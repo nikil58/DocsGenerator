@@ -3,8 +3,10 @@ project(DocsGenerator)
 
 set(CMAKE_CXX_STANDARD 20)
 set(QT_VERSION 5)
-set(REQUIRED_LIBS Core Gui Widgets WebEngineWidgets)
-set(REQUIRED_LIBS_QUALIFIED Qt5::Core Qt5::Gui Qt5::Widgets Qt5::WebEngineWidgets)
+set(CMAKE_AUTOMOC ON)
+
+set(REQUIRED_LIBS Core Gui Widgets WebKitWidgets)
+set(REQUIRED_LIBS_QUALIFIED Qt5::Core Qt5::Gui Qt5::Widgets  Qt5::WebKitWidgets)
 
 add_executable(${PROJECT_NAME} main.cpp Form.cpp Form.h)
 

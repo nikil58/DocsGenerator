@@ -1,10 +1,13 @@
 #pragma once
 
 #include <QWidget>
-#include <QHBoxLayout>
+#include <QVBoxLayout>
 #include <QTabWidget>
+#include <QLineEdit>
+#include <QWebView>
 
 class Form : public QWidget {
+Q_OBJECT
 private:
     /// QFont used for define font-size of anything in form
     QFont font_size_;
@@ -14,9 +17,12 @@ private:
 
     /// Tab menu for form
     QTabWidget* tabs_{};
-
+    QLineEdit* line_edit{};
+    QWebView* widget{};
     void DrawMainForm();
 public:
     explicit Form();
+private slots:
+    void UpdatePreview();
 
 };
