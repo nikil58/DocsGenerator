@@ -5,6 +5,7 @@
 #include <QWebFrame>
 #include <QThread>
 #include <QEvent>
+#include <QClipboard>
 
 #include <QSplitter>
 
@@ -76,6 +77,17 @@ void Form::DrawMainForm() {
     preview_widget_ = new QWebView();
     preview_widget_->setMinimumWidth(300);
     preview_widget_->setHtml(test);
+    preview_widget_->setDisabled(true);
+
+    QPushButton* copy_button = new QPushButton("Копировать");
+    copy_button->setFont(font_size_);
+    connect(copy_button, SIGNAL(clicked()), this, SLOT(CopyButtonClicked()));
+
+    QVBoxLayout* preview_button_layout = new QVBoxLayout();
+    preview_button_layout->addWidget(copy_button);
+    preview_button_layout->addWidget(preview_widget_);
+    QWidget* right_container = new QWidget();
+    right_container->setLayout(preview_button_layout);
 
     QVBoxLayout* left_side_menu = new QVBoxLayout();
     left_side_menu->addWidget(label);
@@ -100,7 +112,7 @@ void Form::DrawMainForm() {
     QWidget* left_side_container = new QWidget();
     left_side_container->setLayout(left_side_menu);
     splitter->addWidget(left_side_container);
-    splitter->addWidget(preview_widget_);
+    splitter->addWidget(right_container);
     splitter->setHandleWidth(2);
     splitter->setFrameShadow(QFrame::Sunken);
 
@@ -191,4 +203,18 @@ bool Form::eventFilter(QObject* obj, QEvent* e) {
             last_selected_field_ = text_edit;
     }
     return false;
+}
+
+void Form::CopyButtonClicked(){
+    QClipboard* clipboard = QApplication::clipboard();
+    clipboard->setText(preview_widget_->page()->mainFrame()->toHtml(),QClipboard::Clipboard);
+
+    if (clipboard->supportsSelection()) {
+        clipboard->setText(preview_widget_->page()->mainFrame()->toHtml(), QClipboard::Selection);
+    }
+
+#if defined (Q_OS_LINUX)
+    QThread::msleep(1);
+#endif
+
 }

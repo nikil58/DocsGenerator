@@ -6,6 +6,7 @@
 #include <QLineEdit>
 #include <QWebView>
 #include <QTextEdit>
+#include <QApplication>
 
 class Form : public QWidget {
 Q_OBJECT
@@ -36,4 +37,5 @@ public:
 private slots:
     void UpdatePreview();
     void OperationClick();
+    void CopyButtonClicked();
 };
