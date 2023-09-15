@@ -24,14 +24,23 @@ void PreviewWorker::UpdatePreview() {
         }
     }
     else if (QTextEdit* text_edit = qobject_cast<QTextEdit*>(QObject::sender())){
-        if (text_edit->objectName() == "inputs")
-            inputs_field_ = text_edit->toPlainText();
-        else if (text_edit->objectName() == "constants")
-            const_field_ = text_edit->toPlainText();
-        else if (text_edit->objectName() == "algorithm")
-            algorithm_field_ = text_edit->toPlainText();
-        else if (text_edit->objectName() == "outputs")
-            output_field_ = text_edit->toPlainText();
+        if (text_edit->objectName() == "inputs") {
+            inputs_field_ = text_edit->toPlainText().replace("\n", "<br>");
+            inputs_field_ = Parse(inputs_field_);
+        }
+        else if (text_edit->objectName() == "constants") {
+            const_field_ = text_edit->toPlainText().replace("\n", "<br>");
+            const_field_ = Parse(const_field_);
+        }
+        else if (text_edit->objectName() == "algorithm") {
+            algorithm_field_ = text_edit->toPlainText().replace("\n", "<br>");
+            algorithm_field_ = Parse(algorithm_field_);
+        }
+        else if (text_edit->objectName() == "outputs") {
+            output_field_ = text_edit->toPlainText().replace("\n", "<br>");
+            output_field_ = Parse(output_field_);
+        }
+
     }
 
     Update();
@@ -49,8 +58,7 @@ void PreviewWorker::Update() {
                            "    <font face=\\\"Liberation Serif, serif\\\">\n"
                            "        <font style=\\\"font-size: 12pt\\\"><font color=\\\"#000000\\\"><font face=\\\"Times New Roman, serif\\\">\n"
                            "        <i>";
-    QString inputs = inputs_field_.replace("\n", "<br>");
-    inputs = Parse(inputs);
+    QString inputs = inputs_field_;
     QString inputs_end = "</i>\n"
                          "        </font>\n"
                          "    </font></font></font></p>";
@@ -61,7 +69,7 @@ void PreviewWorker::Update() {
                           "    <font face=\\\"Liberation Serif, serif\\\">\n"
                           "    <font style=\\\"font-size: 12pt\\\"><font color=\\\"#000000\\\"><font face=\\\"Times New Roman, serif\\\">\n"
                           "        <i>";
-    QString const_field = const_field_.replace("\n", "<br>");
+    QString const_field = const_field_;
     QString const_end = "</sub></i>\n"
                         "    </font>\n"
                         "    </font></font></font></p>";
@@ -71,7 +79,7 @@ void PreviewWorker::Update() {
                               "    <p class=\\\"western\\\" align=\\\"justify\\\" style=\\\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\\\">\n"
                               "    <font face=\\\"Liberation Serif, serif\\\">\n"
                               "    <p class=\\\"western\\\" align=\\\"justify\\\" style=\\\"text-align: center; line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm;\\\"><font face=\\\"Liberation Serif, serif\\\"><font style=\\\"font-size: 12pt\\\"><font color=\\\"#000000\\\"><font face=\\\"Times New Roman, serif\\\">";
-    QString algorithm = algorithm_field_.replace("\n", "<br>");
+    QString algorithm = algorithm_field_;
     QString algorithm_end = "</font></font></font></font></p>";
     QString output_start = "<p class=\\\"western\\\" align=\\\"justify\\\" style=\\\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\\\">\n"
                            "        <u style=\\\"font-family: 'Times New Roman', serif; font-size: 16px;\\\">Выход:</u>\n"
@@ -80,7 +88,7 @@ void PreviewWorker::Update() {
                            "    <font face=\\\"Liberation Serif, serif\\\">\n"
                            "    <font style=\\\"font-size: 12pt\\\"><font color=\\\"#000000\\\"><font face=\\\"Times New Roman, serif\\\">\n"
                            "        <i>";
-    QString output = output_field_.replace("\n", "<br>");
+    QString output = output_field_;
     QString output_end = "</i>\n"
                          "    </font>\n"
                          "    </font></font></font></p>";

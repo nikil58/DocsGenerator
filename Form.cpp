@@ -51,24 +51,28 @@ void Form::DrawMainForm() {
     const_label->setFont(font_size_);
     const_field_ = new QTextEdit();
     const_field_->setFont(font_size_);
+    const_field_->setObjectName("constants");
     const_label->setBuddy(const_field_);
 
     QLabel* algorithm_label = new QLabel("Алгоритм");
     algorithm_label->setFont(font_size_);
     algorithm_field_ = new QTextEdit();
     algorithm_field_->setFont(font_size_);
+    algorithm_field_->setObjectName("algorithm");
     algorithm_label->setBuddy(algorithm_field_);
 
     QLabel* output_label = new QLabel("Выход");
     output_label->setFont(font_size_);
     output_field_ = new QTextEdit();
     output_field_->setFont(font_size_);
+    output_field_->setObjectName("outputs");
     output_label->setBuddy(output_field_);
 
     QLabel* link_label = new QLabel("Ссылка на пример");
     link_label->setFont(font_size_);
     link_field_ = new QLineEdit();
     link_field_->setFont(font_size_);
+    link_field_->setObjectName("link");
     link_label->setBuddy(link_field_);
 
     QPushButton* copy_button = new QPushButton("Копировать");
