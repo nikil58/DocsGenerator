@@ -24,7 +24,6 @@ void PreviewWorker::UpdatePreview() {
         }
     }
     else if (QTextEdit* text_edit = qobject_cast<QTextEdit*>(QObject::sender())){
-        qDebug() << text_edit->objectName();
         if (text_edit->objectName() == "inputs")
             inputs_field_ = text_edit->toPlainText();
         else if (text_edit->objectName() == "constants")
@@ -39,7 +38,7 @@ void PreviewWorker::UpdatePreview() {
 }
 
 void PreviewWorker::Update() {
-    qDebug() << QThread::currentThread()->objectName();
+    //qDebug() << QThread::currentThread()->objectName();
     QString title_start = "<html><head></head><body><h1><font face=\\\"Times New Roman, serif\\\"><span style=\\\"font-size: 16px;\\\">";
     QString title = title_field_.replace("\n", "<br>");
     QString title_end = "</span></font></h1>";
@@ -96,11 +95,11 @@ void PreviewWorker::Update() {
 }
 
 QString PreviewWorker::Parse(QString text) {
-    QString result{};
+    QString result = text;
     if (text.contains("\\(")&&text.contains("\\)")){
         QString first_part = text.split("\\(")[0];
-        QStringRef last_part(&text, text.indexOf("\\)") + 2, text.length() - text.indexOf("\\)") + 2);
-        QString test;
+        QStringRef last_part(&text, text.indexOf("\\)") + 2, text.length() - text.indexOf("\\)") - 2);
+        QString test = last_part.toString();
         QStringRef substring(&text, text.indexOf("\\("), text.indexOf("\\)") + 2 - text.indexOf("\\("));
         QFile file("./temp.txt");
         if (file.open(QIODevice::ReadWrite)){
@@ -109,7 +108,6 @@ QString PreviewWorker::Parse(QString text) {
             file.close();
             QProcess* proc = new QProcess();
             proc->start("node ./latex_to_mathml.js ./temp.txt");
-            qDebug() << proc->thread()->objectName() << QThread::currentThread()->objectName();
             proc->waitForFinished();
             result = proc->readAllStandardOutput();
             file.remove();
@@ -117,12 +115,12 @@ QString PreviewWorker::Parse(QString text) {
 
         }
         if (last_part.contains("\\(")&&last_part.contains("\\)")) {
-            test= Parse(last_part.toString());
+            test = Parse(last_part.toString());
         }
-        result = first_part + result + test;
+        result = first_part + result;
+        result.replace("\n", "</math>"+test);
 
     }
-
     qDebug() << result;
     return result;
 }
