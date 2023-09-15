@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QThread>
 #include <QProcess>
+#include <QFile>
 
 class PreviewWorker : public QObject{
 Q_OBJECT

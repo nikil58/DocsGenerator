@@ -154,16 +154,28 @@ bool Form::eventFilter(QObject* obj, QEvent* e) {
 
 void Form::CopyButtonClicked(){
     QClipboard* clipboard = QApplication::clipboard();
-    clipboard->setText(preview_widget_->page()->mainFrame()->toHtml(),QClipboard::Clipboard);
 
-    if (clipboard->supportsSelection()) {
-        clipboard->setText(preview_widget_->page()->mainFrame()->toHtml(), QClipboard::Selection);
-    }
-
+    QFile file("./temp.html");
+    if (file.open(QIODevice::ReadWrite)){
+        QTextStream stream(&file);
+        stream << preview_widget_->page()->mainFrame()->toHtml();
+        file.close();
+        QProcess* proc = new QProcess();
+        proc->start("tidy -i -m -w 160 ./temp.html");
+        proc->waitForFinished();
+        file.open(QIODevice::ReadOnly);
+        QString result = stream.readAll().replace("<!DOCTYPE html>","");
+        clipboard->setText(result, QClipboard::Clipboard);
+        if (clipboard->supportsSelection()) {
+            clipboard->setText(result, QClipboard::Selection);
+        }
 #if defined (Q_OS_LINUX)
-    QThread::msleep(1);
+        QThread::msleep(1);
 #endif
-
+        file.close();
+        file.remove();
+        proc->terminate();
+    }
 }
 
 void Form::Rerender(QString text) {
