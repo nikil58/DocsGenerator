@@ -8,7 +8,7 @@ set(CMAKE_AUTOMOC ON)
 set(REQUIRED_LIBS Core Gui Widgets WebKitWidgets)
 set(REQUIRED_LIBS_QUALIFIED Qt5::Core Qt5::Gui Qt5::Widgets  Qt5::WebKitWidgets)
 
-add_executable(${PROJECT_NAME} main.cpp Form.cpp Form.h)
+add_executable(${PROJECT_NAME} main.cpp Form.cpp Form.h PreviewWorker.cpp PreviewWorker.h)
 
 
 find_package(Qt${QT_VERSION} COMPONENTS ${REQUIRED_LIBS} REQUIRED)
