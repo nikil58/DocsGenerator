@@ -118,7 +118,7 @@ void Form::DrawMainForm() {
     splitter->setFrameShadow(QFrame::Sunken);
 
     connect(title_field_, SIGNAL(textChanged(const QString &)), worker, SLOT(UpdatePreview()));
-    connect(inputs_field_, SIGNAL(textChanged()), worker, SLOT(UpdatePreview()), Qt::QueuedConnection);
+    connect(inputs_field_, SIGNAL(textChanged()), worker, SLOT(UpdatePreview()));
     connect(const_field_, SIGNAL(textChanged()), worker, SLOT(UpdatePreview()));
     connect(algorithm_field_, SIGNAL(textChanged()), worker, SLOT(UpdatePreview()));
     connect(output_field_, SIGNAL(textChanged()), worker, SLOT(UpdatePreview()));
@@ -164,7 +164,7 @@ void Form::CopyButtonClicked(){
         proc->start("tidy -i -m -w 160 ./temp.html");
         proc->waitForFinished();
         file.open(QIODevice::ReadOnly);
-        QString result = stream.readAll().replace("<!DOCTYPE html>","");
+        QString result = stream.readAll().remove("<!DOCTYPE html>\n");
         clipboard->setText(result, QClipboard::Clipboard);
         if (clipboard->supportsSelection()) {
             clipboard->setText(result, QClipboard::Selection);

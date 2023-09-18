@@ -24,19 +24,19 @@ void PreviewWorker::UpdatePreview() {
     }
     else if (QTextEdit* text_edit = qobject_cast<QTextEdit*>(QObject::sender())){
         if (text_edit->objectName() == "inputs") {
-            inputs_field_ = text_edit->toPlainText().replace("\n", "<br>");
+            inputs_field_ = text_edit->toPlainText().replace("\n", "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">");
             inputs_field_ = Parse(inputs_field_);
         }
         else if (text_edit->objectName() == "constants") {
-            const_field_ = text_edit->toPlainText().replace("\n", "<br>");
+            const_field_ = text_edit->toPlainText().replace("\n", "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">");
             const_field_ = Parse(const_field_);
         }
         else if (text_edit->objectName() == "algorithm") {
-            algorithm_field_ = text_edit->toPlainText().replace("\n", "<br>");
+            algorithm_field_ = text_edit->toPlainText().replace("\n", "<p class=\"western\" align=\"justify\" style=\"text-align: center; line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm;\">");
             algorithm_field_ = Parse(algorithm_field_);
         }
         else if (text_edit->objectName() == "outputs") {
-            output_field_ = text_edit->toPlainText().replace("\n", "<br>");
+            output_field_ = text_edit->toPlainText().replace("\n", "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">");
             output_field_ = Parse(output_field_);
         }
 
@@ -49,52 +49,35 @@ void PreviewWorker::Update() {
     //qDebug() << QThread::currentThread()->objectName();
     QString title_start = "<html><head></head><body><h1><font face=\"Times New Roman, serif\"><span style=\"font-size: 16px;\">";
     QString title = title_field_.replace("\n", "<br>");
-    QString title_end = "</span></font></h1>";
-    QString inputs_start = "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">\n"
-                           "        <u style=\"font-family: 'Times New Roman', serif; font-size: 16px;\">Вход:</u>\n"
+    QString title_end = "</span></font></h1><font style=\"font-size: 12pt\"><font color=\"#000000\"><font face=\"Times New Roman, serif\">";
+    QString inputs_start = "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">"
+                           "        <u style=\"font-family: 'Times New Roman', serif; font-size: 16px;\">Вход:</u>"
                            "    </p>"
-                           "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">\n"
-                           "    <font face=\"Liberation Serif, serif\">\n"
-                           "        <font style=\"font-size: 12pt\"><font color=\"#000000\"><font face=\"Times New Roman, serif\">\n"
-                           "        <i>";
+                           "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">";
     QString inputs = inputs_field_;
-    QString inputs_end = "</i>\n"
-                         "        </font>\n"
-                         "    </font></font></font></p>";
-    QString const_start = "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">\n"
-                          "        <u style=\"font-family: 'Times New Roman', serif; font-size: 16px;\">Константы:</u>\n"
+    QString inputs_end = "</p>";
+    QString const_start = "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">"
+                          "        <u style=\"font-family: 'Times New Roman', serif; font-size: 16px;\">Константы:</u>"
                           "    </p>\n"
-                          "    <p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">\n"
-                          "    <font face=\"Liberation Serif, serif\">\n"
-                          "    <font style=\"font-size: 12pt\"><font color=\"#000000\"><font face=\"Times New Roman, serif\">\n"
-                          "        <i>";
+                          "    <p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">";
     QString const_field = const_field_;
-    QString const_end = "</sub></i>\n"
-                        "    </font>\n"
-                        "    </font></font></font></p>";
-    QString algorithm_start = "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">\n"
-                              "        <u style=\"font-family: 'Times New Roman', serif; font-size: 16px;\">Алгоритм:</u>\n"
+    QString const_end = "</p>";
+    QString algorithm_start = "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">"
+                              "        <u style=\"font-family: 'Times New Roman', serif; font-size: 16px;\">Алгоритм:</u>"
                               "    </p>\n"
-                              "    <p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">\n"
-                              "    <font face=\"Liberation Serif, serif\">\n"
-                              "    <p class=\"western\" align=\"justify\" style=\"text-align: center; line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm;\"><font face=\"Liberation Serif, serif\"><font style=\"font-size: 12pt\"><font color=\"#000000\"><font face=\"Times New Roman, serif\">";
+                              "    <p class=\"western\" align=\"justify\" style=\"text-align: center; line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm;\">";
     QString algorithm = algorithm_field_;
-    QString algorithm_end = "</font></font></font></font></p>";
-    QString output_start = "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">\n"
+    QString algorithm_end = "</p>";
+    QString output_start = "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">"
                            "        <u style=\"font-family: 'Times New Roman', serif; font-size: 16px;\">Выход:</u>\n"
                            "    </p>\n"
-                           "    <p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">\n"
-                           "    <font face=\"Liberation Serif, serif\">\n"
-                           "    <font style=\"font-size: 12pt\"><font color=\"#000000\"><font face=\"Times New Roman, serif\">\n"
-                           "        <i>";
+                           "    <p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">";
     QString output = output_field_;
-    QString output_end = "</i>\n"
-                         "    </font>\n"
-                         "    </font></font></font></p>";
+    QString output_end = "</p>";
     QString link_start = "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">\n"
-                         "        <u style=\"font-family: 'Times New Roman', serif; font-size: 16px;\"><a href=\\";
+                         "        <u style=\"font-family: 'Times New Roman', serif; font-size: 16px;\"><a href=modelica://";
     QString link = link_field_.replace("\n", "<br>");
-    QString link_end = "\">Пример использования</a></u>\n"
+    QString link_end = ">Пример использования</a></u>\n"
                        "    </p>";
 
     text_ = title_start + title + title_end + inputs_start + inputs + inputs_end + const_start + const_field + const_end + algorithm_start + algorithm + algorithm_end + output_start +output + output_end + link_start + link + link_end;
@@ -128,7 +111,7 @@ QString PreviewWorker::Parse(QString text) {
         result.replace("\n", "</math>"+test);
 
     }
-    qDebug() << result;
+    //qDebug() << result;
     return result;
 }
 
