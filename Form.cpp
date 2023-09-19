@@ -21,7 +21,6 @@ Form::Form() {
 
 void Form::DrawMainForm() {
     title_field_ = new QLineEdit();
-    title_field_->setMaxLength(20);
     title_field_->setFont(font_size_);
     title_field_->setObjectName("title");
 

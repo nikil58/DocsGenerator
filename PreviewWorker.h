@@ -21,6 +21,7 @@ private:
     QString link_field_;
 
     QString text_{};
+    QMap<QString, QString> formulas_cache_{};
 
 
     void Update();

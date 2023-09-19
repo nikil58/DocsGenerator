@@ -88,11 +88,14 @@ QString PreviewWorker::Parse(QString text) {
     QString result = text;
     if (text.contains("\\(")&&text.contains("\\)")){
         QString first_part = text.split("\\(")[0];
-        QStringRef last_part(&text, text.indexOf("\\)") + 2, text.length() - text.indexOf("\\)") - 2);
-        QString test = last_part.toString();
+        QStringRef last_part_ref(&text, text.indexOf("\\)") + 2, text.length() - text.indexOf("\\)") - 2);
+        QString last_part = last_part_ref.toString();
         QStringRef substring(&text, text.indexOf("\\("), text.indexOf("\\)") + 2 - text.indexOf("\\("));
+        if (formulas_cache_.contains(substring.toString())) {
+            result = formulas_cache_.value(substring.toString());
+        }
         QFile file("./temp.txt");
-        if (file.open(QIODevice::ReadWrite)){
+        if (formulas_cache_.contains(substring.toString()) != true&&file.open(QIODevice::ReadWrite)){
             QTextStream stream(&file);
             stream << substring.toString();
             file.close();
@@ -102,14 +105,13 @@ QString PreviewWorker::Parse(QString text) {
             result = proc->readAllStandardOutput();
             file.remove();
             proc->terminate();
-
+            formulas_cache_.insert(substring.toString(),result);
         }
         if (last_part.contains("\\(")&&last_part.contains("\\)")) {
-            test = Parse(last_part.toString());
+            last_part = Parse(last_part);
         }
         result = first_part + result;
-        result.replace("\n", "</math>"+test);
-
+        result.replace("\n", "</math>"+last_part);
     }
     //qDebug() << result;
     return result;
