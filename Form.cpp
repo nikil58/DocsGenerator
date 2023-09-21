@@ -32,7 +32,7 @@ void Form::DrawMainForm() {
     under_line->setFrameShadow(QFrame::Sunken);
 
     QGridLayout* buttons_layout = new QGridLayout();
-    int column, row = 0;
+    int column = 0, row = 0;
     for (const auto& current_button_text : formulas_buttons_) {
         QPushButton* button = new QPushButton(current_button_text);
         button->setFont(font_size_);
