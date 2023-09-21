@@ -10,7 +10,7 @@ Form::Form() {
     QThread::currentThread()->setObjectName("Main");
     this->setWindowFlags(Qt::Window/* | Qt::WindowStaysOnTopHint*/);
     this->setWindowTitle("Генератор документации");
-    this->setMinimumSize(1280, 720);
+    this->setMinimumSize(1280, 900);
 
     font_size_.setPixelSize(20);
     form_layout_ = new QVBoxLayout(this);
@@ -31,12 +31,19 @@ void Form::DrawMainForm() {
     under_line->setFrameShape(QFrame::HLine);
     under_line->setFrameShadow(QFrame::Sunken);
 
-    QHBoxLayout* buttons_layout = new QHBoxLayout();
-    for (int i = 0; i < 7; i++) {
-        QPushButton* btn = new QPushButton("Low");
-        btn->setFont(font_size_);
-        buttons_layout->addWidget(btn);
-        connect(btn, SIGNAL(clicked()), this, SLOT(OperationClick()));
+    QGridLayout* buttons_layout = new QGridLayout();
+    int column, row = 0;
+    for (const auto& current_button_text : formulas_buttons_) {
+        QPushButton* button = new QPushButton(current_button_text);
+        button->setFont(font_size_);
+        button->setObjectName(current_button_text);
+        buttons_layout->addWidget(button,row, column++);
+        button->setMinimumHeight(40);
+        if (column > 5) {
+            column = 0;
+            row++;
+        }
+        connect(button, SIGNAL(clicked()), this, SLOT(OperationClick()));
     }
 
     QLabel* input_label = new QLabel("Входы");
@@ -136,10 +143,71 @@ void Form::DrawMainForm() {
 
 
 void Form::OperationClick() {
-    last_selected_field_->insertPlainText("#low()$");
-    last_selected_field_->moveCursor(QTextCursor::Left);
-    last_selected_field_->moveCursor(QTextCursor::Left);
-    last_selected_field_->setFocus();
+    if (last_selected_field_) {
+        if (QObject::sender()->objectName() == formulas_buttons_[0]) {
+            last_selected_field_->insertPlainText("\\(\\)");
+            last_selected_field_->moveCursor(QTextCursor::Left);
+            last_selected_field_->moveCursor(QTextCursor::Left);
+            last_selected_field_->setFocus();
+        }
+        else if (QObject::sender()->objectName() == formulas_buttons_[1]){
+            last_selected_field_->insertPlainText("_{}");
+            last_selected_field_->moveCursor(QTextCursor::Left);
+            last_selected_field_->setFocus();
+        }
+        else if (QObject::sender()->objectName() == formulas_buttons_[2]) {
+            last_selected_field_->insertPlainText("^{}");
+            last_selected_field_->moveCursor(QTextCursor::Left);
+            last_selected_field_->setFocus();
+        }
+        else if (QObject::sender()->objectName() == formulas_buttons_[3]) {
+            last_selected_field_->insertPlainText("\\sqrt{}");
+            last_selected_field_->moveCursor(QTextCursor::Left);
+            last_selected_field_->setFocus();
+        }
+        else if (QObject::sender()->objectName() == formulas_buttons_[4]) {
+            last_selected_field_->insertPlainText("\\frac{}{}");
+            last_selected_field_->moveCursor(QTextCursor::Left);
+            last_selected_field_->moveCursor(QTextCursor::Left);
+            last_selected_field_->moveCursor(QTextCursor::Left);
+            last_selected_field_->setFocus();
+        }
+        else if (QObject::sender()->objectName() == formulas_buttons_[5]) {
+            last_selected_field_->insertPlainText("\\Delta");
+            last_selected_field_->setFocus();
+        }
+        else if (QObject::sender()->objectName() == formulas_buttons_[6]) {
+            last_selected_field_->insertPlainText("\\sum{}");
+            last_selected_field_->moveCursor(QTextCursor::Left);
+            last_selected_field_->setFocus();
+        }
+        else if (QObject::sender()->objectName() == formulas_buttons_[7]) {
+            last_selected_field_->insertPlainText("\\prod{}");
+            last_selected_field_->moveCursor(QTextCursor::Left);
+            last_selected_field_->setFocus();
+        }
+        else if (QObject::sender()->objectName() == formulas_buttons_[8]) {
+            last_selected_field_->insertPlainText("\\int");
+            last_selected_field_->setFocus();
+        }
+        else if (QObject::sender()->objectName() == formulas_buttons_[9]) {
+            last_selected_field_->insertPlainText("\\times");
+            last_selected_field_->setFocus();
+        }
+        else if (QObject::sender()->objectName() == formulas_buttons_[10]) {
+            last_selected_field_->insertPlainText("\\pi");
+            last_selected_field_->setFocus();
+        }
+        else if (QObject::sender()->objectName() == formulas_buttons_[11]) {
+            last_selected_field_->insertPlainText("\\leq");
+            last_selected_field_->setFocus();
+        }
+        else if (QObject::sender()->objectName() == formulas_buttons_[12]) {
+            last_selected_field_->insertPlainText("\\infty");
+            last_selected_field_->setFocus();
+        }
+    }
+
 }
 
 bool Form::eventFilter(QObject* obj, QEvent* e) {
