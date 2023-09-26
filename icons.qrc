@@ -1,0 +1,10 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+<qresource>
+    <file alias="Нижний">./img/sub.png</file>
+    <file alias="Верхний">./img/sup.png</file>
+    <file alias="Корень">./img/root.png</file>
+    <file alias="Дробь">./img/frac.png</file>
+    <file alias="∆">./img/delta.png</file>
+</qresource>
+</RCC>

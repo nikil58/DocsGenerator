@@ -34,8 +34,18 @@ void Form::DrawMainForm() {
     QGridLayout* buttons_layout = new QGridLayout();
     int column = 0, row = 0;
     for (const auto& current_button_text : formulas_buttons_) {
-        QPushButton* button = new QPushButton(current_button_text);
+        QPushButton* button = new QPushButton(/*current_button_text*/);
         button->setFont(font_size_);
+
+        QPixmap pixmap(":"+current_button_text);
+        QIcon ButtonIcon(pixmap);
+
+        if (!ButtonIcon.isNull()) {
+            button->setIcon(ButtonIcon);
+            button->setIconSize(QSize(pixmap.rect().size()));
+        }
+        else
+            button->setText(current_button_text);
         button->setObjectName(current_button_text);
         buttons_layout->addWidget(button,row, column++);
         button->setMinimumHeight(40);
