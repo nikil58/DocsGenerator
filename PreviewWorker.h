@@ -32,6 +32,7 @@ public:
     signals:
     void RenderIsReady(QString text);
 public slots:
+    void ClearCache();
     void UpdatePreview();
 };
 

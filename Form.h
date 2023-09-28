@@ -36,9 +36,12 @@ private:
     const QString formulas_buttons_[13] = {"Формула", "Нижний", "Верхний", "Корень", "Дробь", "∆", "Сумма", "Произведение", "Интеграл", "X", "Pi", "<=", "Бесконечность"};
 public:
     explicit Form();
+signals:
+    void ClearCache();
 
 private slots:
     void OperationClick();
+    void ClearButtonClicked();
     void CopyButtonClicked();
     void Rerender(QString text);
 };

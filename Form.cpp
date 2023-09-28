@@ -31,7 +31,7 @@ void Form::DrawMainForm() {
     under_line->setFrameShape(QFrame::HLine);
     under_line->setFrameShadow(QFrame::Sunken);
 
-    QGridLayout* buttons_layout = new QGridLayout();
+    QGridLayout* formulas_buttons_layout = new QGridLayout();
     int column = 0, row = 0;
     for (const auto& current_button_text : formulas_buttons_) {
         QPushButton* button = new QPushButton(/*current_button_text*/);
@@ -47,7 +47,7 @@ void Form::DrawMainForm() {
         else
             button->setText(current_button_text);
         button->setObjectName(current_button_text);
-        buttons_layout->addWidget(button,row, column++);
+        formulas_buttons_layout->addWidget(button, row, column++);
         button->setMinimumHeight(40);
         if (column > 5) {
             column = 0;
@@ -95,16 +95,21 @@ void Form::DrawMainForm() {
     copy_button->setFont(font_size_);
     connect(copy_button, SIGNAL(clicked()), this, SLOT(CopyButtonClicked()));
 
+    QPushButton* clear_button = new QPushButton("Очистить");
+    clear_button->setFont(font_size_);
+    connect(clear_button, SIGNAL(clicked()), this, SLOT(ClearButtonClicked()));
+
     preview_widget_ = new QWebView();
     preview_widget_->setMinimumWidth(300);
     preview_widget_->setDisabled(true);
     PreviewWorker* worker = new PreviewWorker(0, this);
+    connect(this, SIGNAL(ClearCache()), worker, SLOT(ClearCache()));
 
     QVBoxLayout* left_side_menu = new QVBoxLayout();
     left_side_menu->addWidget(label);
     left_side_menu->addWidget(title_field_);
     left_side_menu->addWidget(under_line);
-    left_side_menu->addLayout(buttons_layout);
+    left_side_menu->addLayout(formulas_buttons_layout);
     left_side_menu->addWidget(input_label);
     left_side_menu->addWidget(inputs_field_);
     left_side_menu->addWidget(const_label);
@@ -120,8 +125,11 @@ void Form::DrawMainForm() {
     splitter->setChildrenCollapsible(false);
     splitter->setOrientation(Qt::Horizontal);
 
+    QHBoxLayout* buttons_layout = new QHBoxLayout();
+    buttons_layout->addWidget(copy_button);
+    buttons_layout->addWidget(clear_button);
     QVBoxLayout* preview_button_layout = new QVBoxLayout();
-    preview_button_layout->addWidget(copy_button);
+    preview_button_layout->addLayout(buttons_layout);
     preview_button_layout->addWidget(preview_widget_);
     QWidget* right_container = new QWidget();
     right_container->setLayout(preview_button_layout);
@@ -253,6 +261,17 @@ void Form::CopyButtonClicked(){
         file.remove();
         proc->terminate();
     }
+}
+
+
+void Form::ClearButtonClicked() {
+    title_field_->clear();
+    inputs_field_->clear();
+    const_field_->clear();
+    algorithm_field_->clear();
+    output_field_->clear();
+    link_field_->clear();
+    emit ClearCache();
 }
 
 void Form::Rerender(QString text) {

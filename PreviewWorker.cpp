@@ -118,3 +118,7 @@ QString PreviewWorker::Parse(QString text) {
 }
 
 PreviewWorker::~PreviewWorker() noexcept {}
+
+void PreviewWorker::ClearCache() {
+    formulas_cache_.clear();
+}
