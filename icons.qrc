@@ -1,10 +1,17 @@
 <!DOCTYPE RCC>
 <RCC version="1.0">
 <qresource>
-    <file alias="Нижний">./img/sub.png</file>
-    <file alias="Верхний">./img/sup.png</file>
-    <file alias="Корень">./img/root.png</file>
-    <file alias="Дробь">./img/frac.png</file>
-    <file alias="∆">./img/delta.png</file>
+    <file alias="sub">./img/sub.png</file>
+    <file alias="sup">./img/sup.png</file>
+    <file alias="root">./img/root.png</file>
+    <file alias="frac">./img/frac.png</file>
+    <file alias="Delta">./img/delta.png</file>
+    <file alias="sum">./img/sum.png</file>
+    <file alias="prod">./img/prod.png</file>
+    <file alias="int">./img/int.png</file>
+    <file alias="vec">./img/times.png</file>
+    <file alias="pi">./img/pi.png</file>
+    <file alias="leq">./img/leq.png</file>
+    <file alias="inf">./img/inf.png</file>
 </qresource>
 </RCC>
