@@ -34,7 +34,7 @@ void Form::DrawMainForm() {
     QGridLayout* buttons_layout = new QGridLayout();
     int column = 0, row = 0;
     for (const auto& current_button_text : formulas_buttons_) {
-        QPushButton* button = new QPushButton(/*current_button_text*/);
+        QPushButton* button = new QPushButton();
         button->setFont(font_size_);
 
         QPixmap pixmap(":"+current_button_text);
@@ -123,13 +123,13 @@ void Form::DrawMainForm() {
     QVBoxLayout* preview_button_layout = new QVBoxLayout();
     preview_button_layout->addWidget(copy_button);
     preview_button_layout->addWidget(preview_widget_);
-    QWidget* right_container = new QWidget();
-    right_container->setLayout(preview_button_layout);
+    QWidget* right_side_container = new QWidget();
+    right_side_container->setLayout(preview_button_layout);
 
     QWidget* left_side_container = new QWidget();
     left_side_container->setLayout(left_side_menu);
     splitter->addWidget(left_side_container);
-    splitter->addWidget(right_container);
+    splitter->addWidget(right_side_container);
     splitter->setHandleWidth(2);
     splitter->setFrameShadow(QFrame::Sunken);
     splitter->setSizes(QList<int>({1,1}));
