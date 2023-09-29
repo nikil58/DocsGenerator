@@ -33,7 +33,7 @@ private:
     bool eventFilter(QObject* obj, QEvent* e);
     void DrawMainForm();
 
-    const QString formulas_buttons_[13] = {"Формула", "Нижний", "Верхний", "Корень", "Дробь", "∆", "Сумма", "Произведение", "Интеграл", "X", "Pi", "<=", "Бесконечность"};
+    const QString formulas_buttons_[13] = {"Формула", "Нижний", "Верхний", "Корень", "Дробь", "∆", "Сумма", "Произведение", "Интеграл", "X", "Pi", "Меньше", "Бесконечность"};
 public:
     explicit Form();
 

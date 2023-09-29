@@ -42,7 +42,7 @@ void Form::DrawMainForm() {
 
         if (!ButtonIcon.isNull()) {
             button->setIcon(ButtonIcon);
-            button->setIconSize(QSize(pixmap.rect().size()));
+            button->setIconSize(QSize(30,30));
         }
         else
             button->setText(current_button_text);

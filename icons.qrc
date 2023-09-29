@@ -6,5 +6,12 @@
     <file alias="Корень">./img/root.png</file>
     <file alias="Дробь">./img/frac.png</file>
     <file alias="∆">./img/delta.png</file>
+    <file alias="Сумма">./img/sum.png</file>
+    <file alias="Произведение">./img/prod.png</file>
+    <file alias="Интеграл">./img/int.png</file>
+    <file alias="X">./img/times.png</file>
+    <file alias="Pi">./img/pi.png</file>
+    <file alias="Меньше">./img/leq.png</file>
+    <file alias="Бесконечность">./img/inf.png</file>
 </qresource>
 </RCC>
