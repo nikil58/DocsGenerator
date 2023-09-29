@@ -132,6 +132,7 @@ void Form::DrawMainForm() {
     splitter->addWidget(right_container);
     splitter->setHandleWidth(2);
     splitter->setFrameShadow(QFrame::Sunken);
+    splitter->setSizes(QList<int>({1,1}));
 
     connect(title_field_, SIGNAL(textChanged(const QString &)), worker, SLOT(UpdatePreview()));
     connect(inputs_field_, SIGNAL(textChanged()), worker, SLOT(UpdatePreview()));
