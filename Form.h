@@ -45,6 +45,7 @@ private:
     bool eventFilter(QObject* obj, QEvent* e);
     void DrawMainForm();
     QWidget* DrawFirstTab();
+    QWidget* DrawSecondTab();
 
     const QString formulas_buttons_[13] = {"Формула", "sub", "sup", "root", "frac", "Delta", "sum", "prod", "int", "vec", "pi", "leq", "inf"};
 public:
