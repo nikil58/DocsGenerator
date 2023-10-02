@@ -11,7 +11,7 @@ Form::Form() {
     this->setMinimumSize(1280, 900);
 
     font_size_.setPixelSize(20);
-    form_layout_ = new QVBoxLayout(this);
+    form_layout_ = new QHBoxLayout(this);
     DrawMainForm();
 
     this->show();
@@ -67,7 +67,7 @@ void Form::DrawMainForm() {
     preview_widget_->setDisabled(true);
     worker_ = new PreviewWorker(0, this);
     connect(this, SIGNAL(ClearCache()), worker_, SLOT(ClearCache()));
-    connect(title_field_, SIGNAL(textChanged()),  worker_, SLOT(UpdatePreview()));
+    connect(title_field_, SIGNAL(textChanged(const QString &)),  worker_, SLOT(UpdatePreview()));
 
     buttons_layout_ = new QHBoxLayout();
     buttons_layout_->addWidget(copy_button);
@@ -76,10 +76,38 @@ void Form::DrawMainForm() {
     tabs_ = new QTabWidget();
     tabs_->setFont(font_size_);
     tabs_->addTab(DrawFirstTab(), "Модуль");
-    form_layout_->addWidget(tabs_);
+
+    QVBoxLayout* left_side_layout = new QVBoxLayout();
+    left_side_layout->addWidget(title_label_);
+    left_side_layout->addWidget(title_field_);
+    left_side_layout->addWidget(title_splitter_);
+    left_side_layout->addLayout(formulas_buttons_layout_);
+    left_side_layout->addWidget(tabs_);
+
+    QVBoxLayout* preview_button_layout = new QVBoxLayout();
+    preview_button_layout->addLayout(buttons_layout_);
+    preview_button_layout->addWidget(preview_widget_);
+    QWidget* right_side_container = new QWidget();
+    right_side_container->setLayout(preview_button_layout);
+
+    QSplitter* splitter = new QSplitter();
+    splitter->setChildrenCollapsible(false);
+    splitter->setOrientation(Qt::Horizontal);
+
+    QWidget* container = new QWidget();
+    container->setLayout(left_side_layout);
+
+    splitter->addWidget(container);
+    splitter->addWidget(right_side_container);
+    splitter->setHandleWidth(2);
+    splitter->setFrameShadow(QFrame::Sunken);
+    splitter->setSizes(QList<int>({1,1}));
+
+    form_layout_->addLayout(left_side_layout);
+    form_layout_->addWidget(splitter);
 }
 
-QSplitter* Form::DrawFirstTab() {
+QWidget* Form::DrawFirstTab() {
     QLabel* input_label = new QLabel("Входы");
     input_label->setFont(font_size_);
     inputs_field_ = new QTextEdit();
@@ -116,10 +144,6 @@ QSplitter* Form::DrawFirstTab() {
     link_label->setBuddy(link_field_);
 
     QVBoxLayout* left_side_menu = new QVBoxLayout();
-    left_side_menu->addWidget(title_label_);
-    left_side_menu->addWidget(title_field_);
-    left_side_menu->addWidget(title_splitter_);
-    left_side_menu->addLayout(formulas_buttons_layout_);
     left_side_menu->addWidget(input_label);
     left_side_menu->addWidget(inputs_field_);
     left_side_menu->addWidget(const_label);
@@ -131,36 +155,21 @@ QSplitter* Form::DrawFirstTab() {
     left_side_menu->addWidget(link_label);
     left_side_menu->addWidget(link_field_);
 
-    QSplitter* splitter = new QSplitter();
-    splitter->setChildrenCollapsible(false);
-    splitter->setOrientation(Qt::Horizontal);
-
-    QVBoxLayout* preview_button_layout = new QVBoxLayout();
-    preview_button_layout->addLayout(buttons_layout_);
-    preview_button_layout->addWidget(preview_widget_);
-    QWidget* right_side_container = new QWidget();
-    right_side_container->setLayout(preview_button_layout);
-
     QWidget* left_side_container = new QWidget();
     left_side_container->setLayout(left_side_menu);
-    splitter->addWidget(left_side_container);
-    splitter->addWidget(right_side_container);
-    splitter->setHandleWidth(2);
-    splitter->setFrameShadow(QFrame::Sunken);
-    splitter->setSizes(QList<int>({1,1}));
 
     connect(inputs_field_, SIGNAL(textChanged()),  worker_, SLOT(UpdatePreview()));
     connect(const_field_, SIGNAL(textChanged()),  worker_, SLOT(UpdatePreview()));
     connect(algorithm_field_, SIGNAL(textChanged()), worker_, SLOT(UpdatePreview()));
     connect(output_field_, SIGNAL(textChanged()),  worker_, SLOT(UpdatePreview()));
-    connect(link_field_, SIGNAL(textChanged()),  worker_, SLOT(UpdatePreview()));
+    connect(link_field_, SIGNAL(textChanged(const QString &)),  worker_, SLOT(UpdatePreview()));
 
     inputs_field_->installEventFilter(this);
     const_field_->installEventFilter(this);
     algorithm_field_->installEventFilter(this);
     output_field_->installEventFilter(this);
 
-    return splitter;
+    return left_side_container;
 }
 
 

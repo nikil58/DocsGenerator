@@ -17,7 +17,7 @@ private:
     QFont font_size_;
 
     /// Layout for wrap main preview_widget_
-    QVBoxLayout* form_layout_;
+    QHBoxLayout* form_layout_;
 
     QHBoxLayout* buttons_layout_;
 
@@ -44,7 +44,7 @@ private:
 
     bool eventFilter(QObject* obj, QEvent* e);
     void DrawMainForm();
-    QSplitter* DrawFirstTab();
+    QWidget* DrawFirstTab();
 
     const QString formulas_buttons_[13] = {"Формула", "sub", "sup", "root", "frac", "Delta", "sum", "prod", "int", "vec", "pi", "leq", "inf"};
 public:
