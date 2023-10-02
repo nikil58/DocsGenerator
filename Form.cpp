@@ -64,7 +64,7 @@ void Form::DrawMainForm() {
 
     preview_widget_ = new QWebView();
     preview_widget_->setMinimumWidth(300);
-    preview_widget_->setDisabled(true);
+    connect(preview_widget_, SIGNAL(urlChanged(const QUrl &)), this, SLOT(ClickOnLink(const QUrl &)));
     worker_ = new PreviewWorker(0, this);
     connect(this, SIGNAL(ClearCache()), worker_, SLOT(ClearCache()));
     connect(title_field_, SIGNAL(textChanged(const QString &)),  worker_, SLOT(UpdatePreview()));
@@ -343,4 +343,9 @@ void Form::ClearButtonClicked() {
 
 void Form::Rerender(QString text) {
     preview_widget_->setHtml(text);
+}
+
+void Form::ClickOnLink(const QUrl& url) {
+    if (url.toString().contains("modelica"))
+        inputs_field_->textChanged();
 }

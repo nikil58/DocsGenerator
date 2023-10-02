@@ -58,4 +58,5 @@ private slots:
     void ClearButtonClicked();
     void CopyButtonClicked();
     void Rerender(QString text);
+    void ClickOnLink(const QUrl &);
 };
