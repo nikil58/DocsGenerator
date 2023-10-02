@@ -74,6 +74,7 @@ void Form::DrawMainForm() {
     buttons_layout_->addWidget(clear_button);
 
     tabs_ = new QTabWidget();
+    connect(tabs_, SIGNAL(currentChanged(int)), this, SLOT(SwitchTab(int)));
     tabs_->setFont(font_size_);
     tabs_->addTab(DrawFirstTab(), "Модуль");
     tabs_->addTab(DrawSecondTab(), "Модель");
@@ -138,10 +139,10 @@ QWidget* Form::DrawFirstTab() {
 
     QLabel* link_label = new QLabel("Ссылка на пример");
     link_label->setFont(font_size_);
-    link_field_ = new QLineEdit();
-    link_field_->setFont(font_size_);
-    link_field_->setObjectName("link");
-    link_label->setBuddy(link_field_);
+    link_field_1_ = new QLineEdit();
+    link_field_1_->setFont(font_size_);
+    link_field_1_->setObjectName("link");
+    link_label->setBuddy(link_field_1_);
 
     QVBoxLayout* left_side_menu = new QVBoxLayout();
     left_side_menu->addWidget(input_label);
@@ -153,7 +154,7 @@ QWidget* Form::DrawFirstTab() {
     left_side_menu->addWidget(output_label);
     left_side_menu->addWidget(output_field_);
     left_side_menu->addWidget(link_label);
-    left_side_menu->addWidget(link_field_);
+    left_side_menu->addWidget(link_field_1_);
 
     QWidget* left_side_container = new QWidget();
     left_side_container->setLayout(left_side_menu);
@@ -162,7 +163,7 @@ QWidget* Form::DrawFirstTab() {
     connect(const_field_, SIGNAL(textChanged()),  worker_, SLOT(UpdatePreview()));
     connect(algorithm_field_, SIGNAL(textChanged()), worker_, SLOT(UpdatePreview()));
     connect(output_field_, SIGNAL(textChanged()),  worker_, SLOT(UpdatePreview()));
-    connect(link_field_, SIGNAL(textChanged(const QString &)),  worker_, SLOT(UpdatePreview()));
+    connect(link_field_1_, SIGNAL(textChanged(const QString &)),  worker_, SLOT(UpdatePreview()));
 
     inputs_field_->installEventFilter(this);
     const_field_->installEventFilter(this);
@@ -203,10 +204,10 @@ QWidget* Form::DrawSecondTab() {
 
     QLabel* link_label = new QLabel("Ссылка на модуль");
     link_label->setFont(font_size_);
-    link_field_ = new QLineEdit();
-    link_field_->setFont(font_size_);
-    link_field_->setObjectName("link");
-    link_label->setBuddy(link_field_);
+    link_field_2_ = new QLineEdit();
+    link_field_2_->setFont(font_size_);
+    link_field_2_->setObjectName("link");
+    link_label->setBuddy(link_field_2_);
 
     QVBoxLayout* left_side_menu = new QVBoxLayout();
     left_side_menu->addWidget(input_description);
@@ -218,7 +219,7 @@ QWidget* Form::DrawSecondTab() {
     left_side_menu->addWidget(output_list);
     left_side_menu->addWidget(output_list_field);
     left_side_menu->addWidget(link_label);
-    left_side_menu->addWidget(link_field_);
+    left_side_menu->addWidget(link_field_2_);
 
     QWidget* left_side_container = new QWidget();
     left_side_container->setLayout(left_side_menu);
@@ -337,10 +338,19 @@ void Form::ClearButtonClicked() {
     const_field_->clear();
     algorithm_field_->clear();
     output_field_->clear();
-    link_field_->clear();
+    link_field_1_->clear();
     emit ClearCache();
 }
 
 void Form::Rerender(QString text) {
     preview_widget_->setHtml(text);
+}
+
+void Form::SwitchTab(int index) {
+    if (index == 0) {
+        worker_->SetMode(0);
+    }
+    else if (index == 1) {
+        worker_->SetMode(1);
+    }
 }

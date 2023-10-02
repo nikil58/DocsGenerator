@@ -23,13 +23,15 @@ private:
     QString text_{};
     QMap<QString, QString> formulas_cache_{};
 
-
+    void FirstTypeForm();
+    void SecondTypeForm();
     void Update();
     QString Parse(QString text);
 public:
     explicit PreviewWorker(int mode, QObject* parent = nullptr);
     ~PreviewWorker();
-    signals:
+    void SetMode(int mode) { mode_ = mode; Update();};
+signals:
     void RenderIsReady(QString text);
 public slots:
     void ClearCache();

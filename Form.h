@@ -30,7 +30,8 @@ private:
     QTextEdit* const_field_;
     QTextEdit* algorithm_field_;
     QTextEdit* output_field_;
-    QLineEdit* link_field_;
+    QLineEdit* link_field_1_;
+    QLineEdit* link_field_2_;
 
     QFrame* title_splitter_;
 
@@ -58,4 +59,5 @@ private slots:
     void ClearButtonClicked();
     void CopyButtonClicked();
     void Rerender(QString text);
+    void SwitchTab(int index);
 };
