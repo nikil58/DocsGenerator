@@ -6,6 +6,8 @@
 #include <QWebView>
 #include <QTextEdit>
 #include <QApplication>
+#include <QSplitter>
+#include <QLabel>
 #include "PreviewWorker.h"
 
 class Form : public QWidget {
@@ -17,21 +19,32 @@ private:
     /// Layout for wrap main preview_widget_
     QVBoxLayout* form_layout_;
 
+    QHBoxLayout* buttons_layout_;
+
     /// Tab menu for form
     QTabWidget* tabs_;
+
     QLineEdit* title_field_;
+    QLabel* title_label_;
     QTextEdit* inputs_field_;
     QTextEdit* const_field_;
     QTextEdit* algorithm_field_;
     QTextEdit* output_field_;
     QLineEdit* link_field_;
 
+    QFrame* title_splitter_;
+
+    QGridLayout* formulas_buttons_layout_;
+
     QWebView* preview_widget_{};
 
     QTextEdit* last_selected_field_{};
 
+    PreviewWorker* worker_;
+
     bool eventFilter(QObject* obj, QEvent* e);
     void DrawMainForm();
+    QSplitter* DrawFirstTab();
 
     const QString formulas_buttons_[13] = {"Формула", "sub", "sup", "root", "frac", "Delta", "sum", "prod", "int", "vec", "pi", "leq", "inf"};
 public:

@@ -1,10 +1,8 @@
 #include "Form.h"
 
-#include <QLabel>
 #include <QPushButton>
 #include <QWebFrame>
 #include <QClipboard>
-#include <QSplitter>
 
 Form::Form() {
     QThread::currentThread()->setObjectName("Main");
@@ -24,14 +22,14 @@ void Form::DrawMainForm() {
     title_field_->setFont(font_size_);
     title_field_->setObjectName("title");
 
-    QLabel* label = new QLabel("Название");
-    label->setFont(font_size_);
+    title_label_ = new QLabel("Название");
+    title_label_->setFont(font_size_);
 
-    auto under_line = new QFrame();
-    under_line->setFrameShape(QFrame::HLine);
-    under_line->setFrameShadow(QFrame::Sunken);
+    title_splitter_ = new QFrame();
+    title_splitter_->setFrameShape(QFrame::HLine);
+    title_splitter_->setFrameShadow(QFrame::Sunken);
 
-    QGridLayout* formulas_buttons_layout = new QGridLayout();
+    formulas_buttons_layout_ = new QGridLayout();
     int column = 0, row = 0;
     for (const auto& current_button_text : formulas_buttons_) {
         QPushButton* button = new QPushButton();
@@ -47,7 +45,7 @@ void Form::DrawMainForm() {
         else
             button->setText(current_button_text);
         button->setObjectName(current_button_text);
-        formulas_buttons_layout->addWidget(button, row, column++);
+        formulas_buttons_layout_->addWidget(button, row, column++);
         button->setMinimumHeight(40);
         if (column > 5) {
             column = 0;
@@ -56,6 +54,32 @@ void Form::DrawMainForm() {
         connect(button, SIGNAL(clicked()), this, SLOT(OperationClick()));
     }
 
+    QPushButton* copy_button = new QPushButton("Копировать");
+    copy_button->setFont(font_size_);
+    connect(copy_button, SIGNAL(clicked()), this, SLOT(CopyButtonClicked()));
+
+    QPushButton* clear_button = new QPushButton("Очистить");
+    clear_button->setFont(font_size_);
+    connect(clear_button, SIGNAL(clicked()), this, SLOT(ClearButtonClicked()));
+
+    preview_widget_ = new QWebView();
+    preview_widget_->setMinimumWidth(300);
+    preview_widget_->setDisabled(true);
+    worker_ = new PreviewWorker(0, this);
+    connect(this, SIGNAL(ClearCache()), worker_, SLOT(ClearCache()));
+    connect(title_field_, SIGNAL(textChanged()),  worker_, SLOT(UpdatePreview()));
+
+    buttons_layout_ = new QHBoxLayout();
+    buttons_layout_->addWidget(copy_button);
+    buttons_layout_->addWidget(clear_button);
+
+    tabs_ = new QTabWidget();
+    tabs_->setFont(font_size_);
+    tabs_->addTab(DrawFirstTab(), "Модуль");
+    form_layout_->addWidget(tabs_);
+}
+
+QSplitter* Form::DrawFirstTab() {
     QLabel* input_label = new QLabel("Входы");
     input_label->setFont(font_size_);
     inputs_field_ = new QTextEdit();
@@ -91,25 +115,11 @@ void Form::DrawMainForm() {
     link_field_->setObjectName("link");
     link_label->setBuddy(link_field_);
 
-    QPushButton* copy_button = new QPushButton("Копировать");
-    copy_button->setFont(font_size_);
-    connect(copy_button, SIGNAL(clicked()), this, SLOT(CopyButtonClicked()));
-
-    QPushButton* clear_button = new QPushButton("Очистить");
-    clear_button->setFont(font_size_);
-    connect(clear_button, SIGNAL(clicked()), this, SLOT(ClearButtonClicked()));
-
-    preview_widget_ = new QWebView();
-    preview_widget_->setMinimumWidth(300);
-    preview_widget_->setDisabled(true);
-    PreviewWorker* worker = new PreviewWorker(0, this);
-    connect(this, SIGNAL(ClearCache()), worker, SLOT(ClearCache()));
-
     QVBoxLayout* left_side_menu = new QVBoxLayout();
-    left_side_menu->addWidget(label);
+    left_side_menu->addWidget(title_label_);
     left_side_menu->addWidget(title_field_);
-    left_side_menu->addWidget(under_line);
-    left_side_menu->addLayout(formulas_buttons_layout);
+    left_side_menu->addWidget(title_splitter_);
+    left_side_menu->addLayout(formulas_buttons_layout_);
     left_side_menu->addWidget(input_label);
     left_side_menu->addWidget(inputs_field_);
     left_side_menu->addWidget(const_label);
@@ -125,11 +135,8 @@ void Form::DrawMainForm() {
     splitter->setChildrenCollapsible(false);
     splitter->setOrientation(Qt::Horizontal);
 
-    QHBoxLayout* buttons_layout = new QHBoxLayout();
-    buttons_layout->addWidget(copy_button);
-    buttons_layout->addWidget(clear_button);
     QVBoxLayout* preview_button_layout = new QVBoxLayout();
-    preview_button_layout->addLayout(buttons_layout);
+    preview_button_layout->addLayout(buttons_layout_);
     preview_button_layout->addWidget(preview_widget_);
     QWidget* right_side_container = new QWidget();
     right_side_container->setLayout(preview_button_layout);
@@ -142,22 +149,18 @@ void Form::DrawMainForm() {
     splitter->setFrameShadow(QFrame::Sunken);
     splitter->setSizes(QList<int>({1,1}));
 
-    connect(title_field_, SIGNAL(textChanged(const QString &)), worker, SLOT(UpdatePreview()));
-    connect(inputs_field_, SIGNAL(textChanged()), worker, SLOT(UpdatePreview()));
-    connect(const_field_, SIGNAL(textChanged()), worker, SLOT(UpdatePreview()));
-    connect(algorithm_field_, SIGNAL(textChanged()), worker, SLOT(UpdatePreview()));
-    connect(output_field_, SIGNAL(textChanged()), worker, SLOT(UpdatePreview()));
-    connect(link_field_, SIGNAL(textChanged(const QString &)), worker, SLOT(UpdatePreview()));
+    connect(inputs_field_, SIGNAL(textChanged()),  worker_, SLOT(UpdatePreview()));
+    connect(const_field_, SIGNAL(textChanged()),  worker_, SLOT(UpdatePreview()));
+    connect(algorithm_field_, SIGNAL(textChanged()), worker_, SLOT(UpdatePreview()));
+    connect(output_field_, SIGNAL(textChanged()),  worker_, SLOT(UpdatePreview()));
+    connect(link_field_, SIGNAL(textChanged()),  worker_, SLOT(UpdatePreview()));
 
     inputs_field_->installEventFilter(this);
     const_field_->installEventFilter(this);
     algorithm_field_->installEventFilter(this);
     output_field_->installEventFilter(this);
 
-    tabs_ = new QTabWidget();
-    tabs_->setFont(font_size_);
-    tabs_->addTab(splitter, "Модуль");
-    form_layout_->addWidget(tabs_);
+    return splitter;
 }
 
 
