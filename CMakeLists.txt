@@ -5,7 +5,6 @@ set(CMAKE_CXX_STANDARD 20)
 set(QT_VERSION 5)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
-set(ENV{QT_AUTO_SCREEN_SCALE_FACTOR} 1)
 
 set(REQUIRED_LIBS Core Gui Widgets WebKitWidgets)
 set(REQUIRED_LIBS_QUALIFIED Qt5::Core Qt5::Gui Qt5::Widgets  Qt5::WebKitWidgets)
