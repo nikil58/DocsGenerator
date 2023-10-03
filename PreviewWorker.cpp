@@ -118,6 +118,7 @@ void PreviewWorker::ClearCache() {
     formulas_cache_.clear();
     inputs_list_="";
     outputs_list_="";
+    link_field_1_="";
     link_field_2_="";
     Update();
 }
@@ -220,6 +221,10 @@ void PreviewWorker::SecondTypeForm() {
     QString section_name_start = "";
     QString section_name = "";
     QString section_name_end = "";
+
+    QString section_field = "";
+    QString section_field_end = "";
+
     if (!section_name_.isEmpty() && section_name_.count(" ") != section_name_.length()) {
         section_name_start = "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">"
                              "        <u style=\"font-family: 'Times New Roman', serif; font-size: 16px;\">";
@@ -227,15 +232,12 @@ void PreviewWorker::SecondTypeForm() {
         section_name_end = "</u>"
                                "    </p>"
                                "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">";
-    }
 
-    QString section_field = "";
-    QString section_field_end = "";
-    if (!section_field_.isEmpty() && section_field_.count(" ") != section_field_.length()) {
-        section_field = section_field_;
-        section_field_end = "</p>";
+        if (!section_field_.isEmpty() && section_field_.count(" ") != section_field_.length()) {
+            section_field = section_field_;
+            section_field_end = "</p>";
+        }
     }
-
 
     if (link_field_2_ != "") {
         link_start = "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">\n"
