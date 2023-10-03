@@ -224,6 +224,17 @@ QWidget* Form::DrawSecondTab() {
     QWidget* left_side_container = new QWidget();
     left_side_container->setLayout(left_side_menu);
 
+    connect(input_description_field, SIGNAL(textChanged()),  worker_, SLOT(UpdatePreview()));
+    connect(input_list_field, SIGNAL(textChanged()),  worker_, SLOT(UpdatePreview()));
+    connect(output_description_field, SIGNAL(textChanged()), worker_, SLOT(UpdatePreview()));
+    connect(output_list_field, SIGNAL(textChanged()),  worker_, SLOT(UpdatePreview()));
+    connect(link_field_2_, SIGNAL(textChanged(const QString &)),  worker_, SLOT(UpdatePreview()));
+
+    input_description_field->installEventFilter(this);
+    input_list_field->installEventFilter(this);
+    output_description_field->installEventFilter(this);
+    output_list_field->installEventFilter(this);
+
     return left_side_container;
 }
 

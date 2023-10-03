@@ -19,7 +19,10 @@ void PreviewWorker::UpdatePreview() {
             title_field_ = line_edit->text();
         }
         else if (line_edit->objectName() == "link"){
-            link_field_ = line_edit->text();
+            if (mode_ == 0)
+                link_field_1_ = line_edit->text();
+            else
+                link_field_2_ = line_edit->text();
         }
     }
     else if (QTextEdit* text_edit = qobject_cast<QTextEdit*>(QObject::sender())){
@@ -38,6 +41,22 @@ void PreviewWorker::UpdatePreview() {
         else if (text_edit->objectName() == "outputs") {
             output_field_ = text_edit->toPlainText().replace("\n", "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">");
             output_field_ = Parse(output_field_);
+        }
+        else if (text_edit->objectName() == "inputs_description") {
+            inputs_description_ = text_edit->toPlainText().replace("\n", "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">");
+            inputs_description_ = Parse(inputs_description_);
+        }
+        else if (text_edit->objectName() == "inputs_list") {
+            inputs_list_ = "<li>" + text_edit->toPlainText().replace("\n", "<li>") + "</li>";
+            inputs_list_ = Parse(inputs_list_);
+        }
+        else if (text_edit->objectName() == "output_description") {
+            outputs_description_ = text_edit->toPlainText().replace("\n", "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">");
+            outputs_description_ = Parse(outputs_description_);
+        }
+        else if (text_edit->objectName() == "output_list") {
+            outputs_list_ =  "<li>" + text_edit->toPlainText().replace("\n", "<li>") + "</li>";
+            outputs_list_ = Parse(outputs_list_);
         }
 
     }
@@ -123,7 +142,7 @@ void PreviewWorker::FirstTypeForm() {
     QString output_end = "</p>";
     QString link_start = "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">\n"
                          "        <u style=\"font-family: 'Times New Roman', serif; font-size: 16px;\"><a href=modelica://";
-    QString link = link_field_.replace("\n", "<br>");
+    QString link = link_field_1_.replace("\n", "<br>");
     QString link_end = ">Пример использования</a></u>\n"
                        "    </p>";
 
@@ -131,5 +150,44 @@ void PreviewWorker::FirstTypeForm() {
 }
 
 void PreviewWorker::SecondTypeForm() {
-    text_ = "";
+    QString title_start = "<html><head></head><body><h1><font face=\"Times New Roman, serif\"><span style=\"font-size: 16px;\">";
+    QString title = title_field_.replace("\n", "<br>");
+    QString title_end = "</span></font></h1><font style=\"font-size: 12pt\"><font color=\"#000000\"><font face=\"Times New Roman, serif\">";
+    QString inputs_start = "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">"
+                           "        <u style=\"font-family: 'Times New Roman', serif; font-size: 16px;\">Описание входов:</u>"
+                           "    </p>"
+                           "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">";
+    QString inputs = inputs_description_;
+    QString inputs_end = "</p>";
+    QString inputs_list_start = "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">"
+                          "        <u style=\"font-family: 'Times New Roman', serif; font-size: 16px;\"></u>"
+                          "    </p>\n"
+                          "  <ul>";
+    QString inputs_list = inputs_list_;
+    QString inputs_list_end = "</ul>";
+    QString outputs_start =  "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">"
+                             "        <u style=\"font-family: 'Times New Roman', serif; font-size: 16px;\">Описание выходов:</u>"
+                             "    </p>"
+                             "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">";
+    QString outputs = outputs_description_;
+    QString outputs_end = "</p>";
+
+    QString outputs_list_start = "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">"
+                                "        <u style=\"font-family: 'Times New Roman', serif; font-size: 16px;\"></u>"
+                                "    </p>\n"
+                                "  <ul>";
+    QString outputs_list = outputs_list_;
+    QString outputs_list_end = "</ul>";
+
+    QString link_start = "";
+    QString link="";
+    QString link_end = "";
+    if (link_field_2_ != "") {
+        link_start = "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">\n"
+                     "        <u style=\"font-family: 'Times New Roman', serif; font-size: 16px;\"><a href=modelica://";
+        link = link_field_2_.replace("\n", "<br>");
+        link_end = ">Ссылка на модуль</a></u>\n"
+                           "    </p>";
+    }
+    text_ = title_start + title + title_end + inputs_start + inputs + inputs_end + inputs_list_start + inputs_list + inputs_list_end + outputs_start + outputs + outputs_end + outputs_list_start + outputs_list + outputs_list_end +  link_start + link + link_end;
 }

@@ -18,7 +18,13 @@ private:
     QString const_field_;
     QString algorithm_field_;
     QString output_field_;
-    QString link_field_;
+    QString link_field_1_;
+
+    QString inputs_description_;
+    QString inputs_list_;
+    QString outputs_description_;
+    QString outputs_list_;
+    QString link_field_2_;
 
     QString text_{};
     QMap<QString, QString> formulas_cache_{};
