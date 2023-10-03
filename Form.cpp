@@ -176,31 +176,31 @@ QWidget* Form::DrawFirstTab() {
 QWidget* Form::DrawSecondTab() {
     QLabel* input_description = new QLabel("Описание входов");
     input_description->setFont(font_size_);
-    QTextEdit* input_description_field = new QTextEdit();
-    input_description_field->setFont(font_size_);
-    input_description_field->setObjectName("inputs_description");
-    input_description->setBuddy(input_description_field);
+    input_description_field_ = new QTextEdit();
+    input_description_field_->setFont(font_size_);
+    input_description_field_->setObjectName("inputs_description");
+    input_description->setBuddy(input_description_field_);
 
     QLabel* input_list = new QLabel("Список входов");
     input_list->setFont(font_size_);
-    QTextEdit* input_list_field = new QTextEdit();
-    input_list_field->setFont(font_size_);
-    input_list_field->setObjectName("inputs_list");
-    input_list->setBuddy(input_list_field);
+    input_list_field_ = new QTextEdit();
+    input_list_field_->setFont(font_size_);
+    input_list_field_->setObjectName("inputs_list");
+    input_list->setBuddy(input_list_field_);
 
     QLabel* output_description = new QLabel("Описание выходов");
     output_description->setFont(font_size_);
-    QTextEdit* output_description_field = new QTextEdit();
-    output_description_field->setFont(font_size_);
-    output_description_field->setObjectName("output_description");
-    output_description->setBuddy(output_description_field);
+    output_description_field_ = new QTextEdit();
+    output_description_field_->setFont(font_size_);
+    output_description_field_->setObjectName("output_description");
+    output_description->setBuddy(output_description_field_);
 
     QLabel* output_list = new QLabel("Список выходов");
     output_list->setFont(font_size_);
-    QTextEdit* output_list_field = new QTextEdit();
-    output_list_field->setFont(font_size_);
-    output_list_field->setObjectName("output_list");
-    output_list->setBuddy(input_list_field);
+    output_list_field_ = new QTextEdit();
+    output_list_field_->setFont(font_size_);
+    output_list_field_->setObjectName("output_list");
+    output_list->setBuddy(output_list_field_);
 
     QLabel* link_label = new QLabel("Ссылка на модуль");
     link_label->setFont(font_size_);
@@ -209,31 +209,52 @@ QWidget* Form::DrawSecondTab() {
     link_field_2_->setObjectName("link");
     link_label->setBuddy(link_field_2_);
 
+    QLabel* section_name_label = new QLabel("Название дополнительного раздела");
+    section_name_label->setFont(font_size_);
+    section_name_ = new QLineEdit();
+    section_name_->setFont(font_size_);
+    section_name_->setObjectName("section_name");
+    section_name_label->setBuddy(section_name_);
+
+    QLabel* section_field_label = new QLabel("Содержание");
+    section_field_label->setFont(font_size_);
+    section_field_ = new QTextEdit();
+    section_field_->setFont(font_size_);
+    section_field_->setObjectName("section_field");
+    section_field_label->setBuddy(section_field_);
+
     QVBoxLayout* left_side_menu = new QVBoxLayout();
     left_side_menu->addWidget(input_description);
-    left_side_menu->addWidget(input_description_field);
+    left_side_menu->addWidget(input_description_field_);
     left_side_menu->addWidget(input_list);
-    left_side_menu->addWidget(input_list_field);
+    left_side_menu->addWidget(input_list_field_);
     left_side_menu->addWidget(output_description);
-    left_side_menu->addWidget(output_description_field);
+    left_side_menu->addWidget(output_description_field_);
     left_side_menu->addWidget(output_list);
-    left_side_menu->addWidget(output_list_field);
+    left_side_menu->addWidget(output_list_field_);
     left_side_menu->addWidget(link_label);
     left_side_menu->addWidget(link_field_2_);
+    left_side_menu->addWidget(section_name_label);
+    left_side_menu->addWidget(section_name_);
+    left_side_menu->addWidget(section_field_label);
+    left_side_menu->addWidget(section_field_);
+
 
     QWidget* left_side_container = new QWidget();
     left_side_container->setLayout(left_side_menu);
 
-    connect(input_description_field, SIGNAL(textChanged()),  worker_, SLOT(UpdatePreview()));
-    connect(input_list_field, SIGNAL(textChanged()),  worker_, SLOT(UpdatePreview()));
-    connect(output_description_field, SIGNAL(textChanged()), worker_, SLOT(UpdatePreview()));
-    connect(output_list_field, SIGNAL(textChanged()),  worker_, SLOT(UpdatePreview()));
+    connect(input_description_field_, SIGNAL(textChanged()),  worker_, SLOT(UpdatePreview()));
+    connect(input_list_field_, SIGNAL(textChanged()),  worker_, SLOT(UpdatePreview()));
+    connect(output_description_field_, SIGNAL(textChanged()), worker_, SLOT(UpdatePreview()));
+    connect(output_list_field_, SIGNAL(textChanged()),  worker_, SLOT(UpdatePreview()));
     connect(link_field_2_, SIGNAL(textChanged(const QString &)),  worker_, SLOT(UpdatePreview()));
+    connect(section_name_, SIGNAL(textChanged(const QString &)),  worker_, SLOT(UpdatePreview()));
+    connect(section_field_, SIGNAL(textChanged()),  worker_, SLOT(UpdatePreview()));
 
-    input_description_field->installEventFilter(this);
-    input_list_field->installEventFilter(this);
-    output_description_field->installEventFilter(this);
-    output_list_field->installEventFilter(this);
+    input_description_field_->installEventFilter(this);
+    input_list_field_->installEventFilter(this);
+    output_description_field_->installEventFilter(this);
+    output_list_field_->installEventFilter(this);
 
     return left_side_container;
 }
@@ -350,6 +371,15 @@ void Form::ClearButtonClicked() {
     algorithm_field_->clear();
     output_field_->clear();
     link_field_1_->clear();
+
+    input_description_field_->clear();
+    input_list_field_->clear();
+    output_description_field_->clear();
+    output_list_field_->clear();
+    link_field_2_->clear();
+    section_name_->clear();
+    section_field_->clear();
+
     emit ClearCache();
 }
 

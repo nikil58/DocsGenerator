@@ -31,7 +31,14 @@ private:
     QTextEdit* algorithm_field_;
     QTextEdit* output_field_;
     QLineEdit* link_field_1_;
+
+    QTextEdit* input_description_field_;
+    QTextEdit* input_list_field_;
+    QTextEdit* output_description_field_;
+    QTextEdit* output_list_field_;
     QLineEdit* link_field_2_;
+    QLineEdit* section_name_;
+    QTextEdit* section_field_;
 
     QFrame* title_splitter_;
 

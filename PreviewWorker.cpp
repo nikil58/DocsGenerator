@@ -24,6 +24,9 @@ void PreviewWorker::UpdatePreview() {
             else
                 link_field_2_ = line_edit->text();
         }
+        else if (line_edit->objectName() == "section_name") {
+            section_name_ = line_edit->text();
+        }
     }
     else if (QTextEdit* text_edit = qobject_cast<QTextEdit*>(QObject::sender())){
         if (text_edit->objectName() == "inputs") {
@@ -57,6 +60,10 @@ void PreviewWorker::UpdatePreview() {
         else if (text_edit->objectName() == "output_list") {
             outputs_list_ =  "<li>" + text_edit->toPlainText().replace("\n", "<li>") + "</li>";
             outputs_list_ = Parse(outputs_list_);
+        }
+        else if (text_edit->objectName() == "section_field") {
+            section_field_ = text_edit->toPlainText().replace("\n", "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">");
+            section_field_ = Parse(section_field_);
         }
 
     }
@@ -110,6 +117,10 @@ PreviewWorker::~PreviewWorker() noexcept {}
 
 void PreviewWorker::ClearCache() {
     formulas_cache_.clear();
+    inputs_list_="";
+    outputs_list_="";
+    link_field_2_="";
+    Update();
 }
 
 void PreviewWorker::FirstTypeForm() {
@@ -182,6 +193,27 @@ void PreviewWorker::SecondTypeForm() {
     QString link_start = "";
     QString link="";
     QString link_end = "";
+
+    QString section_name_start = "";
+    QString section_name = "";
+    QString section_name_end = "";
+    if (!section_name_.isEmpty() && section_name_.count(" ") != section_name_.length()) {
+        section_name_start = "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">"
+                             "        <u style=\"font-family: 'Times New Roman', serif; font-size: 16px;\">";
+        section_name = section_name_;
+        section_name_end = "</u>"
+                               "    </p>"
+                               "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">";
+    }
+
+    QString section_field = "";
+    QString section_field_end = "";
+    if (!section_field_.isEmpty() && section_field_.count(" ") != section_field_.length()) {
+        section_field = section_field_;
+        section_field_end = "</p>";
+    }
+
+
     if (link_field_2_ != "") {
         link_start = "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">\n"
                      "        <u style=\"font-family: 'Times New Roman', serif; font-size: 16px;\"><a href=modelica://";
@@ -189,5 +221,5 @@ void PreviewWorker::SecondTypeForm() {
         link_end = ">Ссылка на модуль</a></u>\n"
                            "    </p>";
     }
-    text_ = title_start + title + title_end + inputs_start + inputs + inputs_end + inputs_list_start + inputs_list + inputs_list_end + outputs_start + outputs + outputs_end + outputs_list_start + outputs_list + outputs_list_end +  link_start + link + link_end;
+    text_ = title_start + title + title_end + inputs_start + inputs + inputs_end + inputs_list_start + inputs_list + inputs_list_end + outputs_start + outputs + outputs_end + outputs_list_start + outputs_list + outputs_list_end +  link_start + link + link_end + section_name_start + section_name + section_name_end + section_field + section_field_end;
 }

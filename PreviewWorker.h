@@ -25,6 +25,8 @@ private:
     QString outputs_description_;
     QString outputs_list_;
     QString link_field_2_;
+    QString section_name_;
+    QString section_field_;
 
     QString text_{};
     QMap<QString, QString> formulas_cache_{};
