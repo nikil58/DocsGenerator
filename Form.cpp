@@ -114,6 +114,7 @@ QWidget* Form::DrawFirstTab() {
     inputs_field_ = new QTextEdit();
     inputs_field_->setFont(font_size_);
     inputs_field_->setObjectName("inputs");
+    inputs_field_->setAcceptRichText(false);
     input_label->setBuddy(inputs_field_);
 
     QLabel* const_label = new QLabel("Константы");
@@ -121,6 +122,7 @@ QWidget* Form::DrawFirstTab() {
     const_field_ = new QTextEdit();
     const_field_->setFont(font_size_);
     const_field_->setObjectName("constants");
+    const_field_->setAcceptRichText(false);
     const_label->setBuddy(const_field_);
 
     QLabel* algorithm_label = new QLabel("Алгоритм");
@@ -128,6 +130,7 @@ QWidget* Form::DrawFirstTab() {
     algorithm_field_ = new QTextEdit();
     algorithm_field_->setFont(font_size_);
     algorithm_field_->setObjectName("algorithm");
+    algorithm_field_->setAcceptRichText(false);
     algorithm_label->setBuddy(algorithm_field_);
 
     QLabel* output_label = new QLabel("Выход");
@@ -135,6 +138,7 @@ QWidget* Form::DrawFirstTab() {
     output_field_ = new QTextEdit();
     output_field_->setFont(font_size_);
     output_field_->setObjectName("outputs");
+    output_field_->setAcceptRichText(false);
     output_label->setBuddy(output_field_);
 
     QLabel* link_label = new QLabel("Ссылка на пример");
@@ -179,6 +183,7 @@ QWidget* Form::DrawSecondTab() {
     input_description_field_ = new QTextEdit();
     input_description_field_->setFont(font_size_);
     input_description_field_->setObjectName("inputs_description");
+    input_description_field_->setAcceptRichText(false);
     input_description->setBuddy(input_description_field_);
 
     QLabel* input_list = new QLabel("Список входов");
@@ -186,6 +191,7 @@ QWidget* Form::DrawSecondTab() {
     input_list_field_ = new QTextEdit();
     input_list_field_->setFont(font_size_);
     input_list_field_->setObjectName("inputs_list");
+    input_list_field_->setAcceptRichText(false);
     input_list->setBuddy(input_list_field_);
 
     QLabel* output_description = new QLabel("Описание выходов");
@@ -193,6 +199,7 @@ QWidget* Form::DrawSecondTab() {
     output_description_field_ = new QTextEdit();
     output_description_field_->setFont(font_size_);
     output_description_field_->setObjectName("output_description");
+    output_description_field_->setAcceptRichText(false);
     output_description->setBuddy(output_description_field_);
 
     QLabel* output_list = new QLabel("Список выходов");
@@ -200,6 +207,7 @@ QWidget* Form::DrawSecondTab() {
     output_list_field_ = new QTextEdit();
     output_list_field_->setFont(font_size_);
     output_list_field_->setObjectName("output_list");
+    output_list_field_->setAcceptRichText(false);
     output_list->setBuddy(output_list_field_);
 
     QLabel* link_label = new QLabel("Ссылка на модуль");
@@ -221,6 +229,7 @@ QWidget* Form::DrawSecondTab() {
     section_field_ = new QTextEdit();
     section_field_->setFont(font_size_);
     section_field_->setObjectName("section_field");
+    section_field_->setAcceptRichText(false);
     section_field_label->setBuddy(section_field_);
 
     QVBoxLayout* left_side_menu = new QVBoxLayout();
