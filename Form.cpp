@@ -3,6 +3,8 @@
 #include <QPushButton>
 #include <QWebFrame>
 #include <QClipboard>
+#include <QToolBar>
+#include <QMenuBar>
 
 Form::Form() {
     QThread::currentThread()->setObjectName("Main");
@@ -12,8 +14,21 @@ Form::Form() {
 
     font_size_.setPixelSize(20);
     form_layout_ = new QHBoxLayout(this);
+    QWidget* widget = new QWidget;
+    widget->setLayout(form_layout_);
     DrawMainForm();
 
+   /* QToolBar* toolbar = new QToolBar();
+    QAction* action1 = toolbar->addAction("Import");
+    this->addToolBar(Qt::TopToolBarArea, toolbar);*/
+
+   auto* import = new QAction("&Import", this);
+   QMenu* file = menuBar()->addMenu("&File");
+   menuBar()->setFont(font_size_);
+   file->setFont(font_size_);
+   file->addAction(import);
+
+    this->setCentralWidget(widget);
     this->show();
 }
 

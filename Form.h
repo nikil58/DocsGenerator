@@ -8,9 +8,10 @@
 #include <QApplication>
 #include <QSplitter>
 #include <QLabel>
+#include <QMainWindow>
 #include "PreviewWorker.h"
 
-class Form : public QWidget {
+class Form : public QMainWindow {
 Q_OBJECT
 private:
     /// QFont used for define font-size of anything in form
