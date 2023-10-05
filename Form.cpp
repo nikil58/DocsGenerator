@@ -3,8 +3,9 @@
 #include <QPushButton>
 #include <QWebFrame>
 #include <QClipboard>
-#include <QToolBar>
 #include <QMenuBar>
+#include <QFileDialog>
+#include <QSettings>
 
 Form::Form() {
     QThread::currentThread()->setObjectName("Main");
@@ -13,20 +14,20 @@ Form::Form() {
     this->setMinimumSize(1280, 900);
 
     font_size_.setPixelSize(20);
-    form_layout_ = new QHBoxLayout(this);
+    form_layout_ = new QHBoxLayout();
     QWidget* widget = new QWidget;
     widget->setLayout(form_layout_);
     DrawMainForm();
 
-   /* QToolBar* toolbar = new QToolBar();
-    QAction* action1 = toolbar->addAction("Import");
-    this->addToolBar(Qt::TopToolBarArea, toolbar);*/
-
-   auto* import = new QAction("&Import", this);
-   QMenu* file = menuBar()->addMenu("&File");
+   QAction* import_menu = new QAction("&Импорт", this);
+   QAction* export_menu = new QAction("&Экспорт", this);
+   QMenu* file = menuBar()->addMenu("&Файл");
    menuBar()->setFont(font_size_);
    file->setFont(font_size_);
-   file->addAction(import);
+   file->addAction(import_menu);
+   file->addAction(export_menu);
+   connect(import_menu, SIGNAL(triggered(bool)), this, SLOT(ImportFile(bool)));
+   connect(export_menu, SIGNAL(triggered(bool)), this, SLOT(ExportFile(bool)));
 
     this->setCentralWidget(widget);
     this->show();
@@ -423,4 +424,46 @@ void Form::SwitchTab(int index) {
 void Form::ClickOnLink(const QUrl& url) {
     if (url.toString().contains("modelica"))
         inputs_field_->textChanged();
+}
+
+void Form::ImportFile(bool) {
+    QString file_name = QFileDialog::getOpenFileName(this, tr("Открыть"), QDir::currentPath(), tr("Config file (*.ini) ;; All files (*.*)"));
+
+    QSettings* settings = new QSettings(file_name, QSettings::IniFormat);
+    title_field_->setText(settings->value("title").toString());
+    inputs_field_->setText(settings->value("inputs_field").toString());
+    const_field_->setText(settings->value("const_field").toString());
+    algorithm_field_->setText(settings->value("algorithm_field").toString());
+    output_field_->setText(settings->value("output_field").toString());
+    link_field_1_->setText(settings->value("link_field_1").toString());
+    input_description_field_->setText(settings->value("input_description_field").toString());
+    input_list_field_->setText(settings->value("input_list_field").toString());
+    output_description_field_->setText(settings->value("output_description_field").toString());
+    output_list_field_->setText(settings->value("output_list_field").toString());
+    link_field_2_->setText(settings->value("link_field_2").toString());
+    section_name_->setText(settings->value("section_name").toString());
+    section_field_->setText(settings->value("section_field").toString());
+
+    delete settings;
+}
+
+void Form::ExportFile(bool) {
+    QString file_name = QFileDialog::getSaveFileName(this, tr("Сохранить в"), QDir::currentPath(), tr("Config file (*.ini) ;; All files (*.*)"));
+
+    QSettings* settings = new QSettings(file_name, QSettings::IniFormat);
+    settings->setValue("title", title_field_->text());
+    settings->setValue("inputs_field",inputs_field_->toPlainText());
+    settings->setValue("const_field",const_field_->toPlainText());
+    settings->setValue("algorithm_field",algorithm_field_->toPlainText());
+    settings->setValue("output_field",output_field_->toPlainText());
+    settings->setValue("link_field_1",link_field_1_->text());
+    settings->setValue("input_description_field",input_description_field_->toPlainText());
+    settings->setValue("input_list_field",input_list_field_->toPlainText());
+    settings->setValue("output_description_field",output_description_field_->toPlainText());
+    settings->setValue("output_list_field",output_list_field_->toPlainText());
+    settings->setValue("link_field_2",link_field_2_->text());
+    settings->setValue("section_name",section_name_->text());
+    settings->setValue("section_field",section_field_->toPlainText());
+
+    delete settings;
 }

@@ -69,4 +69,6 @@ private slots:
     void Rerender(QString text);
     void SwitchTab(int index);
     void ClickOnLink(const QUrl &);
+    void ImportFile(bool);
+    void ExportFile(bool);
 };
