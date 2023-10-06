@@ -173,10 +173,10 @@ void PreviewWorker::FirstTypeForm() {
     QString link_end = "";
     if (!link_field_1_.isEmpty() && link_field_1_.count(" ") != link_field_1_.length()) {
         link_start = "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">\n"
-                     "        <u style=\"font-family: 'Times New Roman', serif; font-size: 16px;\"><a href=modelica://";
+                     "        <u style=\"font-family: 'Times New Roman', serif; font-size: 16px;\"><a href=\"modelica://";
         link = link_field_1_.replace("\n", "<br>");
-        link_end = ">Пример использования</a></u>\n"
-                   "    </p>";
+        link_end = "\">Пример использования</a></u>\n"
+                   "    </p></body></html>";
     }
 
     text_ = title_start + title + title_end + inputs_start + inputs + inputs_end + const_start + const_field +
@@ -241,9 +241,9 @@ void PreviewWorker::SecondTypeForm() {
 
     if (link_field_2_ != "") {
         link_start = "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">\n"
-                     "        <u style=\"font-family: 'Times New Roman', serif; font-size: 16px;\"><a href=modelica://";
+                     "        <u style=\"font-family: 'Times New Roman', serif; font-size: 16px;\"><a href=\"modelica://";
         link = link_field_2_.replace("\n", "<br>");
-        link_end = ">Ссылка на модуль</a></u>\n"
+        link_end = "\">Ссылка на модуль</a></u>\n"
                            "    </p>";
     }
     text_ = title_start + title + title_end + inputs_start + inputs + inputs_end + inputs_list_start + inputs_list + inputs_list_end + outputs_start + outputs + outputs_end + outputs_list_start + outputs_list + outputs_list_end +  link_start + link + link_end + section_name_start + section_name + section_name_end + section_field + section_field_end;
