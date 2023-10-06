@@ -90,7 +90,7 @@ QString PreviewWorker::Parse(QString text) {
             result = formulas_cache_.value(substring.toString());
         }
         QFile file("./temp.txt");
-        if (formulas_cache_.contains(substring.toString()) != true&&file.open(QIODevice::ReadWrite)){
+        if (!formulas_cache_.contains(substring.toString()) && file.open(QIODevice::ReadWrite)){
             QTextStream stream(&file);
             stream << substring.toString();
             file.close();
@@ -107,6 +107,9 @@ QString PreviewWorker::Parse(QString text) {
         }
         result = first_part + result;
         result.replace("\n", "</math>"+last_part);
+    }
+    else if (text.contains("!img")) {
+        result = text.replace("!img(", "<img src = \"file:").replace(")","\"/>");
     }
     //qDebug() << result;
     return result;

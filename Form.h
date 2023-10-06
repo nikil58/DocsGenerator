@@ -56,7 +56,7 @@ private:
     QWidget* DrawFirstTab();
     QWidget* DrawSecondTab();
 
-    const QString formulas_buttons_[13] = {"Формула", "sub", "sup", "root", "frac", "Delta", "sum", "prod", "int", "vec", "pi", "leq", "inf"};
+    const QString formulas_buttons_[14] = {"Формула", "sub", "sup", "root", "frac", "Delta", "sum", "prod", "int", "vec", "pi", "leq", "inf", "Фотография"};
 public:
     explicit Form();
 signals:

@@ -349,6 +349,12 @@ void Form::OperationClick() {
             last_selected_field_->insertPlainText("\\infty");
             last_selected_field_->setFocus();
         }
+        else if (QObject::sender()->objectName() == formulas_buttons_[13]) {
+            QString photo_path = QFileDialog::getOpenFileName(this, tr("Выбрать"), QDir::currentPath(), tr("Image (PNG, JPG, JPEG, TIFF) (*.png *.jpg *.jpeg *.tiff) ;; All files (*.*)"));
+            if (!photo_path.isEmpty())
+                last_selected_field_->insertPlainText("!img("+photo_path+")");
+            last_selected_field_->setFocus();
+        }
     }
 
 }
