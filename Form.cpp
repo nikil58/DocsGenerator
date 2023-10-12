@@ -342,14 +342,30 @@ void Form::OperationClick() {
             last_selected_field_->setFocus();
         }
         else if (QObject::sender()->objectName() == formulas_buttons_[11]) {
-            last_selected_field_->insertPlainText("\\leq");
+            last_selected_field_->insertPlainText("\\alpha");
             last_selected_field_->setFocus();
         }
         else if (QObject::sender()->objectName() == formulas_buttons_[12]) {
-            last_selected_field_->insertPlainText("\\infty");
+            last_selected_field_->insertPlainText("\\beta");
             last_selected_field_->setFocus();
         }
         else if (QObject::sender()->objectName() == formulas_buttons_[13]) {
+            last_selected_field_->insertPlainText("\\varphi");
+            last_selected_field_->setFocus();
+        }
+        else if (QObject::sender()->objectName() == formulas_buttons_[14]) {
+            last_selected_field_->insertPlainText("\\theta");
+            last_selected_field_->setFocus();
+        }
+        else if (QObject::sender()->objectName() == formulas_buttons_[15]) {
+            last_selected_field_->insertPlainText("\\leq");
+            last_selected_field_->setFocus();
+        }
+        else if (QObject::sender()->objectName() == formulas_buttons_[16]) {
+            last_selected_field_->insertPlainText("\\infty");
+            last_selected_field_->setFocus();
+        }
+        else if (QObject::sender()->objectName() == formulas_buttons_[17]) {
             QString photo_path = QFileDialog::getOpenFileName(this, tr("Выбрать"), QDir::currentPath(), tr("Image (PNG, JPG, JPEG, TIFF) (*.png *.jpg *.jpeg *.tiff) ;; All files (*.*)"));
             if (!photo_path.isEmpty())
                 last_selected_field_->insertPlainText("!img("+photo_path+")");

@@ -13,5 +13,9 @@
     <file alias="pi">./img/pi.png</file>
     <file alias="leq">./img/leq.png</file>
     <file alias="inf">./img/inf.png</file>
+    <file alias="alpha">./img/alpha.png</file>
+    <file alias="beta">./img/beta.png</file>
+    <file alias="phi">./img/phi.png</file>
+    <file alias="theta">./img/theta.png</file>
 </qresource>
 </RCC>
