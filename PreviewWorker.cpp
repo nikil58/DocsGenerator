@@ -108,8 +108,8 @@ QString PreviewWorker::Parse(QString text) {
         result = first_part + result;
         result.replace("\n", "</math>"+last_part);
     }
-    else if (text.contains("!img")) {
-        result = text.replace("!img(", "<img src = \"file:").replace(")","\"/>");
+    if (result.contains("!img")) {
+        result = result.replace("!img(", "<img src = \"file:").replace(")","\"/>");
     }
     //qDebug() << result;
     return result;
