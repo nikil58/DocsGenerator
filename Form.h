@@ -3,7 +3,7 @@
 #include <QVBoxLayout>
 #include <QTabWidget>
 #include <QLineEdit>
-#include <QWebView>
+#include <QtWebEngineWidgets>
 #include <QTextEdit>
 #include <QApplication>
 #include <QSplitter>
@@ -45,7 +45,7 @@ private:
 
     QGridLayout* formulas_buttons_layout_;
 
-    QWebView* preview_widget_{};
+    QWebEngineView* preview_widget_{};
 
     QTextEdit* last_selected_field_{};
 

@@ -1,7 +1,6 @@
 #include "Form.h"
 
 #include <QPushButton>
-#include <QWebFrame>
 #include <QClipboard>
 #include <QMenuBar>
 #include <QFileDialog>
@@ -78,7 +77,7 @@ void Form::DrawMainForm() {
     clear_button->setFont(font_size_);
     connect(clear_button, SIGNAL(clicked()), this, SLOT(ClearButtonClicked()));
 
-    preview_widget_ = new QWebView();
+    preview_widget_ = new QWebEngineView();
     preview_widget_->setMinimumWidth(300);
     connect(preview_widget_, SIGNAL(urlChanged(const QUrl &)), this, SLOT(ClickOnLink(const QUrl &)));
     worker_ = new PreviewWorker(0, this);
@@ -384,30 +383,31 @@ bool Form::eventFilter(QObject* obj, QEvent* e) {
     return false;
 }
 
-void Form::CopyButtonClicked(){
-    QClipboard* clipboard = QApplication::clipboard();
-
-    QFile file("./temp.html");
-    if (file.open(QIODevice::ReadWrite)){
-        QTextStream stream(&file);
-        stream << preview_widget_->page()->mainFrame()->toHtml();
-        file.close();
-        QProcess* proc = new QProcess();
-        proc->start("tidy -i -m -w 160 ./temp.html");
-        proc->waitForFinished();
-        file.open(QIODevice::ReadOnly);
-        QString result = stream.readAll().remove("<!DOCTYPE html>\n");
-        clipboard->setText(result, QClipboard::Clipboard);
-        if (clipboard->supportsSelection()) {
-            clipboard->setText(result, QClipboard::Selection);
-        }
+void Form::CopyButtonClicked() {
+    preview_widget_->page()->toHtml([this](QString html) {
+        QClipboard* clipboard = QApplication::clipboard();
+        QFile file("./temp.html");
+        if (file.open(QIODevice::ReadWrite)) {
+            QTextStream stream(&file);
+            stream << html;
+            file.close();
+            QProcess* proc = new QProcess();
+            proc->start("tidy -i -m -w 160 ./temp.html");
+            proc->waitForFinished();
+            file.open(QIODevice::ReadOnly);
+            QString result = stream.readAll().remove("<!DOCTYPE html>\n");
+            clipboard->setText(result, QClipboard::Clipboard);
+            if (clipboard->supportsSelection()) {
+                clipboard->setText(result, QClipboard::Selection);
+            }
 #if defined (Q_OS_LINUX)
-        QThread::msleep(1);
+            QThread::msleep(1);
 #endif
-        file.close();
-        file.remove();
-        proc->terminate();
-    }
+            file.close();
+            file.remove();
+            proc->terminate();
+        }
+    });
 }
 
 

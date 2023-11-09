@@ -83,16 +83,19 @@ QString PreviewWorker::Parse(QString text) {
     QString result = text;
     if (text.contains("\\(")&&text.contains("\\)")){
         QString first_part = text.split("\\(")[0];
-        QStringRef last_part_ref(&text, text.indexOf("\\)") + 2, text.length() - text.indexOf("\\)") - 2);
-        QString last_part = last_part_ref.toString();
-        QStringRef substring(&text, text.indexOf("\\("), text.indexOf("\\)") + 2 - text.indexOf("\\("));
-        if (formulas_cache_.contains(substring.toString())) {
-            result = formulas_cache_.value(substring.toString());
+        QString last_part_ref = text.left(text.indexOf("\\)" + 2)).right(text.indexOf("\\)") - 2);
+        //QStringView last_part_ref(&text, text.indexOf("\\)") + 2, text.length() - text.indexOf("\\)") - 2);
+        //QString last_part = last_part_ref.toString();
+        QString last_part = last_part_ref;
+        QString substring = text.left(text.indexOf("\\(")).right(text.indexOf("\\)") + 2);
+        //QStringRef substring(&text, text.indexOf("\\("), text.indexOf("\\)") + 2 - text.indexOf("\\("));
+        if (formulas_cache_.contains(substring/*.toString()*/)) {
+            result = formulas_cache_.value(substring/*.toString()*/);
         }
         QFile file("./temp.txt");
-        if (!formulas_cache_.contains(substring.toString()) && file.open(QIODevice::ReadWrite)){
+        if (!formulas_cache_.contains(substring/*.toString()*/) && file.open(QIODevice::ReadWrite)){
             QTextStream stream(&file);
-            stream << substring.toString();
+            stream << substring/*.toString()*/;
             file.close();
             QProcess* proc = new QProcess();
             proc->start("node ./latex_to_mathml.js ./temp.txt");
@@ -100,7 +103,7 @@ QString PreviewWorker::Parse(QString text) {
             result = proc->readAllStandardOutput();
             file.remove();
             proc->terminate();
-            formulas_cache_.insert(substring.toString(),result);
+            formulas_cache_.insert(substring/*.toString()*/,result);
         }
         if (last_part.contains("\\(")&&last_part.contains("\\)")) {
             last_part = Parse(last_part);
