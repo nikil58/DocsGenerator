@@ -1,6 +1,7 @@
 #include "PreviewWorker.h"
 #include <QLineEdit>
 #include <QTextEdit>
+#include <QRegularExpression>
 
 
 PreviewWorker::PreviewWorker(int mode, QObject* parent) : mode_(mode) {
@@ -83,11 +84,14 @@ QString PreviewWorker::Parse(QString text) {
     QString result = text;
     if (text.contains("\\(")&&text.contains("\\)")){
         QString first_part = text.split("\\(")[0];
-        QString last_part_ref = text.left(text.indexOf("\\)" + 2)).right(text.indexOf("\\)") - 2);
+        QRegularExpression regex1("\\)(.+?)$");
+        QString last_part_ref = regex1.match(text).captured(1);
         //QStringView last_part_ref(&text, text.indexOf("\\)") + 2, text.length() - text.indexOf("\\)") - 2);
         //QString last_part = last_part_ref.toString();
         QString last_part = last_part_ref;
-        QString substring = text.left(text.indexOf("\\(")).right(text.indexOf("\\)") + 2);
+        QRegularExpression regex2("\\((.+?)\\)");
+        QString substring = regex2.match(text).captured(1).replace("\\","");
+        qDebug() << substring;
         //QStringRef substring(&text, text.indexOf("\\("), text.indexOf("\\)") + 2 - text.indexOf("\\("));
         if (formulas_cache_.contains(substring/*.toString()*/)) {
             result = formulas_cache_.value(substring/*.toString()*/);
@@ -98,9 +102,10 @@ QString PreviewWorker::Parse(QString text) {
             stream << substring/*.toString()*/;
             file.close();
             QProcess* proc = new QProcess();
-            proc->start("node ./latex_to_mathml.js ./temp.txt");
+            proc->start("node", QStringList() << "./latex_to_mathml.js" << "./temp.txt");
             proc->waitForFinished();
             result = proc->readAllStandardOutput();
+            qDebug() << result;
             file.remove();
             proc->terminate();
             formulas_cache_.insert(substring/*.toString()*/,result);
