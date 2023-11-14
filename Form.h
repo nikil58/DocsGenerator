@@ -51,6 +51,8 @@ private:
 
     PreviewWorker* worker_;
 
+    QString text_in_preview_{};
+
     bool eventFilter(QObject* obj, QEvent* e);
     void DrawMainForm();
     QWidget* DrawFirstTab();

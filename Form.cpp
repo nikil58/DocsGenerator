@@ -384,30 +384,28 @@ bool Form::eventFilter(QObject* obj, QEvent* e) {
 }
 
 void Form::CopyButtonClicked() {
-    preview_widget_->page()->toHtml([this](QString html) {
-        QClipboard* clipboard = QApplication::clipboard();
-        QFile file("./temp.html");
-        if (file.open(QIODevice::ReadWrite)) {
-            QTextStream stream(&file);
-            stream << html;
-            file.close();
-            QProcess* proc = new QProcess();
-            proc->start("tidy -i -m -w 160 ./temp.html");
-            proc->waitForFinished();
-            file.open(QIODevice::ReadOnly);
-            QString result = stream.readAll().remove("<!DOCTYPE html>\n");
-            clipboard->setText(result, QClipboard::Clipboard);
-            if (clipboard->supportsSelection()) {
-                clipboard->setText(result, QClipboard::Selection);
-            }
-#if defined (Q_OS_LINUX)
-            QThread::msleep(1);
-#endif
-            file.close();
-            file.remove();
-            proc->terminate();
+    QClipboard* clipboard = QApplication::clipboard();
+    QFile file("./temp.html");
+    if (file.open(QIODevice::ReadWrite)) {
+        QTextStream stream(&file);
+        stream << text_in_preview_;
+        file.close();
+        QProcess* proc = new QProcess();
+        proc->start("tidy", QStringList() << "-i" << "-m" << "-w 160" <<"./temp.html");
+        proc->waitForFinished();
+        file.open(QIODevice::ReadOnly);
+        QString result = stream.readAll().remove("<!DOCTYPE html>\n");
+        clipboard->setText(result, QClipboard::Clipboard);
+        if (clipboard->supportsSelection()) {
+            clipboard->setText(result, QClipboard::Selection);
         }
-    });
+#if defined (Q_OS_LINUX)
+        QThread::msleep(1);
+#endif
+        file.close();
+        file.remove();
+        proc->terminate();
+    }
 }
 
 
@@ -431,7 +429,8 @@ void Form::ClearButtonClicked() {
 }
 
 void Form::Rerender(QString text) {
-    preview_widget_->setHtml(text);
+    preview_widget_->load(QUrl::fromLocalFile(QCoreApplication::applicationDirPath() + "/index.html"));
+    text_in_preview_ = text;
 }
 
 void Form::SwitchTab(int index) {
