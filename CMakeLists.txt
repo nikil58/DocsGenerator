@@ -6,8 +6,8 @@ set(QT_VERSION 5)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-set(REQUIRED_LIBS Core Gui Widgets WebKitWidgets)
-set(REQUIRED_LIBS_QUALIFIED Qt5::Core Qt5::Gui Qt5::Widgets  Qt5::WebKitWidgets)
+set(REQUIRED_LIBS Core Gui Widgets WebEngineWidgets)
+set(REQUIRED_LIBS_QUALIFIED Qt5::Core Qt5::Gui Qt5::Widgets  Qt5::WebEngineWidgets)
 
 add_executable(${PROJECT_NAME} main.cpp Form.cpp Form.h PreviewWorker.cpp PreviewWorker.h icons.qrc)
 

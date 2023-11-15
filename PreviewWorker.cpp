@@ -1,6 +1,7 @@
 #include "PreviewWorker.h"
 #include <QLineEdit>
 #include <QTextEdit>
+#include <QCoreApplication>
 
 
 PreviewWorker::PreviewWorker(int mode, QObject* parent) : mode_(mode) {
@@ -127,7 +128,9 @@ void PreviewWorker::ClearCache() {
 }
 
 void PreviewWorker::FirstTypeForm() {
-    QString title_start = "<html><head></head><body><h1><font face=\"Times New Roman, serif\"><span style=\"font-size: 16px;\">";
+    QString title_start = "<html><head>";
+    QString script = "<script type=\"text/javascript\" src=\"" + QCoreApplication::applicationDirPath() + "/MathJax/es5/tex-mml-chtml.js\"></script>";
+    QString title_start_second_part = "</head><body><h1><font face=\"Times New Roman, serif\"><span style=\"font-size: 16px;\">";
     QString title = title_field_.replace("\n", "<br>");
     QString title_end = "</span></font></h1><font style=\"font-size: 12pt\"><font color=\"#000000\"><font face=\"Times New Roman, serif\">";
 
@@ -182,13 +185,26 @@ void PreviewWorker::FirstTypeForm() {
                    "    </p></body></html>";
     }
 
-    text_ = title_start + title + title_end + inputs_start + inputs + inputs_end + const_start + const_field +
+    QString for_file = title_start + script + title_start_second_part + title + title_end + inputs_start + inputs + inputs_end + const_start + const_field +
+                       const_end + algorithm_start + algorithm + algorithm_end + output_start + output + output_end + link_start +
+                       link + link_end;
+
+    QFile file("./index.html");
+    if (file.open(QIODevice::ReadWrite | QFile::Truncate)){
+        QTextStream stream(&file);
+        stream << for_file;
+        file.close();
+    }
+
+    text_ = title_start + title_start_second_part + title + title_end + inputs_start + inputs + inputs_end + const_start + const_field +
             const_end + algorithm_start + algorithm + algorithm_end + output_start + output + output_end + link_start +
             link + link_end;
 }
 
 void PreviewWorker::SecondTypeForm() {
-    QString title_start = "<html><head></head><body><h1><font face=\"Times New Roman, serif\"><span style=\"font-size: 16px;\">";
+    QString title_start = "<html><head>";
+    QString script = "<script type=\"text/javascript\" src=\"" + QCoreApplication::applicationDirPath() + "/MathJax/es5/tex-mml-chtml.js\"></script>";
+    QString title_start_second_part = "</head><body><h1><font face=\"Times New Roman, serif\"><span style=\"font-size: 16px;\">";
     QString title = title_field_.replace("\n", "<br>");
     QString title_end = "</span></font></h1><font style=\"font-size: 12pt\"><font color=\"#000000\"><font face=\"Times New Roman, serif\">";
     QString inputs_start = "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">"
@@ -249,5 +265,21 @@ void PreviewWorker::SecondTypeForm() {
         link_end = "\">Ссылка на модуль</a></u>\n"
                            "    </p>";
     }
-    text_ = title_start + title + title_end + inputs_start + inputs + inputs_end + inputs_list_start + inputs_list + inputs_list_end + outputs_start + outputs + outputs_end + outputs_list_start + outputs_list + outputs_list_end +  link_start + link + link_end + section_name_start + section_name + section_name_end + section_field + section_field_end;
+    QString for_file = text_ = title_start + script + title_start_second_part + title + title_end + inputs_start + inputs + inputs_end + inputs_list_start + inputs_list +
+                               inputs_list_end + outputs_start + outputs + outputs_end + outputs_list_start + outputs_list +
+                               outputs_list_end + link_start + link + link_end + section_name_start + section_name + section_name_end +
+                               section_field + section_field_end;
+
+    QFile file("./index.html");
+    if (file.open(QIODevice::ReadWrite | QFile::Truncate)){
+        QTextStream stream(&file);
+        stream << for_file;
+        file.close();
+    }
+
+    text_ = title_start + title_start_second_part + title + title_end + inputs_start + inputs + inputs_end + inputs_list_start + inputs_list +
+            inputs_list_end + outputs_start + outputs + outputs_end + outputs_list_start + outputs_list +
+            outputs_list_end + link_start + link + link_end + section_name_start + section_name + section_name_end +
+            section_field + section_field_end;
+
 }

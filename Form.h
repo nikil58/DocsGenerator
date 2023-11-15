@@ -3,7 +3,7 @@
 #include <QVBoxLayout>
 #include <QTabWidget>
 #include <QLineEdit>
-#include <QWebView>
+#include <QWebEngineView>
 #include <QTextEdit>
 #include <QApplication>
 #include <QSplitter>
@@ -45,11 +45,13 @@ private:
 
     QGridLayout* formulas_buttons_layout_;
 
-    QWebView* preview_widget_{};
+    QWebEngineView* preview_widget_{};
 
     QTextEdit* last_selected_field_{};
 
     PreviewWorker* worker_;
+
+    QString text_in_preview_{};
 
     bool eventFilter(QObject* obj, QEvent* e);
     void DrawMainForm();

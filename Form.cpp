@@ -1,7 +1,6 @@
 #include "Form.h"
 
 #include <QPushButton>
-#include <QWebFrame>
 #include <QClipboard>
 #include <QMenuBar>
 #include <QFileDialog>
@@ -78,7 +77,7 @@ void Form::DrawMainForm() {
     clear_button->setFont(font_size_);
     connect(clear_button, SIGNAL(clicked()), this, SLOT(ClearButtonClicked()));
 
-    preview_widget_ = new QWebView();
+    preview_widget_ = new QWebEngineView();
     preview_widget_->setMinimumWidth(300);
     connect(preview_widget_, SIGNAL(urlChanged(const QUrl &)), this, SLOT(ClickOnLink(const QUrl &)));
     worker_ = new PreviewWorker(0, this);
@@ -386,11 +385,10 @@ bool Form::eventFilter(QObject* obj, QEvent* e) {
 
 void Form::CopyButtonClicked(){
     QClipboard* clipboard = QApplication::clipboard();
-
     QFile file("./temp.html");
     if (file.open(QIODevice::ReadWrite)){
         QTextStream stream(&file);
-        stream << preview_widget_->page()->mainFrame()->toHtml();
+        stream << text_in_preview_;
         file.close();
         QProcess* proc = new QProcess();
         proc->start("tidy -i -m -w 160 ./temp.html");
@@ -431,7 +429,8 @@ void Form::ClearButtonClicked() {
 }
 
 void Form::Rerender(QString text) {
-    preview_widget_->setHtml(text);
+    preview_widget_->load(QUrl::fromLocalFile(QCoreApplication::applicationDirPath() + "/index.html"));
+    text_in_preview_ = text;
 }
 
 void Form::SwitchTab(int index) {
