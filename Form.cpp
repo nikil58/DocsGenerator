@@ -63,7 +63,7 @@ void Form::DrawMainForm() {
         button->setObjectName(current_button_text);
         formulas_buttons_layout_->addWidget(button, row, column++);
         button->setMinimumHeight(40);
-        if (column > 5) {
+        if (column > 5) { /// only 5 buttons can be in a row
             column = 0;
             row++;
         }
@@ -80,7 +80,7 @@ void Form::DrawMainForm() {
 
     preview_widget_ = new QWebEngineView();
     preview_widget_->setMinimumWidth(300);
-    connect(preview_widget_, SIGNAL(urlChanged(const QUrl &)), this, SLOT(ClickOnLink(const QUrl &)));
+    connect(preview_widget_, SIGNAL(urlChanged(const QUrl &)), this, SLOT(ClickOnLink(const QUrl &))); /// Do now allow link clicks
     worker_ = new PreviewWorker(0, this);
     connect(this, SIGNAL(ClearCache()), worker_, SLOT(ClearCache()));
     connect(title_field_, SIGNAL(textChanged(const QString &)),  worker_, SLOT(UpdatePreview()));
@@ -108,7 +108,7 @@ void Form::DrawMainForm() {
     auto* right_side_container = new QWidget();
     right_side_container->setLayout(preview_button_layout);
 
-    auto* splitter = new QSplitter();
+    auto* splitter = new QSplitter(); /// vertical line that allows change size of left and right parts
     splitter->setChildrenCollapsible(false);
     splitter->setOrientation(Qt::Horizontal);
 
@@ -390,7 +390,7 @@ void Form::CopyButtonClicked(){
         stream << text_in_preview_;
         file.close();
         auto* proc = new QProcess();
-        proc->start("tidy", QStringList() << "-i" << "-m" << "-w 160" << "./temp.html");
+        proc->start("tidy", QStringList() << "-i" << "-m" << "-w 160" << "./temp.html"); /// tidy is for beatify html
         proc->waitForFinished();
         file.open(QIODevice::ReadOnly);
         QString result = stream.readAll().remove("<!DOCTYPE html>\n");
@@ -429,7 +429,7 @@ void Form::ClearButtonClicked() {
 }
 
 void Form::Rerender(QString text) {
-    preview_widget_->load(QUrl::fromLocalFile(QCoreApplication::applicationDirPath() + "/index.html"));
+    preview_widget_->load(QUrl::fromLocalFile(QCoreApplication::applicationDirPath() + "/index.html")); /// have to use load instead of "setHtml" because JavaScript won't change string but file - will
     text_in_preview_ = std::move(text);
 }
 
