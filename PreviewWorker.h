@@ -34,10 +34,10 @@ private:
     void FirstTypeForm();
     void SecondTypeForm();
     void Update();
-    QString Parse(QString text);
+    QString Parse(const QString& text);
 public:
     explicit PreviewWorker(int mode, QObject* parent = nullptr);
-    ~PreviewWorker();
+    ~PreviewWorker() override;
     void SetMode(int mode) { mode_ = mode; Update();};
 signals:
     void RenderIsReady(QString text);

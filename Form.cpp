@@ -5,6 +5,7 @@
 #include <QMenuBar>
 #include <QFileDialog>
 #include <QSettings>
+#include <utility>
 
 Form::Form() {
     QThread::currentThread()->setObjectName("Main");
@@ -14,19 +15,19 @@ Form::Form() {
 
     font_size_.setPixelSize(20);
     form_layout_ = new QHBoxLayout();
-    QWidget* widget = new QWidget;
+    auto* widget = new QWidget;
     widget->setLayout(form_layout_);
     DrawMainForm();
 
-   QAction* import_menu = new QAction("&Импорт", this);
-   QAction* export_menu = new QAction("&Экспорт", this);
-   QMenu* file = menuBar()->addMenu("&Файл");
-   menuBar()->setFont(font_size_);
-   file->setFont(font_size_);
-   file->addAction(import_menu);
-   file->addAction(export_menu);
-   connect(import_menu, SIGNAL(triggered(bool)), this, SLOT(ImportFile(bool)));
-   connect(export_menu, SIGNAL(triggered(bool)), this, SLOT(ExportFile(bool)));
+    auto* import_menu = new QAction("&Импорт", this);
+    auto* export_menu = new QAction("&Экспорт", this);
+    QMenu* file = menuBar()->addMenu("&Файл");
+    menuBar()->setFont(font_size_);
+    file->setFont(font_size_);
+    file->addAction(import_menu);
+    file->addAction(export_menu);
+    connect(import_menu, SIGNAL(triggered(bool)), this, SLOT(ImportFile(bool)));
+    connect(export_menu, SIGNAL(triggered(bool)), this, SLOT(ExportFile(bool)));
 
     this->setCentralWidget(widget);
     this->show();
@@ -47,7 +48,7 @@ void Form::DrawMainForm() {
     formulas_buttons_layout_ = new QGridLayout();
     int column = 0, row = 0;
     for (const auto& current_button_text : formulas_buttons_) {
-        QPushButton* button = new QPushButton();
+        auto* button = new QPushButton();
         button->setFont(font_size_);
 
         QPixmap pixmap(":"+current_button_text);
@@ -69,11 +70,11 @@ void Form::DrawMainForm() {
         connect(button, SIGNAL(clicked()), this, SLOT(OperationClick()));
     }
 
-    QPushButton* copy_button = new QPushButton("Копировать");
+    auto* copy_button = new QPushButton("Копировать");
     copy_button->setFont(font_size_);
     connect(copy_button, SIGNAL(clicked()), this, SLOT(CopyButtonClicked()));
 
-    QPushButton* clear_button = new QPushButton("Очистить");
+    auto* clear_button = new QPushButton("Очистить");
     clear_button->setFont(font_size_);
     connect(clear_button, SIGNAL(clicked()), this, SLOT(ClearButtonClicked()));
 
@@ -94,24 +95,24 @@ void Form::DrawMainForm() {
     tabs_->addTab(DrawFirstTab(), "Модуль");
     tabs_->addTab(DrawSecondTab(), "Модель");
 
-    QVBoxLayout* left_side_layout = new QVBoxLayout();
+    auto* left_side_layout = new QVBoxLayout();
     left_side_layout->addWidget(title_label_);
     left_side_layout->addWidget(title_field_);
     left_side_layout->addWidget(title_splitter_);
     left_side_layout->addLayout(formulas_buttons_layout_);
     left_side_layout->addWidget(tabs_);
 
-    QVBoxLayout* preview_button_layout = new QVBoxLayout();
+    auto* preview_button_layout = new QVBoxLayout();
     preview_button_layout->addLayout(buttons_layout_);
     preview_button_layout->addWidget(preview_widget_);
-    QWidget* right_side_container = new QWidget();
+    auto* right_side_container = new QWidget();
     right_side_container->setLayout(preview_button_layout);
 
-    QSplitter* splitter = new QSplitter();
+    auto* splitter = new QSplitter();
     splitter->setChildrenCollapsible(false);
     splitter->setOrientation(Qt::Horizontal);
 
-    QWidget* container = new QWidget();
+    auto* container = new QWidget();
     container->setLayout(left_side_layout);
 
     splitter->addWidget(container);
@@ -124,7 +125,7 @@ void Form::DrawMainForm() {
 }
 
 QWidget* Form::DrawFirstTab() {
-    QLabel* input_label = new QLabel("Входы");
+    auto* input_label = new QLabel("Входы");
     input_label->setFont(font_size_);
     inputs_field_ = new QTextEdit();
     inputs_field_->setFont(font_size_);
@@ -132,7 +133,7 @@ QWidget* Form::DrawFirstTab() {
     inputs_field_->setAcceptRichText(false);
     input_label->setBuddy(inputs_field_);
 
-    QLabel* const_label = new QLabel("Константы");
+    auto* const_label = new QLabel("Константы");
     const_label->setFont(font_size_);
     const_field_ = new QTextEdit();
     const_field_->setFont(font_size_);
@@ -140,7 +141,7 @@ QWidget* Form::DrawFirstTab() {
     const_field_->setAcceptRichText(false);
     const_label->setBuddy(const_field_);
 
-    QLabel* algorithm_label = new QLabel("Алгоритм");
+    auto* algorithm_label = new QLabel("Алгоритм");
     algorithm_label->setFont(font_size_);
     algorithm_field_ = new QTextEdit();
     algorithm_field_->setFont(font_size_);
@@ -148,7 +149,7 @@ QWidget* Form::DrawFirstTab() {
     algorithm_field_->setAcceptRichText(false);
     algorithm_label->setBuddy(algorithm_field_);
 
-    QLabel* output_label = new QLabel("Выход");
+    auto* output_label = new QLabel("Выход");
     output_label->setFont(font_size_);
     output_field_ = new QTextEdit();
     output_field_->setFont(font_size_);
@@ -156,14 +157,14 @@ QWidget* Form::DrawFirstTab() {
     output_field_->setAcceptRichText(false);
     output_label->setBuddy(output_field_);
 
-    QLabel* link_label = new QLabel("Ссылка на пример");
+    auto* link_label = new QLabel("Ссылка на пример");
     link_label->setFont(font_size_);
     link_field_1_ = new QLineEdit();
     link_field_1_->setFont(font_size_);
     link_field_1_->setObjectName("link");
     link_label->setBuddy(link_field_1_);
 
-    QVBoxLayout* left_side_menu = new QVBoxLayout();
+    auto* left_side_menu = new QVBoxLayout();
     left_side_menu->addWidget(input_label);
     left_side_menu->addWidget(inputs_field_);
     left_side_menu->addWidget(const_label);
@@ -175,7 +176,7 @@ QWidget* Form::DrawFirstTab() {
     left_side_menu->addWidget(link_label);
     left_side_menu->addWidget(link_field_1_);
 
-    QWidget* left_side_container = new QWidget();
+    auto* left_side_container = new QWidget();
     left_side_container->setLayout(left_side_menu);
 
     connect(inputs_field_, SIGNAL(textChanged()),  worker_, SLOT(UpdatePreview()));
@@ -193,7 +194,7 @@ QWidget* Form::DrawFirstTab() {
 }
 
 QWidget* Form::DrawSecondTab() {
-    QLabel* input_description = new QLabel("Описание входов");
+    auto* input_description = new QLabel("Описание входов");
     input_description->setFont(font_size_);
     input_description_field_ = new QTextEdit();
     input_description_field_->setFont(font_size_);
@@ -201,7 +202,7 @@ QWidget* Form::DrawSecondTab() {
     input_description_field_->setAcceptRichText(false);
     input_description->setBuddy(input_description_field_);
 
-    QLabel* input_list = new QLabel("Список входов");
+    auto* input_list = new QLabel("Список входов");
     input_list->setFont(font_size_);
     input_list_field_ = new QTextEdit();
     input_list_field_->setFont(font_size_);
@@ -209,7 +210,7 @@ QWidget* Form::DrawSecondTab() {
     input_list_field_->setAcceptRichText(false);
     input_list->setBuddy(input_list_field_);
 
-    QLabel* output_description = new QLabel("Описание выходов");
+    auto* output_description = new QLabel("Описание выходов");
     output_description->setFont(font_size_);
     output_description_field_ = new QTextEdit();
     output_description_field_->setFont(font_size_);
@@ -217,7 +218,7 @@ QWidget* Form::DrawSecondTab() {
     output_description_field_->setAcceptRichText(false);
     output_description->setBuddy(output_description_field_);
 
-    QLabel* output_list = new QLabel("Список выходов");
+    auto* output_list = new QLabel("Список выходов");
     output_list->setFont(font_size_);
     output_list_field_ = new QTextEdit();
     output_list_field_->setFont(font_size_);
@@ -225,21 +226,21 @@ QWidget* Form::DrawSecondTab() {
     output_list_field_->setAcceptRichText(false);
     output_list->setBuddy(output_list_field_);
 
-    QLabel* link_label = new QLabel("Ссылка на модуль");
+    auto* link_label = new QLabel("Ссылка на модуль");
     link_label->setFont(font_size_);
     link_field_2_ = new QLineEdit();
     link_field_2_->setFont(font_size_);
     link_field_2_->setObjectName("link");
     link_label->setBuddy(link_field_2_);
 
-    QLabel* section_name_label = new QLabel("Название дополнительного раздела");
+    auto* section_name_label = new QLabel("Название дополнительного раздела");
     section_name_label->setFont(font_size_);
     section_name_ = new QLineEdit();
     section_name_->setFont(font_size_);
     section_name_->setObjectName("section_name");
     section_name_label->setBuddy(section_name_);
 
-    QLabel* section_field_label = new QLabel("Содержание");
+    auto* section_field_label = new QLabel("Содержание");
     section_field_label->setFont(font_size_);
     section_field_ = new QTextEdit();
     section_field_->setFont(font_size_);
@@ -247,7 +248,7 @@ QWidget* Form::DrawSecondTab() {
     section_field_->setAcceptRichText(false);
     section_field_label->setBuddy(section_field_);
 
-    QVBoxLayout* left_side_menu = new QVBoxLayout();
+    auto* left_side_menu = new QVBoxLayout();
     left_side_menu->addWidget(input_description);
     left_side_menu->addWidget(input_description_field_);
     left_side_menu->addWidget(input_list);
@@ -263,8 +264,7 @@ QWidget* Form::DrawSecondTab() {
     left_side_menu->addWidget(section_field_label);
     left_side_menu->addWidget(section_field_);
 
-
-    QWidget* left_side_container = new QWidget();
+    auto* left_side_container = new QWidget();
     left_side_container->setLayout(left_side_menu);
 
     connect(input_description_field_, SIGNAL(textChanged()),  worker_, SLOT(UpdatePreview()));
@@ -371,12 +371,11 @@ void Form::OperationClick() {
             last_selected_field_->setFocus();
         }
     }
-
 }
 
 bool Form::eventFilter(QObject* obj, QEvent* e) {
     if (e->type() == QEvent::FocusOut) {
-        QTextEdit* text_edit = qobject_cast<QTextEdit*>(obj);
+        auto* text_edit = qobject_cast<QTextEdit*>(obj);
         if (text_edit)
             last_selected_field_ = text_edit;
     }
@@ -390,8 +389,8 @@ void Form::CopyButtonClicked(){
         QTextStream stream(&file);
         stream << text_in_preview_;
         file.close();
-        QProcess* proc = new QProcess();
-        proc->start("tidy -i -m -w 160 ./temp.html");
+        auto* proc = new QProcess();
+        proc->start("tidy", QStringList() << "-i" << "-m" << "-w 160" << "./temp.html");
         proc->waitForFinished();
         file.open(QIODevice::ReadOnly);
         QString result = stream.readAll().remove("<!DOCTYPE html>\n");
@@ -405,6 +404,7 @@ void Form::CopyButtonClicked(){
         file.close();
         file.remove();
         proc->terminate();
+        delete proc;
     }
 }
 
@@ -430,7 +430,7 @@ void Form::ClearButtonClicked() {
 
 void Form::Rerender(QString text) {
     preview_widget_->load(QUrl::fromLocalFile(QCoreApplication::applicationDirPath() + "/index.html"));
-    text_in_preview_ = text;
+    text_in_preview_ = std::move(text);
 }
 
 void Form::SwitchTab(int index) {
@@ -450,7 +450,7 @@ void Form::ClickOnLink(const QUrl& url) {
 void Form::ImportFile(bool) {
     QString file_name = QFileDialog::getOpenFileName(this, tr("Открыть"), QDir::currentPath(), tr("Config file (*.ini) ;; All files (*.*)"));
 
-    QSettings* settings = new QSettings(file_name, QSettings::IniFormat);
+    auto* settings = new QSettings(file_name, QSettings::IniFormat);
     title_field_->setText(settings->value("title").toString());
     inputs_field_->setText(settings->value("inputs_field").toString());
     const_field_->setText(settings->value("const_field").toString());
@@ -471,7 +471,7 @@ void Form::ImportFile(bool) {
 void Form::ExportFile(bool) {
     QString file_name = QFileDialog::getSaveFileName(this, tr("Сохранить в"), QDir::currentPath(), tr("Config file (*.ini) ;; All files (*.*)"));
 
-    QSettings* settings = new QSettings(file_name, QSettings::IniFormat);
+    auto* settings = new QSettings(file_name, QSettings::IniFormat);
     settings->setValue("title", title_field_->text());
     settings->setValue("inputs_field",inputs_field_->toPlainText());
     settings->setValue("const_field",const_field_->toPlainText());
@@ -487,4 +487,9 @@ void Form::ExportFile(bool) {
     settings->setValue("section_field",section_field_->toPlainText());
 
     delete settings;
+}
+
+Form::~Form() {
+    delete worker_;
+    delete this->centralWidget();
 }
