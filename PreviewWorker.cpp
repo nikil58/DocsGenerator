@@ -30,23 +30,23 @@ void PreviewWorker::UpdatePreview() {
     } else if (auto* text_edit = qobject_cast<QTextEdit*>(QObject::sender())) {
         if (text_edit->objectName() == "inputs") {
             inputs_field_ = text_edit->toPlainText().replace("\n",
-                                                             R"(<p class="western" align="justify" style="line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm">)");
+                                                             R"(<p class="western" align="justify" style="line-height: 170%; text-indent: 1.25cm; margin-bottom: 0cm">)");
             inputs_field_ = Parse(inputs_field_);
         } else if (text_edit->objectName() == "constants") {
             const_field_ = text_edit->toPlainText().replace("\n",
-                                                            R"(<p class="western" align="justify" style="line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm">)");
+                                                            R"(<p class="western" align="justify" style="line-height: 170%; text-indent: 1.25cm; margin-bottom: 0cm">)");
             const_field_ = Parse(const_field_);
         } else if (text_edit->objectName() == "algorithm") {
             algorithm_field_ = text_edit->toPlainText().replace("\n",
-                                                                R"(<p class="western" align="justify" style="text-align: center; line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm;">)");
+                                                                R"(<p class="western" align="justify" style="text-align: center; line-height: 170%; text-indent: 1.25cm; margin-bottom: 0cm;">)");
             algorithm_field_ = Parse(algorithm_field_);
         } else if (text_edit->objectName() == "outputs") {
             output_field_ = text_edit->toPlainText().replace("\n",
-                                                             R"(<p class="western" align="justify" style="line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm">)");
+                                                             R"(<p class="western" align="justify" style="line-height: 170%; text-indent: 1.25cm; margin-bottom: 0cm">)");
             output_field_ = Parse(output_field_);
         }
         else if (text_edit->objectName() == "inputs_description") {
-            inputs_description_ = text_edit->toPlainText().replace("\n", R"(<p class="western" align="justify" style="line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm">)");
+            inputs_description_ = text_edit->toPlainText().replace("\n", R"(<p class="western" align="justify" style="line-height: 170%; text-indent: 1.25cm; margin-bottom: 0cm">)");
             inputs_description_ = Parse(inputs_description_);
         }
         else if (text_edit->objectName() == "inputs_list") {
@@ -54,7 +54,7 @@ void PreviewWorker::UpdatePreview() {
             inputs_list_ = Parse(inputs_list_);
         }
         else if (text_edit->objectName() == "output_description") {
-            outputs_description_ = text_edit->toPlainText().replace("\n", R"(<p class="western" align="justify" style="line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm">)");
+            outputs_description_ = text_edit->toPlainText().replace("\n", R"(<p class="western" align="justify" style="line-height: 170%; text-indent: 1.25cm; margin-bottom: 0cm">)");
             outputs_description_ = Parse(outputs_description_);
         }
         else if (text_edit->objectName() == "output_list") {
@@ -62,7 +62,7 @@ void PreviewWorker::UpdatePreview() {
             outputs_list_ = Parse(outputs_list_);
         }
         else if (text_edit->objectName() == "section_field") {
-            section_field_ = text_edit->toPlainText().replace("\n", R"(<p class="western" align="justify" style="line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm">)");
+            section_field_ = text_edit->toPlainText().replace("\n", R"(<p class="western" align="justify" style="line-height: 170%; text-indent: 1.25cm; margin-bottom: 0cm">)");
             section_field_ = Parse(section_field_);
         }
 
@@ -143,10 +143,10 @@ void PreviewWorker::FirstTypeForm() {
     QString title = title_field_.replace("\n", "<br>");
     QString title_end = R"(</span></font></h1><font style="font-size: 12pt"><font color="#000000"><font face="Times New Roman, serif">)";
 
-    QString inputs_start = "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">"
+    QString inputs_start = "<p class=\"western\" align=\"justify\" style=\"line-height: 170%; text-indent: 1.25cm; margin-bottom: 0cm\">"
                            "        <u style=\"font-family: 'Times New Roman', serif; font-size: 16px;\">Вход:</u>"
                            "    </p>"
-                           "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">";
+                           "<p class=\"western\" align=\"justify\" style=\"line-height: 170%; text-indent: 1.25cm; margin-bottom: 0cm\">";
     QString inputs = inputs_field_;
     QString inputs_end = "</p>";
 
@@ -154,10 +154,10 @@ void PreviewWorker::FirstTypeForm() {
     QString const_field = "";
     QString const_end = "";
     if (!const_field_.isEmpty() && const_field_.count(" ") != const_field_.length()) {
-        const_start = "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">"
+        const_start = "<p class=\"western\" align=\"justify\" style=\"line-height: 170%; text-indent: 1.25cm; margin-bottom: 0cm\">"
                       "        <u style=\"font-family: 'Times New Roman', serif; font-size: 16px;\">Константы:</u>"
                       "    </p>\n"
-                      "    <p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">";
+                      "    <p class=\"western\" align=\"justify\" style=\"line-height: 170%; text-indent: 1.25cm; margin-bottom: 0cm\">";
         const_field = const_field_;
         const_end = "</p>";
     }
@@ -166,19 +166,19 @@ void PreviewWorker::FirstTypeForm() {
     QString algorithm = "";
     QString algorithm_end = "";
     if (!algorithm_field_.isEmpty() && algorithm_field_.count(" ") != algorithm_field_.length()) {
-        algorithm_start = "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">"
+        algorithm_start = "<p class=\"western\" align=\"justify\" style=\"line-height: 170%; text-indent: 1.25cm; margin-bottom: 0cm\">"
                           "        <u style=\"font-family: 'Times New Roman', serif; font-size: 16px;\">Алгоритм:</u>"
                           "    </p>\n"
-                          "    <p class=\"western\" align=\"justify\" style=\"text-align: center; line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm;\">";
+                          "    <p class=\"western\" align=\"justify\" style=\"text-align: center; line-height: 170%; text-indent: 1.25cm; margin-bottom: 0cm;\">";
         algorithm = algorithm_field_;
         algorithm_end = "</p>";
     }
 
 
-    QString output_start = "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">"
+    QString output_start = "<p class=\"western\" align=\"justify\" style=\"line-height: 170%; text-indent: 1.25cm; margin-bottom: 0cm\">"
                            "        <u style=\"font-family: 'Times New Roman', serif; font-size: 16px;\">Выход:</u>\n"
                            "    </p>\n"
-                           "    <p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">";
+                           "    <p class=\"western\" align=\"justify\" style=\"line-height: 170%; text-indent: 1.25cm; margin-bottom: 0cm\">";
     QString output = output_field_;
     QString output_end = "</p>";
 
@@ -187,7 +187,7 @@ void PreviewWorker::FirstTypeForm() {
     QString link = "";
     QString link_end = "";
     if (!link_field_1_.isEmpty() && link_field_1_.count(" ") != link_field_1_.length()) {
-        link_start = "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">\n"
+        link_start = "<p class=\"western\" align=\"justify\" style=\"line-height: 170%; text-indent: 1.25cm; margin-bottom: 0cm\">\n"
                      "        <u style=\"font-family: 'Times New Roman', serif; font-size: 16px;\"><a href=\"modelica://";
         link = link_field_1_.replace("\n", "<br>");
         link_end = "\">Пример использования</a></u>\n"
@@ -216,26 +216,26 @@ void PreviewWorker::SecondTypeForm() {
     QString title_start_second_part = R"(</head><body><h1><font face="Times New Roman, serif"><span style="font-size: 16px;">)";
     QString title = title_field_.replace("\n", "<br>");
     QString title_end = R"(</span></font></h1><font style="font-size: 12pt"><font color="#000000"><font face="Times New Roman, serif">)";
-    QString inputs_start = "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">"
+    QString inputs_start = "<p class=\"western\" align=\"justify\" style=\"line-height: 170%; text-indent: 1.25cm; margin-bottom: 0cm\">"
                            "        <u style=\"font-family: 'Times New Roman', serif; font-size: 16px;\">Описание входов:</u>"
                            "    </p>"
-                           "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">";
+                           "<p class=\"western\" align=\"justify\" style=\"line-height: 170%; text-indent: 1.25cm; margin-bottom: 0cm\">";
     QString inputs = inputs_description_;
     QString inputs_end = "</p>";
-    QString inputs_list_start = "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">"
+    QString inputs_list_start = "<p class=\"western\" align=\"justify\" style=\"line-height: 170%; text-indent: 1.25cm; margin-bottom: 0cm\">"
                           "        <u style=\"font-family: 'Times New Roman', serif; font-size: 16px;\"></u>"
                           "    </p>\n"
                           "  <ul>";
     QString inputs_list = inputs_list_;
     QString inputs_list_end = "</ul>";
-    QString outputs_start =  "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">"
+    QString outputs_start =  "<p class=\"western\" align=\"justify\" style=\"line-height: 170%; text-indent: 1.25cm; margin-bottom: 0cm\">"
                              "        <u style=\"font-family: 'Times New Roman', serif; font-size: 16px;\">Описание выходов:</u>"
                              "    </p>"
-                             "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">";
+                             "<p class=\"western\" align=\"justify\" style=\"line-height: 170%; text-indent: 1.25cm; margin-bottom: 0cm\">";
     QString outputs = outputs_description_;
     QString outputs_end = "</p>";
 
-    QString outputs_list_start = "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">"
+    QString outputs_list_start = "<p class=\"western\" align=\"justify\" style=\"line-height: 170%; text-indent: 1.25cm; margin-bottom: 0cm\">"
                                 "        <u style=\"font-family: 'Times New Roman', serif; font-size: 16px;\"></u>"
                                 "    </p>\n"
                                 "  <ul>";
@@ -254,12 +254,12 @@ void PreviewWorker::SecondTypeForm() {
     QString section_field_end = "";
 
     if (!section_name_.isEmpty() && section_name_.count(" ") != section_name_.length()) {
-        section_name_start = "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">"
+        section_name_start = "<p class=\"western\" align=\"justify\" style=\"line-height: 170%; text-indent: 1.25cm; margin-bottom: 0cm\">"
                              "        <u style=\"font-family: 'Times New Roman', serif; font-size: 16px;\">";
         section_name = section_name_;
         section_name_end = "</u>"
                                "    </p>"
-                               "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">";
+                               "<p class=\"western\" align=\"justify\" style=\"line-height: 170%; text-indent: 1.25cm; margin-bottom: 0cm\">";
 
         if (!section_field_.isEmpty() && section_field_.count(" ") != section_field_.length()) {
             section_field = section_field_;
@@ -268,7 +268,7 @@ void PreviewWorker::SecondTypeForm() {
     }
 
     if (link_field_2_ != "") {
-        link_start = "<p class=\"western\" align=\"justify\" style=\"line-height: 115%; text-indent: 1.25cm; margin-bottom: 0cm\">\n"
+        link_start = "<p class=\"western\" align=\"justify\" style=\"line-height: 170%; text-indent: 1.25cm; margin-bottom: 0cm\">\n"
                      "        <u style=\"font-family: 'Times New Roman', serif; font-size: 16px;\"><a href=\"modelica://";
         link = link_field_2_.replace("\n", "<br>");
         link_end = "\">Ссылка на модуль</a></u>\n"
