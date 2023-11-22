@@ -47,7 +47,8 @@ void Form::DrawMainForm() {
 
     formulas_buttons_layout_ = new QGridLayout();
     int column = 0, row = 0;
-    for (const auto& current_button_text : formulas_buttons_) {
+    for (const auto& current_button : formulas_buttons_) {
+        QString current_button_text = current_button.at(0);
         auto* button = new QPushButton();
         button->setFont(font_size_);
 
@@ -286,91 +287,27 @@ QWidget* Form::DrawSecondTab() {
 
 void Form::OperationClick() {
     if (last_selected_field_) {
-        if (QObject::sender()->objectName() == formulas_buttons_[0]) {
-            last_selected_field_->insertPlainText("\\(\\)");
-            last_selected_field_->moveCursor(QTextCursor::Left);
-            last_selected_field_->moveCursor(QTextCursor::Left);
-            last_selected_field_->setFocus();
-        }
-        else if (QObject::sender()->objectName() == formulas_buttons_[1]){
-            last_selected_field_->insertPlainText("_{}");
-            last_selected_field_->moveCursor(QTextCursor::Left);
-            last_selected_field_->setFocus();
-        }
-        else if (QObject::sender()->objectName() == formulas_buttons_[2]) {
-            last_selected_field_->insertPlainText("^{}");
-            last_selected_field_->moveCursor(QTextCursor::Left);
-            last_selected_field_->setFocus();
-        }
-        else if (QObject::sender()->objectName() == formulas_buttons_[3]) {
-            last_selected_field_->insertPlainText("\\sqrt{}");
-            last_selected_field_->moveCursor(QTextCursor::Left);
-            last_selected_field_->setFocus();
-        }
-        else if (QObject::sender()->objectName() == formulas_buttons_[4]) {
-            last_selected_field_->insertPlainText("\\frac{}{}");
-            last_selected_field_->moveCursor(QTextCursor::Left);
-            last_selected_field_->moveCursor(QTextCursor::Left);
-            last_selected_field_->moveCursor(QTextCursor::Left);
-            last_selected_field_->setFocus();
-        }
-        else if (QObject::sender()->objectName() == formulas_buttons_[5]) {
-            last_selected_field_->insertPlainText("\\Delta");
-            last_selected_field_->setFocus();
-        }
-        else if (QObject::sender()->objectName() == formulas_buttons_[6]) {
-            last_selected_field_->insertPlainText("\\sum{}");
-            last_selected_field_->moveCursor(QTextCursor::Left);
-            last_selected_field_->setFocus();
-        }
-        else if (QObject::sender()->objectName() == formulas_buttons_[7]) {
-            last_selected_field_->insertPlainText("\\prod{}");
-            last_selected_field_->moveCursor(QTextCursor::Left);
-            last_selected_field_->setFocus();
-        }
-        else if (QObject::sender()->objectName() == formulas_buttons_[8]) {
-            last_selected_field_->insertPlainText("\\int");
-            last_selected_field_->setFocus();
-        }
-        else if (QObject::sender()->objectName() == formulas_buttons_[9]) {
-            last_selected_field_->insertPlainText("\\times");
-            last_selected_field_->setFocus();
-        }
-        else if (QObject::sender()->objectName() == formulas_buttons_[10]) {
-            last_selected_field_->insertPlainText("\\pi");
-            last_selected_field_->setFocus();
-        }
-        else if (QObject::sender()->objectName() == formulas_buttons_[11]) {
-            last_selected_field_->insertPlainText("\\alpha");
-            last_selected_field_->setFocus();
-        }
-        else if (QObject::sender()->objectName() == formulas_buttons_[12]) {
-            last_selected_field_->insertPlainText("\\beta");
-            last_selected_field_->setFocus();
-        }
-        else if (QObject::sender()->objectName() == formulas_buttons_[13]) {
-            last_selected_field_->insertPlainText("\\varphi");
-            last_selected_field_->setFocus();
-        }
-        else if (QObject::sender()->objectName() == formulas_buttons_[14]) {
-            last_selected_field_->insertPlainText("\\theta");
-            last_selected_field_->setFocus();
-        }
-        else if (QObject::sender()->objectName() == formulas_buttons_[15]) {
-            last_selected_field_->insertPlainText("\\leq");
-            last_selected_field_->setFocus();
-        }
-        else if (QObject::sender()->objectName() == formulas_buttons_[16]) {
-            last_selected_field_->insertPlainText("\\infty");
-            last_selected_field_->setFocus();
-        }
-        else if (QObject::sender()->objectName() == formulas_buttons_[17]) {
-            QString photo_path = QFileDialog::getOpenFileName(this, tr("Выбрать"), QDir::currentPath(), tr("Image (PNG, JPG, JPEG, TIFF) (*.png *.jpg *.jpeg *.tiff) ;; All files (*.*)"));
-            if (!photo_path.isEmpty())
-                last_selected_field_->insertPlainText("!img("+photo_path+")");
-            last_selected_field_->setFocus();
+        QString button_text = QObject::sender()->objectName();
+        for (const auto& button : formulas_buttons_) {
+            if (button.at(0) == button_text) {
+                if (!button.at(1).isEmpty())
+                    AddSymbolToField(button.at(1), button.at(2));
+                else {
+                    QString photo_path = QFileDialog::getOpenFileName(this, tr("Выбрать"), QDir::currentPath(), tr("Image (PNG, JPG, JPEG, TIFF) (*.png *.jpg *.jpeg *.tiff) ;; All files (*.*)"));
+                    if (!photo_path.isEmpty())
+                        last_selected_field_->insertPlainText("!img("+photo_path+")");
+                }
+                last_selected_field_->setFocus();
+                break;
+            }
         }
     }
+}
+
+void Form::AddSymbolToField(const QString& symbol, const QString& shift_count) {
+    last_selected_field_->insertPlainText(symbol);
+    for (int i = 0; i < shift_count.toInt(); ++i)
+        last_selected_field_->moveCursor(QTextCursor::Left);
 }
 
 bool Form::eventFilter(QObject* obj, QEvent* e) {
@@ -494,4 +431,6 @@ void Form::ExportFile(bool) {
 Form::~Form() {
     delete worker_;
     delete this->centralWidget();
+    QFile file("./index.html");
+    file.remove();
 }

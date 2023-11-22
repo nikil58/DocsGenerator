@@ -20,7 +20,7 @@ private:
     /// Layout for wrap all form
     QHBoxLayout* form_layout_;
 
-    /// Layout for Copy and Clear buttons
+    /// Layout for Copy and Clear formulas_buttons_
     QHBoxLayout* buttons_layout_{};
 
     /// Tab menu for form
@@ -49,16 +49,16 @@ private:
     QTextEdit* section_field_{};
     // END
 
-    /// Horizontal line that split title input field from rest part of the form: formulas buttons and tabs
+    /// Horizontal line that split title input field from rest part of the form: formulas formulas_buttons_ and tabs
     QFrame* title_splitter_{};
 
-    /// Grid layout that have 5 buttons in a row
+    /// Grid layout that have 5 formulas_buttons_ in a row
     QGridLayout* formulas_buttons_layout_{};
 
     /// Left-side widget that imitate Chromium browser and displays HTML
     QWebEngineView* preview_widget_{};
 
-    /// Pointer to last selected field. It useful when we clicked on the formulas buttons and insert text to the last input
+    /// Pointer to last selected field. It useful when we clicked on the formulas formulas_buttons_ and insert text to the last input
     QTextEdit* last_selected_field_{};
 
     /// Custom class that generate html text from form's inputs fields in the separate thread
@@ -91,13 +91,19 @@ private:
      */
     QWidget* DrawSecondTab();
 
-    /// List of all formulas buttons
-    const QString formulas_buttons_[18] = {"Формула", "sub", "sup", "root", "frac", "Delta", "sum", "prod", "int", "vec", "pi", "alpha", "beta", "phi", "theta", "leq", "inf", "Фотография"};
+    void AddSymbolToField(const QString& symbol, const QString& shift_count);
+
+    /// List of all formulas formulas_buttons_
+    const QVector<QVector<QString>> formulas_buttons_ = {{"Формула", "\\(\\)",   "2"}, {"sub", "_{}", "1"}, {"sup", "^{}", "1"},
+                                                         {"root",    "\\sqrt{}", "1"}, {"frac", "\\frac{}{}", "3"}, {"Delta", "\\Delta", "0"},
+                                                         {"sum",     "\\sum{}",  "1"}, {"prod", "\\prod{}", "1"}, {"int", "\\int", "0"}, {"vec", "\\times", "0"},
+                                                         {"pi",      "\\pi",     "0"}, {"alpha", "\\alpha", "0"}, {"beta", "\\beta", "0"}, {"phi", "\\varphi", "0"},
+                                                         {"theta",   "\\theta",  "0"}, {"leq", "\\leq", "0"}, {"inf", "\\infty", "0"}, {"Фотография", "", "0"}};
 public:
     explicit Form();
     ~Form() override;
 signals:
-    /// Signal that emits when Clear buttons is clicked for worker
+    /// Signal that emits when Clear formulas_buttons_ is clicked for worker
     void ClearCache();
 
 private slots:
