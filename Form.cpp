@@ -1,4 +1,5 @@
 #include "Form.h"
+#include "Spoiler.h"
 
 #include <QPushButton>
 #include <QClipboard>
@@ -133,6 +134,12 @@ QWidget* Form::DrawFirstTab() {
     inputs_field_->setObjectName("inputs");
     inputs_field_->setAcceptRichText(false);
     input_label->setBuddy(inputs_field_);
+    /*QVBoxLayout* test = new QVBoxLayout();
+    test->addWidget(input_label);
+    test->addWidget(inputs_field_);
+
+    Spoiler* spoiler = new Spoiler();
+    spoiler->SetContentLayout(*test);*/
 
     auto* const_label = new QLabel("Константы");
     const_label->setFont(font_size_);
@@ -165,9 +172,11 @@ QWidget* Form::DrawFirstTab() {
     link_field_1_->setObjectName("link");
     link_label->setBuddy(link_field_1_);
 
-    auto* left_side_menu = new QVBoxLayout();
+    auto* left_side_container = new QWidget();
+    auto* left_side_menu = new QVBoxLayout(left_side_container);
     left_side_menu->addWidget(input_label);
     left_side_menu->addWidget(inputs_field_);
+//    left_side_menu->addWidget(spoiler);
     left_side_menu->addWidget(const_label);
     left_side_menu->addWidget(const_field_);
     left_side_menu->addWidget(algorithm_label);
@@ -177,8 +186,11 @@ QWidget* Form::DrawFirstTab() {
     left_side_menu->addWidget(link_label);
     left_side_menu->addWidget(link_field_1_);
 
-    auto* left_side_container = new QWidget();
-    left_side_container->setLayout(left_side_menu);
+
+    auto* scroll_area = new QScrollArea();
+    scroll_area->setStyleSheet("QScrollArea {background-color: transparent;}");
+    scroll_area->setWidgetResizable(true);
+    scroll_area->setWidget(left_side_container);
 
     connect(inputs_field_, SIGNAL(textChanged()),  worker_, SLOT(UpdatePreview()));
     connect(const_field_, SIGNAL(textChanged()),  worker_, SLOT(UpdatePreview()));
@@ -191,7 +203,7 @@ QWidget* Form::DrawFirstTab() {
     algorithm_field_->installEventFilter(this);
     output_field_->installEventFilter(this);
 
-    return left_side_container;
+    return scroll_area;
 }
 
 QWidget* Form::DrawSecondTab() {
@@ -249,7 +261,8 @@ QWidget* Form::DrawSecondTab() {
     section_field_->setAcceptRichText(false);
     section_field_label->setBuddy(section_field_);
 
-    auto* left_side_menu = new QVBoxLayout();
+    auto* left_side_container = new QWidget();
+    auto* left_side_menu = new QVBoxLayout(left_side_container);
     left_side_menu->addWidget(input_description);
     left_side_menu->addWidget(input_description_field_);
     left_side_menu->addWidget(input_list);
@@ -265,8 +278,10 @@ QWidget* Form::DrawSecondTab() {
     left_side_menu->addWidget(section_field_label);
     left_side_menu->addWidget(section_field_);
 
-    auto* left_side_container = new QWidget();
-    left_side_container->setLayout(left_side_menu);
+    auto* scroll_area = new QScrollArea();
+    scroll_area->setStyleSheet("QScrollArea {background-color: transparent;}");
+    scroll_area->setWidgetResizable(true);
+    scroll_area->setWidget(left_side_container);
 
     connect(input_description_field_, SIGNAL(textChanged()),  worker_, SLOT(UpdatePreview()));
     connect(input_list_field_, SIGNAL(textChanged()),  worker_, SLOT(UpdatePreview()));
@@ -281,7 +296,7 @@ QWidget* Form::DrawSecondTab() {
     output_description_field_->installEventFilter(this);
     output_list_field_->installEventFilter(this);
 
-    return left_side_container;
+    return scroll_area;
 }
 
 
