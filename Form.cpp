@@ -127,66 +127,62 @@ void Form::DrawMainForm() {
 }
 
 QWidget* Form::DrawFirstTab() {
-    auto* input_label = new QLabel("Входы");
-    input_label->setFont(font_size_);
     inputs_field_ = new QTextEdit();
     inputs_field_->setFont(font_size_);
     inputs_field_->setObjectName("inputs");
     inputs_field_->setAcceptRichText(false);
-    input_label->setBuddy(inputs_field_);
-    /*QVBoxLayout* test = new QVBoxLayout();
-    test->addWidget(input_label);
-    test->addWidget(inputs_field_);
+    auto* inputs_layout = new QVBoxLayout();
+    inputs_layout->addWidget(inputs_field_);
+    auto* inputs_spoiler = new Spoiler("Входы");
+    inputs_spoiler->SetContentLayout(*inputs_layout);
 
-    Spoiler* spoiler = new Spoiler();
-    spoiler->SetContentLayout(*test);*/
-
-    auto* const_label = new QLabel("Константы");
-    const_label->setFont(font_size_);
     const_field_ = new QTextEdit();
     const_field_->setFont(font_size_);
     const_field_->setObjectName("constants");
     const_field_->setAcceptRichText(false);
-    const_label->setBuddy(const_field_);
+    auto* const_layout = new QVBoxLayout();
+    const_layout->addWidget(const_field_);
+    auto* const_spoiler = new Spoiler("Константы");
+    const_spoiler->SetContentLayout(*const_layout);
 
-    auto* algorithm_label = new QLabel("Алгоритм");
-    algorithm_label->setFont(font_size_);
     algorithm_field_ = new QTextEdit();
     algorithm_field_->setFont(font_size_);
     algorithm_field_->setObjectName("algorithm");
     algorithm_field_->setAcceptRichText(false);
-    algorithm_label->setBuddy(algorithm_field_);
+    auto* algorithm_layout = new QVBoxLayout();
+    algorithm_layout->addWidget(algorithm_field_);
+    auto* algorithm_spoiler = new Spoiler("Алгоритм");
+    algorithm_spoiler->SetContentLayout(*algorithm_layout);
 
-    auto* output_label = new QLabel("Выход");
-    output_label->setFont(font_size_);
     output_field_ = new QTextEdit();
     output_field_->setFont(font_size_);
     output_field_->setObjectName("outputs");
     output_field_->setAcceptRichText(false);
-    output_label->setBuddy(output_field_);
+    auto* output_layout = new QVBoxLayout();
+    output_layout->addWidget(output_field_);
+    auto* output_spoiler = new Spoiler("Выходы");
+    output_spoiler->SetContentLayout(*output_layout);
 
-    auto* link_label = new QLabel("Ссылка на пример");
-    link_label->setFont(font_size_);
     link_field_1_ = new QLineEdit();
     link_field_1_->setFont(font_size_);
     link_field_1_->setObjectName("link");
-    link_label->setBuddy(link_field_1_);
+    auto* link_layout = new QVBoxLayout();
+    link_layout->addWidget(link_field_1_);
+    auto* link_spoiler = new Spoiler("Ссылка на пример");
+    link_spoiler->SetContentLayout(*link_layout);
 
     auto* left_side_container = new QWidget();
     auto* left_side_menu = new QVBoxLayout(left_side_container);
-    left_side_menu->addWidget(input_label);
-    left_side_menu->addWidget(inputs_field_);
-//    left_side_menu->addWidget(spoiler);
-    left_side_menu->addWidget(const_label);
-    left_side_menu->addWidget(const_field_);
-    left_side_menu->addWidget(algorithm_label);
-    left_side_menu->addWidget(algorithm_field_);
-    left_side_menu->addWidget(output_label);
-    left_side_menu->addWidget(output_field_);
-    left_side_menu->addWidget(link_label);
-    left_side_menu->addWidget(link_field_1_);
-
-
+    left_side_menu->addWidget(inputs_spoiler);
+    left_side_menu->addWidget(const_spoiler);
+    left_side_menu->addWidget(algorithm_spoiler);
+    left_side_menu->addWidget(output_spoiler);
+    left_side_menu->addWidget(link_spoiler);
+    for (int i = 0; i < left_side_menu->count(); ++i) {
+        qobject_cast<Spoiler*>(left_side_menu->itemAt(i)->widget())->ToggleButton();
+        qobject_cast<Spoiler*>(left_side_menu->itemAt(i)->widget())->ToggleButton();
+    }
+    qobject_cast<Spoiler*>(left_side_menu->itemAt(0)->widget())->ToggleButton();
     auto* scroll_area = new QScrollArea();
     scroll_area->setStyleSheet("QScrollArea {background-color: transparent;}");
     scroll_area->setWidgetResizable(true);
@@ -207,76 +203,81 @@ QWidget* Form::DrawFirstTab() {
 }
 
 QWidget* Form::DrawSecondTab() {
-    auto* input_description = new QLabel("Описание входов");
-    input_description->setFont(font_size_);
     input_description_field_ = new QTextEdit();
     input_description_field_->setFont(font_size_);
     input_description_field_->setObjectName("inputs_description");
     input_description_field_->setAcceptRichText(false);
-    input_description->setBuddy(input_description_field_);
+    auto* inputs_description_layout = new QVBoxLayout();
+    inputs_description_layout->addWidget(input_description_field_);
+    auto* inputs_description_spoiler = new Spoiler("Описание входов");
+    inputs_description_spoiler->SetContentLayout(*inputs_description_layout);
 
-    auto* input_list = new QLabel("Список входов");
-    input_list->setFont(font_size_);
     input_list_field_ = new QTextEdit();
     input_list_field_->setFont(font_size_);
     input_list_field_->setObjectName("inputs_list");
     input_list_field_->setAcceptRichText(false);
-    input_list->setBuddy(input_list_field_);
+    auto* inputs_list_layout = new QVBoxLayout();
+    inputs_list_layout->addWidget(input_list_field_);
+    auto* inputs_list_spoiler = new Spoiler("Список входов");
+    inputs_list_spoiler->SetContentLayout(*inputs_list_layout);
 
-    auto* output_description = new QLabel("Описание выходов");
-    output_description->setFont(font_size_);
     output_description_field_ = new QTextEdit();
     output_description_field_->setFont(font_size_);
     output_description_field_->setObjectName("output_description");
     output_description_field_->setAcceptRichText(false);
-    output_description->setBuddy(output_description_field_);
+    auto* output_description_layout = new QVBoxLayout();
+    output_description_layout->addWidget(output_description_field_);
+    auto* output_description_spoiler = new Spoiler("Описание выходов");
+    output_description_spoiler->SetContentLayout(*output_description_layout);
 
-    auto* output_list = new QLabel("Список выходов");
-    output_list->setFont(font_size_);
     output_list_field_ = new QTextEdit();
     output_list_field_->setFont(font_size_);
     output_list_field_->setObjectName("output_list");
     output_list_field_->setAcceptRichText(false);
-    output_list->setBuddy(output_list_field_);
+    auto* output_list_layout = new QVBoxLayout();
+    output_list_layout->addWidget(output_list_field_);
+    auto* output_list_spoiler = new Spoiler("Список выходов");
+    output_list_spoiler->SetContentLayout(*output_list_layout);
 
-    auto* link_label = new QLabel("Ссылка на модуль");
-    link_label->setFont(font_size_);
     link_field_2_ = new QLineEdit();
     link_field_2_->setFont(font_size_);
     link_field_2_->setObjectName("link");
-    link_label->setBuddy(link_field_2_);
+    auto* link_layout = new QVBoxLayout();
+    link_layout->addWidget(link_field_2_);
+    auto* link_spoiler = new Spoiler("Ссылка на модуль");
+    link_spoiler->SetContentLayout(*link_layout);
 
-    auto* section_name_label = new QLabel("Название дополнительного раздела");
-    section_name_label->setFont(font_size_);
     section_name_ = new QLineEdit();
     section_name_->setFont(font_size_);
     section_name_->setObjectName("section_name");
-    section_name_label->setBuddy(section_name_);
+    auto* section_name_layout = new QVBoxLayout();
+    section_name_layout->addWidget(section_name_);
+    auto* section_name_spoiler = new Spoiler("Название дополнительного раздела");
+    section_name_spoiler->SetContentLayout(*section_name_layout);
 
-    auto* section_field_label = new QLabel("Содержание");
-    section_field_label->setFont(font_size_);
     section_field_ = new QTextEdit();
     section_field_->setFont(font_size_);
     section_field_->setObjectName("section_field");
     section_field_->setAcceptRichText(false);
-    section_field_label->setBuddy(section_field_);
+    auto* section_content_layout = new QVBoxLayout();
+    section_content_layout->addWidget(section_field_);
+    auto* section_content_spoiler = new Spoiler("Содержание");
+    section_content_spoiler->SetContentLayout(*section_content_layout);
 
     auto* left_side_container = new QWidget();
     auto* left_side_menu = new QVBoxLayout(left_side_container);
-    left_side_menu->addWidget(input_description);
-    left_side_menu->addWidget(input_description_field_);
-    left_side_menu->addWidget(input_list);
-    left_side_menu->addWidget(input_list_field_);
-    left_side_menu->addWidget(output_description);
-    left_side_menu->addWidget(output_description_field_);
-    left_side_menu->addWidget(output_list);
-    left_side_menu->addWidget(output_list_field_);
-    left_side_menu->addWidget(link_label);
-    left_side_menu->addWidget(link_field_2_);
-    left_side_menu->addWidget(section_name_label);
-    left_side_menu->addWidget(section_name_);
-    left_side_menu->addWidget(section_field_label);
-    left_side_menu->addWidget(section_field_);
+    left_side_menu->addWidget(inputs_description_spoiler);
+    left_side_menu->addWidget(inputs_list_spoiler);
+    left_side_menu->addWidget(output_description_spoiler);
+    left_side_menu->addWidget(output_list_spoiler);
+    left_side_menu->addWidget(link_spoiler);
+    left_side_menu->addWidget(section_name_spoiler);
+    left_side_menu->addWidget(section_content_spoiler);
+    for (int i = 0; i < left_side_menu->count(); ++i) {
+        qobject_cast<Spoiler*>(left_side_menu->itemAt(i)->widget())->ToggleButton();
+        qobject_cast<Spoiler*>(left_side_menu->itemAt(i)->widget())->ToggleButton();
+    }
+    qobject_cast<Spoiler*>(left_side_menu->itemAt(0)->widget())->ToggleButton();
 
     auto* scroll_area = new QScrollArea();
     scroll_area->setStyleSheet("QScrollArea {background-color: transparent;}");
