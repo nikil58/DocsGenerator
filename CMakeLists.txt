@@ -11,7 +11,9 @@ set(REQUIRED_LIBS_QUALIFIED Qt5::Core Qt5::Gui Qt5::Widgets  Qt5::WebEngineWidge
 
 add_executable(${PROJECT_NAME} main.cpp Form.cpp Form.h PreviewWorker.cpp PreviewWorker.h icons.qrc
         Spoiler.cpp
-        Spoiler.h)
+        Spoiler.h
+        CharacterForm.cpp
+        CharacterForm.h)
 
 
 find_package(Qt${QT_VERSION} COMPONENTS ${REQUIRED_LIBS} REQUIRED)

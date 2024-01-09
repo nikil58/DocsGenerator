@@ -10,6 +10,7 @@
 #include <QLabel>
 #include <QMainWindow>
 #include "PreviewWorker.h"
+#include "CharacterForm.h"
 
 class Form : public QMainWindow {
 Q_OBJECT
@@ -99,6 +100,8 @@ private:
                                                          {"sum",     "\\sum{}",  "1"}, {"prod", "\\prod{}", "1"}, {"int", "\\int", "0"}, {"vec", "\\times", "0"},
                                                          {"pi",      "\\pi",     "0"}, {"alpha", "\\alpha", "0"}, {"beta", "\\beta", "0"}, {"phi", "\\varphi", "0"},
                                                          {"theta",   "\\theta",  "0"}, {"leq", "\\leq", "0"}, {"inf", "\\infty", "0"}, {"Фотография", "", "0"}};
+
+    CharacterForm* character_form_{};
 public:
     explicit Form();
     ~Form() override;
@@ -123,4 +126,6 @@ private slots:
     void ImportFile(bool);
     /// Slot that invokes every time when File->Export is clicked
     void ExportFile(bool);
+
+    void OpenFormulas(bool);
 };

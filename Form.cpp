@@ -1,5 +1,6 @@
 #include "Form.h"
 #include "Spoiler.h"
+#include "CharacterForm.h"
 
 #include <QPushButton>
 #include <QClipboard>
@@ -46,7 +47,7 @@ void Form::DrawMainForm() {
     title_splitter_->setFrameShape(QFrame::HLine);
     title_splitter_->setFrameShadow(QFrame::Sunken);
 
-    formulas_buttons_layout_ = new QGridLayout();
+    /*formulas_buttons_layout_ = new QGridLayout();
     int column = 0, row = 0;
     for (const auto& current_button : formulas_buttons_) {
         QString current_button_text = current_button.at(0);
@@ -70,7 +71,10 @@ void Form::DrawMainForm() {
             row++;
         }
         connect(button, SIGNAL(clicked()), this, SLOT(OperationClick()));
-    }
+    }*/
+    auto* window = new QPushButton("Спецсимволы");
+    window->setFont(font_size_);
+    connect(window, SIGNAL(clicked(bool)), this, SLOT(OpenFormulas(bool)));
 
     auto* copy_button = new QPushButton("Копировать");
     copy_button->setFont(font_size_);
@@ -101,7 +105,8 @@ void Form::DrawMainForm() {
     left_side_layout->addWidget(title_label_);
     left_side_layout->addWidget(title_field_);
     left_side_layout->addWidget(title_splitter_);
-    left_side_layout->addLayout(formulas_buttons_layout_);
+//    left_side_layout->addLayout(formulas_buttons_layout_);
+left_side_layout->addWidget(window);
     left_side_layout->addWidget(tabs_);
 
     auto* preview_button_layout = new QVBoxLayout();
@@ -124,6 +129,10 @@ void Form::DrawMainForm() {
     splitter->setSizes(QList<int>({1,1}));
 
     form_layout_->addWidget(splitter);
+}
+
+void Form::OpenFormulas(bool) {
+    character_form_ = new CharacterForm(this);
 }
 
 QWidget* Form::DrawFirstTab() {
