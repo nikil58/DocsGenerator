@@ -109,12 +109,12 @@ QString PreviewWorker::Parse(const QString& text) {
             last_part = Parse(last_part);
         }
         result = first_part + result;
-        qDebug() << "test";
         result.replace(QRegExp("alttext=\".*\" "), "");
         result.replace("\n", "</math>"+last_part);
     }
     if (result.contains("!img")) {
-        result = result.replace("!img(", "<img src = \"file:").replace(")","\"/>");
+        QString path = result.split("!img(")[1].split(")")[0];
+        result = result.replace("!img(.*)", "<img src = \"file:" + path + "\"/");
     }
     //qDebug() << result;
     return result;
