@@ -109,7 +109,7 @@ QString PreviewWorker::Parse(const QString& text) {
             last_part = Parse(last_part);
         }
         result = first_part + result;
-        result.replace(QRegExp("alttext=\".*\" "), "");
+        result.replace(QRegExp("alttext=\"[^\"]*\""), "");
         result.replace("\n", "</math>"+last_part);
     }
     if (result.contains("!img")) {
