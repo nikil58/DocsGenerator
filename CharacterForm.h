@@ -2,6 +2,7 @@
 
 #include <QWidget>
 #include <QVBoxLayout>
+#include <QGridLayout>
 
 class CharacterForm : public QWidget{
     Q_OBJECT
@@ -16,6 +17,8 @@ private:
     const QVector<QString> operators_ = {"int", "sum", "prod", "lim"};
     const QVector<QString> attributes_ = {"dot", "overline", "overrightarrow", "widetilde"};
     const QVector<QString> letters_ = {"alpha", "beta", "gamma", "delta", "Delta", "epsilon", "varepsilon", "zeta", "eta", "theta", "vartheta", "Theta", "iota", "lamda", "Lambda", "mu"};
+
+    QGridLayout* PlaceButton(const QVector<QString>& buttons);
 public:
     explicit CharacterForm(QWidget* parent = nullptr);
 };

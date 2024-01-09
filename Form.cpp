@@ -47,34 +47,18 @@ void Form::DrawMainForm() {
     title_splitter_->setFrameShape(QFrame::HLine);
     title_splitter_->setFrameShadow(QFrame::Sunken);
 
-    /*formulas_buttons_layout_ = new QGridLayout();
-    int column = 0, row = 0;
-    for (const auto& current_button : formulas_buttons_) {
-        QString current_button_text = current_button.at(0);
-        auto* button = new QPushButton();
-        button->setFont(font_size_);
+    auto* window_button = new QPushButton("Спецсимволы");
+    window_button->setFont(font_size_);
+    connect(window_button, SIGNAL(clicked(bool)), this, SLOT(OpenFormulas(bool)));
 
-        QPixmap pixmap(":"+current_button_text);
-        QIcon ButtonIcon(pixmap);
+    auto* formula_button = new QPushButton("Формула");
+    formula_button->setFont(font_size_);
+    formula_button->setObjectName("Формула");
+    connect(formula_button, SIGNAL(clicked(bool)), this, SLOT(OperationClick()));
 
-        if (!ButtonIcon.isNull()) {
-            button->setIcon(ButtonIcon);
-            button->setIconSize(QSize(30,30));
-        }
-        else
-            button->setText(current_button_text);
-        button->setObjectName(current_button_text);
-        formulas_buttons_layout_->addWidget(button, row, column++);
-        button->setMinimumHeight(40);
-        if (column > 5) { /// only 5 buttons can be in a row
-            column = 0;
-            row++;
-        }
-        connect(button, SIGNAL(clicked()), this, SLOT(OperationClick()));
-    }*/
-    auto* window = new QPushButton("Спецсимволы");
-    window->setFont(font_size_);
-    connect(window, SIGNAL(clicked(bool)), this, SLOT(OpenFormulas(bool)));
+    auto* window_formula_buttons_layout = new QHBoxLayout();
+    window_formula_buttons_layout->addWidget(formula_button);
+    window_formula_buttons_layout->addWidget(window_button);
 
     auto* copy_button = new QPushButton("Копировать");
     copy_button->setFont(font_size_);
@@ -85,7 +69,7 @@ void Form::DrawMainForm() {
     connect(clear_button, SIGNAL(clicked()), this, SLOT(ClearButtonClicked()));
 
     preview_widget_ = new QWebEngineView();
-    preview_widget_->setMinimumWidth(300);
+    preview_widget_->setMinimumWidth(400);
     connect(preview_widget_, SIGNAL(urlChanged(const QUrl &)), this, SLOT(ClickOnLink(const QUrl &))); /// Do now allow link clicks
     worker_ = new PreviewWorker(0, this);
     connect(this, SIGNAL(ClearCache()), worker_, SLOT(ClearCache()));
@@ -105,8 +89,7 @@ void Form::DrawMainForm() {
     left_side_layout->addWidget(title_label_);
     left_side_layout->addWidget(title_field_);
     left_side_layout->addWidget(title_splitter_);
-//    left_side_layout->addLayout(formulas_buttons_layout_);
-left_side_layout->addWidget(window);
+    left_side_layout->addLayout(window_formula_buttons_layout);
     left_side_layout->addWidget(tabs_);
 
     auto* preview_button_layout = new QVBoxLayout();
@@ -121,12 +104,11 @@ left_side_layout->addWidget(window);
 
     auto* container = new QWidget();
     container->setLayout(left_side_layout);
-
     splitter->addWidget(container);
     splitter->addWidget(right_side_container);
     splitter->setHandleWidth(2);
     splitter->setFrameShadow(QFrame::Sunken);
-    splitter->setSizes(QList<int>({1,1}));
+    splitter->setSizes(QList<int>({container->maximumWidth(), right_side_container->minimumWidth()}));
 
     form_layout_->addWidget(splitter);
 }
