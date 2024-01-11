@@ -440,6 +440,8 @@ void Form::ExportFile(bool) {
 }
 
 Form::~Form() {
+    if (character_form_)
+        delete character_form_;
     delete worker_;
     delete this->centralWidget();
     QFile file("./index.html");

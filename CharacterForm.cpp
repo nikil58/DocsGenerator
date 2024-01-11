@@ -7,7 +7,6 @@ CharacterForm::CharacterForm(QWidget* parent) : QWidget(parent){
     this->setWindowFlags(Qt::Window | Qt::WindowStaysOnTopHint);
     this->setWindowTitle("Спецсимволы");
     this->setFixedSize(420, 720);
-    this->setAttribute(Qt::WA_DeleteOnClose);
     this->setGeometry(parent->x() - 420, parent->y() + 25, 400, 720);
 
     font_size_.setPixelSize(20);
