@@ -114,7 +114,10 @@ void Form::DrawMainForm() {
 }
 
 void Form::OpenFormulas(bool) {
-    character_form_ = new CharacterForm(this);
+    if (!character_form_)
+        character_form_ = new CharacterForm(this);
+    else
+        character_form_->showMaximized();
 }
 
 QWidget* Form::DrawFirstTab() {
@@ -308,6 +311,7 @@ void Form::OperationClick() {
                 break;
             }
         }
+        this->activateWindow();
     }
 }
 

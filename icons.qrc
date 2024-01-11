@@ -12,7 +12,7 @@
     <file alias="times">./img/times.png</file>
     <file alias="pi">./img/pi.png</file>
     <file alias="leq">./img/leq.png</file>
-    <file alias="inf">./img/inf.png</file>
+    <file alias="infty">./img/infty.png</file>
     <file alias="alpha">./img/alpha.png</file>
     <file alias="beta">./img/beta.png</file>
     <file alias="phi">./img/phi.png</file>
