@@ -6,9 +6,9 @@
 CharacterForm::CharacterForm(QWidget* parent) : QWidget(parent){
     this->setWindowFlags(Qt::Window | Qt::WindowStaysOnTopHint);
     this->setWindowTitle("Спецсимволы");
-    this->setFixedSize(400, 720);
+    this->setFixedSize(420, 720);
     this->setAttribute(Qt::WA_DeleteOnClose);
-    this->setGeometry(parent->x() - 400, parent->y() + 25, 400, 720);
+    this->setGeometry(parent->x() - 420, parent->y() + 25, 400, 720);
 
     font_size_.setPixelSize(20);
     global_layout_ = new QVBoxLayout(this);
@@ -31,6 +31,9 @@ CharacterForm::CharacterForm(QWidget* parent) : QWidget(parent){
     auto* attributes_spoiler = new Spoiler("Аттрибуты");
     attributes_spoiler->SetContentLayout(*PlaceButton(attributes_));
 
+    auto* letters_spoiler = new Spoiler("Символы");
+    letters_spoiler->SetContentLayout(*PlaceButton(letters_));
+
     auto* splitters_layout = new QVBoxLayout();
     splitters_layout->addWidget(unary_binary_spoiler);
     splitters_layout->addWidget(relations_spoiler);
@@ -38,6 +41,7 @@ CharacterForm::CharacterForm(QWidget* parent) : QWidget(parent){
     splitters_layout->addWidget(function_spoiler);
     splitters_layout->addWidget(operators_spoiler);
     splitters_layout->addWidget(attributes_spoiler);
+    splitters_layout->addWidget(letters_spoiler);
 
     auto* container = new QWidget();
     container->setLayout(splitters_layout);
