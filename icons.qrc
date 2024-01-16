@@ -67,5 +67,10 @@
     <file alias="lambda">./img/lambda.png</file>
     <file alias="Lambda">./img/Lambda.png</file>
     <file alias="mu">./img/mu.png</file>
+    <file alias="limv2">./img/limv2.png</file>
+    <file alias="lim">./img/lim.png</file>
+    <file alias="intv2">./img/intv2.png</file>
+    <file alias="sumv2">./img/sumv2.png</file>
+    <file alias="prodv2">./img/prodv2.png</file>
 </qresource>
 </RCC>

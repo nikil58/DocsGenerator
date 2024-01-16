@@ -110,11 +110,12 @@ private:
                                                          {"supseteq", "\\supseteq", "0"}, {"notsubset", "\\not\\subset", "0"}, {"notsupset", "\\not\\supset", "0"},
                                                          {"mathbb", "\\usepackage{amsfonts}\\mathbb{}", "1"}, {"|x|", "\\left|\\right|", "7"}, {"cos(x)", "\\cos()", "1"},
                                                          {"sin(x)", "\\sin()", "1"}, {"tan(x)", "\\tan()", "1"}, {"arccos(x)", "\\arccos()", "1"}, {"arcsin(x)", "\\arcsin()", "1"},
-                                                         {"arctan(x)", "\\arctan()", "1"}, {"lim", "\\lim_{x \\to \\infty}", "0"}, {"dot", "\\dot{}", "1"}, {"overline", "\\overline{}", "1"},
+                                                         {"arctan(x)", "\\arctan()", "1"}, {"lim", "\\lim{}", "1"}, {"dot", "\\dot{}", "1"}, {"overline", "\\overline{}", "1"},
                                                          {"overrightarrow", "\\overrightarrow{}", "1"}, {"widetilde", "\\widetilde{}", "1"}, {"gamma", "\\gamma", "0"},
                                                          {"delta", "\\delta", "0"}, {"epsilon", "\\epsilon", "0"}, {"varepsilon", "\\varepsilon", "0"}, {"zeta", "\\zeta", "0"},
                                                          {"eta", "\\eta", "0"}, {"vartheta", "\\vartheta", "0"}, {"Theta", "\\Theta", "0"}, {"iota", "\\iota", "0"},
-                                                         {"lambda", "\\lambda", "0"}, {"Lambda", "\\Lambda", "0"}, {"mu", "\\mu", "0"}};
+                                                         {"lambda", "\\lambda", "0"}, {"Lambda", "\\Lambda", "0"}, {"mu", "\\mu", "0"}, {"limv2", "\\lim\\limits_{x \\to \\infty}{}", "1"},
+                                                         {"intv2", "\\int\\limits_{a=0}^{a=b}{}", "1"}, {"sumv2", "\\sum\\limits_{a=0}^{a=b}{}","1"}, {"prodv2", "\\prod\\limits_{a=0}^{a=b}{}","1"}};
 
     CharacterForm* character_form_{};
 public:

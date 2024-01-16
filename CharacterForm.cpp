@@ -73,13 +73,15 @@ QGridLayout* CharacterForm::PlaceButton(const QVector<QString>& buttons) {
 
         if (!ButtonIcon.isNull()) {
             button->setIcon(ButtonIcon);
-            button->setIconSize(QSize(30,30));
+            button->setIconSize(QSize(30,39));
         }
         else
             button->setText(current_button_text);
         button->setObjectName(current_button_text);
         layout->addWidget(button, row, column++);
-        button->setMinimumHeight(40);
+        button->setFixedSize(100,60);
+        /*button->setMinimumHeight(40);
+        button->setMaximumHeight(40);*/
         if (column > 2) { /// only 3 buttons can be in a row
             column = 0;
             row++;
