@@ -8,6 +8,7 @@
 #include <QFileDialog>
 #include <QSettings>
 #include <utility>
+#include <QShortcut>
 
 Form::Form() {
     QThread::currentThread()->setObjectName("Main");
@@ -55,6 +56,8 @@ void Form::DrawMainForm() {
     formula_button->setFont(font_size_);
     formula_button->setObjectName("Формула");
     connect(formula_button, SIGNAL(clicked(bool)), this, SLOT(OperationClick()));
+    auto* shortcut = new QShortcut(QKeySequence("Ctrl+Q"), this);
+    connect(shortcut, SIGNAL(activated()), this, SLOT(OperationClick()));
 
     auto* window_formula_buttons_layout = new QHBoxLayout();
     window_formula_buttons_layout->addWidget(formula_button);
@@ -298,6 +301,8 @@ QWidget* Form::DrawSecondTab() {
 void Form::OperationClick() {
     if (last_selected_field_) {
         QString button_text = QObject::sender()->objectName();
+        if (button_text.isEmpty())
+            button_text = "Формула";
         for (const auto& button : formulas_buttons_) {
             if (button.at(0) == button_text) {
                 if (!button.at(1).isEmpty())
@@ -325,7 +330,7 @@ void Form::AddSymbolToField(const QString& symbol, const QString& shift_count) {
 }
 
 bool Form::eventFilter(QObject* obj, QEvent* e) {
-    if (e->type() == QEvent::FocusOut) {
+    if (e->type() == QEvent::FocusIn) {
         auto* text_edit = qobject_cast<QTextEdit*>(obj);
         if (text_edit)
             last_selected_field_ = text_edit;
