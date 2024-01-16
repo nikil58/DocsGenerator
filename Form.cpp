@@ -316,9 +316,12 @@ void Form::OperationClick() {
 }
 
 void Form::AddSymbolToField(const QString& symbol, const QString& shift_count) {
+    QTextCursor cursor(last_selected_field_->textCursor());
+    const QString selected_text = cursor.selectedText();
     last_selected_field_->insertPlainText(symbol);
     for (int i = 0; i < shift_count.toInt(); ++i)
         last_selected_field_->moveCursor(QTextCursor::Left);
+    last_selected_field_->insertPlainText(selected_text);
 }
 
 bool Form::eventFilter(QObject* obj, QEvent* e) {
