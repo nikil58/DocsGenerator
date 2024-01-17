@@ -204,7 +204,7 @@ void PreviewWorker::FirstTypeForm() {
                    "    </p></body></html>";
     }
 
-    QString for_file = title_start + title_start_second_part + title + title_end + inputs_start + inputs + inputs_end + const_start + const_field +
+    QString for_file = title_start + script + title_start_second_part + title + title_end + inputs_start + inputs + inputs_end + const_start + const_field +
                        const_end + output_start + output + output_end + algorithm_start + algorithm + algorithm_end + link_start +
                        link + link_end;
 
