@@ -9,6 +9,7 @@
 #include <QSettings>
 #include <utility>
 #include <QShortcut>
+#include <QMessageBox>
 
 Form::Form() {
     QThread::currentThread()->setObjectName("Main");
@@ -142,15 +143,6 @@ QWidget* Form::DrawFirstTab() {
     auto* const_spoiler = new Spoiler("Константы");
     const_spoiler->SetContentLayout(*const_layout);
 
-    algorithm_field_ = new QTextEdit();
-    algorithm_field_->setFont(font_size_);
-    algorithm_field_->setObjectName("algorithm");
-    algorithm_field_->setAcceptRichText(false);
-    auto* algorithm_layout = new QVBoxLayout();
-    algorithm_layout->addWidget(algorithm_field_);
-    auto* algorithm_spoiler = new Spoiler("Алгоритм");
-    algorithm_spoiler->SetContentLayout(*algorithm_layout);
-
     output_field_ = new QTextEdit();
     output_field_->setFont(font_size_);
     output_field_->setObjectName("outputs");
@@ -159,6 +151,15 @@ QWidget* Form::DrawFirstTab() {
     output_layout->addWidget(output_field_);
     auto* output_spoiler = new Spoiler("Выходы");
     output_spoiler->SetContentLayout(*output_layout);
+
+    algorithm_field_ = new QTextEdit();
+    algorithm_field_->setFont(font_size_);
+    algorithm_field_->setObjectName("algorithm");
+    algorithm_field_->setAcceptRichText(false);
+    auto* algorithm_layout = new QVBoxLayout();
+    algorithm_layout->addWidget(algorithm_field_);
+    auto* algorithm_spoiler = new Spoiler("Алгоритм");
+    algorithm_spoiler->SetContentLayout(*algorithm_layout);
 
     link_field_1_ = new QLineEdit();
     link_field_1_->setFont(font_size_);
@@ -172,8 +173,8 @@ QWidget* Form::DrawFirstTab() {
     auto* left_side_menu = new QVBoxLayout(left_side_container);
     left_side_menu->addWidget(inputs_spoiler);
     left_side_menu->addWidget(const_spoiler);
-    left_side_menu->addWidget(algorithm_spoiler);
     left_side_menu->addWidget(output_spoiler);
+    left_side_menu->addWidget(algorithm_spoiler);
     left_side_menu->addWidget(link_spoiler);
     for (int i = 0; i < left_side_menu->count(); ++i) {
         qobject_cast<Spoiler*>(left_side_menu->itemAt(i)->widget())->ToggleButton();
@@ -187,8 +188,8 @@ QWidget* Form::DrawFirstTab() {
 
     connect(inputs_field_, SIGNAL(textChanged()),  worker_, SLOT(UpdatePreview()));
     connect(const_field_, SIGNAL(textChanged()),  worker_, SLOT(UpdatePreview()));
-    connect(algorithm_field_, SIGNAL(textChanged()), worker_, SLOT(UpdatePreview()));
     connect(output_field_, SIGNAL(textChanged()),  worker_, SLOT(UpdatePreview()));
+    connect(algorithm_field_, SIGNAL(textChanged()), worker_, SLOT(UpdatePreview()));
     connect(link_field_1_, SIGNAL(textChanged(const QString &)),  worker_, SLOT(UpdatePreview()));
 
     inputs_field_->installEventFilter(this);
@@ -339,28 +340,51 @@ bool Form::eventFilter(QObject* obj, QEvent* e) {
 }
 
 void Form::CopyButtonClicked(){
-    QClipboard* clipboard = QApplication::clipboard();
-    QFile file("./temp.html");
-    if (file.open(QIODevice::ReadWrite)){
-        QTextStream stream(&file);
-        stream << text_in_preview_;
-        file.close();
-        auto* proc = new QProcess();
-        proc->start("tidy", QStringList() << "-i" << "-m" << "-w 160" << "./temp.html"); /// tidy is for beatify html
-        proc->waitForFinished();
-        file.open(QIODevice::ReadOnly);
-        QString result = stream.readAll().remove("<!DOCTYPE html>\n");
-        clipboard->setText(result, QClipboard::Clipboard);
-        if (clipboard->supportsSelection()) {
-            clipboard->setText(result, QClipboard::Selection);
-        }
+    bool is_empty{false};
+    if (tabs_->currentIndex() == 0) {
+        is_empty = title_field_->text().isEmpty() | inputs_field_->toPlainText().isEmpty() |
+                   const_field_->toPlainText().isEmpty() | algorithm_field_->toPlainText().isEmpty() |
+                   output_field_->toPlainText().isEmpty() | link_field_1_->text().isEmpty();
+    }
+    else {
+        is_empty = title_field_->text().isEmpty() | input_description_field_->toPlainText().isEmpty() |
+                input_list_field_->toPlainText().isEmpty() | output_description_field_->toPlainText().isEmpty() |
+                output_list_field_->toPlainText().isEmpty() | link_field_2_->text().isEmpty();
+        if (!section_name_->text().isEmpty())
+            is_empty |= section_field_->toPlainText().isEmpty();
+    }
+    QMessageBox::StandardButton reply = QMessageBox::Yes;
+    if (is_empty) {
+        reply = QMessageBox::question(this, "Копировать", "Вы действительно хотите копировать текст? Некоторые поля незаполненны, это может сказаться на качестве документации", QMessageBox::Yes | QMessageBox::No);
+    }
+
+    if (reply == QMessageBox::Yes) {
+        QClipboard* clipboard = QApplication::clipboard();
+        QFile file("./temp.html");
+        if (file.open(QIODevice::ReadWrite)){
+            QTextStream stream(&file);
+            stream << text_in_preview_;
+            file.close();
+            auto* proc = new QProcess();
+            proc->start("tidy", QStringList() << "-i" << "-m" << "-w 160" << "./temp.html"); /// tidy is for beatify html
+            proc->waitForFinished();
+            file.open(QIODevice::ReadOnly);
+            QString result = stream.readAll().remove("<!DOCTYPE html>\n");
+            clipboard->setText(result, QClipboard::Clipboard);
+            if (clipboard->supportsSelection()) {
+                clipboard->setText(result, QClipboard::Selection);
+            }
 #if defined (Q_OS_LINUX)
-        QThread::msleep(1);
+            QThread::msleep(1);
 #endif
-        file.close();
-        file.remove();
-        proc->terminate();
-        delete proc;
+            file.close();
+            file.remove();
+            proc->terminate();
+            delete proc;
+        }
+    }
+    else {
+
     }
 }
 
