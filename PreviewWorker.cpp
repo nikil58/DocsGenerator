@@ -2,6 +2,7 @@
 #include <QLineEdit>
 #include <QTextEdit>
 #include <QCoreApplication>
+#include <QRegularExpression>
 
 
 PreviewWorker::PreviewWorker(int mode, QObject* parent) : mode_(mode) {
@@ -113,8 +114,10 @@ QString PreviewWorker::Parse(const QString& text) {
         result.replace("\n", "</math>"+last_part);
     }
     if (result.contains("!img")) {
-        QString path = result.split("!img(")[1].split(")")[0];
-        result = result.replace("!img(.*)", "<img src = \"file:" + path + "\"/");
+        QRegExp exp("!img\\((.*\.(png|jpg|jpeg|gif|tiff))\\)");
+        int pos = exp.indexIn(result);
+        QString path = exp.cap(1);
+        result = result.replace(exp, "<img src = \"file:" + path + "\"/>");
     }
     //qDebug() << result;
     return result;

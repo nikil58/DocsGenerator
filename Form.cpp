@@ -54,6 +54,11 @@ void Form::DrawMainForm() {
     window_button->setFont(font_size_);
     connect(window_button, SIGNAL(clicked(bool)), this, SLOT(OpenFormulas(bool)));
 
+    auto* image_button = new QPushButton("Фотография");
+    image_button->setFont(font_size_);
+    image_button->setObjectName("Фотография");
+    connect(image_button, SIGNAL(clicked(bool)), this, SLOT(OperationClick()));
+
     auto* formula_button = new QPushButton("Формула");
     formula_button->setFont(font_size_);
     formula_button->setObjectName("Формула");
@@ -64,6 +69,7 @@ void Form::DrawMainForm() {
     auto* window_formula_buttons_layout = new QHBoxLayout();
     window_formula_buttons_layout->addWidget(formula_button);
     window_formula_buttons_layout->addWidget(window_button);
+    window_formula_buttons_layout->addWidget(image_button);
 
     auto* copy_button = new QPushButton("Копировать");
     copy_button->setFont(font_size_);
@@ -324,7 +330,7 @@ void Form::OperationClick() {
                 if (!button.at(1).isEmpty())
                     AddSymbolToField(button.at(1), button.at(2));
                 else {
-                    QString photo_path = QFileDialog::getOpenFileName(this, tr("Выбрать"), QDir::currentPath(), tr("Image (PNG, JPG, JPEG, TIFF) (*.png *.jpg *.jpeg *.tiff) ;; All files (*.*)"));
+                    QString photo_path = QFileDialog::getOpenFileName(this, tr("Выбрать"), QDir::currentPath(), tr("Image (PNG, JPG, JPEG, TIFF, GIF) (*.png *.jpg *.jpeg *.tiff *.gif) ;; All files (*.*)"));
                     if (!photo_path.isEmpty())
                         last_selected_field_->insertPlainText("!img("+photo_path+")");
                 }
