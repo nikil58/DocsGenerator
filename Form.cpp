@@ -229,7 +229,7 @@ QWidget* Form::DrawSecondTab() {
     input_list_field_->setFont(font_size_);
     input_list_field_->setObjectName("inputs_list");
     input_list_field_->setAcceptRichText(false);
-    input_list_field_->setPlaceholderText("\\({first_mat}-\\) первая матрица \n\\({second_mat}-\\) вторая матрица");
+    input_list_field_->setPlaceholderText("\\({first\\_mat}-\\) первая матрица \n\\({second\\_mat}-\\) вторая матрица");
     auto* inputs_list_layout = new QVBoxLayout();
     inputs_list_layout->addWidget(input_list_field_);
     auto* inputs_list_spoiler = new Spoiler("Список входов");
@@ -249,7 +249,7 @@ QWidget* Form::DrawSecondTab() {
     output_list_field_->setFont(font_size_);
     output_list_field_->setObjectName("output_list");
     output_list_field_->setAcceptRichText(false);
-    output_list_field_->setPlaceholderText("\\({output_mat}-\\) выходная матрица");
+    output_list_field_->setPlaceholderText("\\({output\\_mat}-\\) выходная матрица");
     auto* output_list_layout = new QVBoxLayout();
     output_list_layout->addWidget(output_list_field_);
     auto* output_list_spoiler = new Spoiler("Список выходов");
