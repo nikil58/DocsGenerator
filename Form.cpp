@@ -41,6 +41,7 @@ void Form::DrawMainForm() {
     title_field_ = new QLineEdit();
     title_field_->setFont(font_size_);
     title_field_->setObjectName("title");
+    title_field_->setPlaceholderText("Формирование сигнала шумоизлучения объекта с заданным спектральным портретом");
 
     title_label_ = new QLabel("Название");
     title_label_->setFont(font_size_);
@@ -129,6 +130,7 @@ QWidget* Form::DrawFirstTab() {
     inputs_field_->setFont(font_size_);
     inputs_field_->setObjectName("inputs");
     inputs_field_->setAcceptRichText(false);
+    inputs_field_->setPlaceholderText("\\(X^{2}-\\) квадрат икса \n\\(Y_{i}-\\) итый игрик \n\\(X + Y -\\) сумма икса и игрик");
     auto* inputs_layout = new QVBoxLayout();
     inputs_layout->addWidget(inputs_field_);
     auto* inputs_spoiler = new Spoiler("Входы");
@@ -137,6 +139,7 @@ QWidget* Form::DrawFirstTab() {
     const_field_ = new QTextEdit();
     const_field_->setFont(font_size_);
     const_field_->setObjectName("constants");
+    const_field_->setPlaceholderText("\\(V_{t}-\\) текущая скорость \n\\(P_{0}-\\) уровень шумности \n\\(N -\\) число объектов");
     const_field_->setAcceptRichText(false);
     auto* const_layout = new QVBoxLayout();
     const_layout->addWidget(const_field_);
@@ -147,6 +150,7 @@ QWidget* Form::DrawFirstTab() {
     output_field_->setFont(font_size_);
     output_field_->setObjectName("outputs");
     output_field_->setAcceptRichText(false);
+    output_field_->setPlaceholderText("\\(L-\\) размер базы \n\\(K_{L}-\\) угол между направлениями \n\\(R -\\) радиус объекта");
     auto* output_layout = new QVBoxLayout();
     output_layout->addWidget(output_field_);
     auto* output_spoiler = new Spoiler("Выходы");
@@ -156,6 +160,8 @@ QWidget* Form::DrawFirstTab() {
     algorithm_field_->setFont(font_size_);
     algorithm_field_->setObjectName("algorithm");
     algorithm_field_->setAcceptRichText(false);
+    algorithm_field_->setPlaceholderText("Радиус циркуляции для модели движения объекта при выборе элемента движения с циркуляцией рассчитывается по интерполированной зависимости:\n"
+                                         "\\(r_{ц} = r_{fi} + K_{R}\\cdot v\\)");
     auto* algorithm_layout = new QVBoxLayout();
     algorithm_layout->addWidget(algorithm_field_);
     auto* algorithm_spoiler = new Spoiler("Алгоритм");
@@ -164,6 +170,7 @@ QWidget* Form::DrawFirstTab() {
     link_field_1_ = new QLineEdit();
     link_field_1_->setFont(font_size_);
     link_field_1_->setObjectName("link");
+    link_field_1_->setPlaceholderText("Etalon.Modules.EtalonExamples.ImpactSimulation.ObjectMotionParameters.RadiusCirculationExample");
     auto* link_layout = new QVBoxLayout();
     link_layout->addWidget(link_field_1_);
     auto* link_spoiler = new Spoiler("Ссылка на пример");
@@ -205,6 +212,8 @@ QWidget* Form::DrawSecondTab() {
     input_description_field_->setFont(font_size_);
     input_description_field_->setObjectName("inputs_description");
     input_description_field_->setAcceptRichText(false);
+    input_description_field_->setPlaceholderText("Входными данными для обработки является одна из двух матриц [3x3].\n"
+                                                 "После обработки одной матрицы, на вход обработки поступает другая.");
     auto* inputs_description_layout = new QVBoxLayout();
     inputs_description_layout->addWidget(input_description_field_);
     auto* inputs_description_spoiler = new Spoiler("Описание входов");
@@ -214,6 +223,7 @@ QWidget* Form::DrawSecondTab() {
     input_list_field_->setFont(font_size_);
     input_list_field_->setObjectName("inputs_list");
     input_list_field_->setAcceptRichText(false);
+    input_list_field_->setPlaceholderText("\\({first_mat}-\\) первая матрица \n\\({second_mat}-\\) вторая матрица");
     auto* inputs_list_layout = new QVBoxLayout();
     inputs_list_layout->addWidget(input_list_field_);
     auto* inputs_list_spoiler = new Spoiler("Список входов");
@@ -223,6 +233,7 @@ QWidget* Form::DrawSecondTab() {
     output_description_field_->setFont(font_size_);
     output_description_field_->setObjectName("output_description");
     output_description_field_->setAcceptRichText(false);
+    output_description_field_->setPlaceholderText("Итоговая матрица модели будет отображена во всплывающем окне \"Обработанная матрица\"");
     auto* output_description_layout = new QVBoxLayout();
     output_description_layout->addWidget(output_description_field_);
     auto* output_description_spoiler = new Spoiler("Описание выходов");
@@ -232,6 +243,7 @@ QWidget* Form::DrawSecondTab() {
     output_list_field_->setFont(font_size_);
     output_list_field_->setObjectName("output_list");
     output_list_field_->setAcceptRichText(false);
+    output_list_field_->setPlaceholderText("\\({output_mat}-\\) выходная матрица");
     auto* output_list_layout = new QVBoxLayout();
     output_list_layout->addWidget(output_list_field_);
     auto* output_list_spoiler = new Spoiler("Список выходов");
@@ -240,6 +252,7 @@ QWidget* Form::DrawSecondTab() {
     link_field_2_ = new QLineEdit();
     link_field_2_->setFont(font_size_);
     link_field_2_->setObjectName("link");
+    link_field_2_->setPlaceholderText("Etalon.Models.experimental.cycle_processing.CycleProcessing");
     auto* link_layout = new QVBoxLayout();
     link_layout->addWidget(link_field_2_);
     auto* link_spoiler = new Spoiler("Ссылка на модуль");
@@ -248,6 +261,7 @@ QWidget* Form::DrawSecondTab() {
     section_name_ = new QLineEdit();
     section_name_->setFont(font_size_);
     section_name_->setObjectName("section_name");
+    section_name_->setPlaceholderText("Описание модели");
     auto* section_name_layout = new QVBoxLayout();
     section_name_layout->addWidget(section_name_);
     auto* section_name_spoiler = new Spoiler("Название дополнительного раздела");
@@ -257,6 +271,7 @@ QWidget* Form::DrawSecondTab() {
     section_field_->setFont(font_size_);
     section_field_->setObjectName("section_field");
     section_field_->setAcceptRichText(false);
+    section_field_->setPlaceholderText("Обработка матрицы производится при помощи составного блока cycle (CycleProcessing)");
     auto* section_content_layout = new QVBoxLayout();
     section_content_layout->addWidget(section_field_);
     auto* section_content_spoiler = new Spoiler("Содержание");

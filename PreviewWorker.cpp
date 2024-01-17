@@ -199,7 +199,7 @@ void PreviewWorker::FirstTypeForm() {
     if (!link_field_1_.isEmpty() && link_field_1_.count(" ") != link_field_1_.length()) {
         link_start = "<p class=\"western\" align=\"justify\" style=\"line-height: 170%; text-indent: 1.25cm; margin-bottom: 0cm\">\n"
                      "        <u style=\"font-family: 'Times New Roman', serif; font-size: 16px;\"><a href=\"modelica://";
-        link = link_field_1_.replace("\n", "<br>");
+        link = link_field_1_.replace("\n", "<br>").replace("modelica://", "");
         link_end = "\">Пример использования</a></u>\n"
                    "    </p></body></html>";
     }
@@ -303,7 +303,7 @@ void PreviewWorker::SecondTypeForm() {
     if (link_field_2_ != "") {
         link_start = "<p class=\"western\" align=\"justify\" style=\"line-height: 170%; text-indent: 1.25cm; margin-bottom: 0cm\">\n"
                      "        <u style=\"font-family: 'Times New Roman', serif; font-size: 16px;\"><a href=\"modelica://";
-        link = link_field_2_.replace("\n", "<br>");
+        link = link_field_2_.replace("\n", "<br>").replace("modelica://", "");
         link_end = "\">Ссылка на модуль</a></u>\n"
                            "    </p>";
     }
