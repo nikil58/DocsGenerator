@@ -64,7 +64,7 @@ void Form::DrawMainForm() {
     formula_button->setObjectName("Формула");
     connect(formula_button, SIGNAL(clicked(bool)), this, SLOT(OperationClick()));
     auto* shortcut = new QShortcut(QKeySequence("Ctrl+Q"), this);
-    connect(shortcut, SIGNAL(activated()), this, SLOT(OperationClick()));
+    connect(shortcut, SIGNAL(activated()), formula_button, SLOT(click()));
 
     auto* window_formula_buttons_layout = new QHBoxLayout();
     window_formula_buttons_layout->addWidget(formula_button);
@@ -323,8 +323,6 @@ QWidget* Form::DrawSecondTab() {
 void Form::OperationClick() {
     if (last_selected_field_) {
         QString button_text = QObject::sender()->objectName();
-        if (button_text.isEmpty())
-            button_text = "Формула";
         for (const auto& button : formulas_buttons_) {
             if (button.at(0) == button_text) {
                 if (!button.at(1).isEmpty())
