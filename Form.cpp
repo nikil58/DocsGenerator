@@ -360,12 +360,40 @@ bool Form::eventFilter(QObject* obj, QEvent* e) {
 
 void Form::CopyButtonClicked(){
     bool is_empty{false};
+    QStringList empty_fields;
     if (tabs_->currentIndex() == 0) {
+        if (title_field_->text().isEmpty())
+            empty_fields.push_back("Заголовок");
+        if (inputs_field_->toPlainText().isEmpty())
+            empty_fields.push_back("Входы");
+        if (const_field_->toPlainText().isEmpty())
+            empty_fields.push_back("Константы");
+        if (output_field_->toPlainText().isEmpty())
+            empty_fields.push_back("Выходы");
+        if (algorithm_field_->toPlainText().isEmpty())
+            empty_fields.push_back("Алгоритм");
+        if (link_field_1_->text().isEmpty())
+            empty_fields.push_back("Ссылка");
         is_empty = title_field_->text().isEmpty() | inputs_field_->toPlainText().isEmpty() |
                    const_field_->toPlainText().isEmpty() | algorithm_field_->toPlainText().isEmpty() |
                    output_field_->toPlainText().isEmpty() | link_field_1_->text().isEmpty();
     }
     else {
+        if (title_field_->text().isEmpty())
+            empty_fields.push_back("Заголовок");
+        if (input_description_field_->toPlainText().isEmpty())
+            empty_fields.push_back("Описание входов");
+        if (input_list_field_->toPlainText().isEmpty())
+            empty_fields.push_back("Список входов");
+        if (output_description_field_->toPlainText().isEmpty())
+            empty_fields.push_back("Описание выходов");
+        if (output_list_field_->toPlainText().isEmpty())
+            empty_fields.push_back("Список выходов");
+        if (link_field_2_->text().isEmpty())
+            empty_fields.push_back("Ссылка");
+        if (!section_name_->text().isEmpty())
+            if (section_field_->toPlainText().isEmpty())
+            empty_fields.push_back("Содержание раздела \""+section_name_->text() + "\"");
         is_empty = title_field_->text().isEmpty() | input_description_field_->toPlainText().isEmpty() |
                 input_list_field_->toPlainText().isEmpty() | output_description_field_->toPlainText().isEmpty() |
                 output_list_field_->toPlainText().isEmpty() | link_field_2_->text().isEmpty();
@@ -374,7 +402,7 @@ void Form::CopyButtonClicked(){
     }
     QMessageBox::StandardButton reply = QMessageBox::Yes;
     if (is_empty) {
-        reply = QMessageBox::question(this, "Копировать", "Вы действительно хотите копировать текст? Некоторые поля незаполненны, это может сказаться на качестве документации", QMessageBox::Yes | QMessageBox::No);
+        reply = QMessageBox::question(this, "Копировать", "Вы действительно хотите копировать текст? Некоторые поля незаполненны, это может сказаться на качестве документации.\nНезаполненные поля:\n• " + empty_fields.join("\n• "), QMessageBox::Yes | QMessageBox::No);
     }
 
     if (reply == QMessageBox::Yes) {
