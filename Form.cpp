@@ -139,7 +139,7 @@ QWidget* Form::DrawFirstTab() {
     inputs_field_->setPlaceholderText("\\(X^{2}-\\) квадрат икса \n\\(Y_{i}-\\) итый игрик \n\\(X + Y -\\) сумма икса и игрик");
     auto* inputs_layout = new QVBoxLayout();
     inputs_layout->addWidget(inputs_field_);
-    auto* inputs_spoiler = new Spoiler("Входы");
+    auto* inputs_spoiler = new Spoiler("Входы", form_layout_->parentWidget());
     inputs_spoiler->SetContentLayout(*inputs_layout);
 
     const_field_ = new QTextEdit();
@@ -149,7 +149,7 @@ QWidget* Form::DrawFirstTab() {
     const_field_->setAcceptRichText(false);
     auto* const_layout = new QVBoxLayout();
     const_layout->addWidget(const_field_);
-    auto* const_spoiler = new Spoiler("Константы");
+    auto* const_spoiler = new Spoiler("Константы", form_layout_->parentWidget());
     const_spoiler->SetContentLayout(*const_layout);
 
     output_field_ = new QTextEdit();
@@ -159,7 +159,7 @@ QWidget* Form::DrawFirstTab() {
     output_field_->setPlaceholderText("\\(L-\\) размер базы \n\\(K_{L}-\\) угол между направлениями \n\\(R -\\) радиус объекта");
     auto* output_layout = new QVBoxLayout();
     output_layout->addWidget(output_field_);
-    auto* output_spoiler = new Spoiler("Выходы");
+    auto* output_spoiler = new Spoiler("Выходы", form_layout_->parentWidget());
     output_spoiler->SetContentLayout(*output_layout);
 
     algorithm_field_ = new QTextEdit();
@@ -170,7 +170,7 @@ QWidget* Form::DrawFirstTab() {
                                          "\\(r_{ц} = r_{fi} + K_{R}\\cdot v\\)");
     auto* algorithm_layout = new QVBoxLayout();
     algorithm_layout->addWidget(algorithm_field_);
-    auto* algorithm_spoiler = new Spoiler("Алгоритм");
+    auto* algorithm_spoiler = new Spoiler("Алгоритм", form_layout_->parentWidget());
     algorithm_spoiler->SetContentLayout(*algorithm_layout);
 
     link_field_1_ = new QLineEdit();
@@ -179,7 +179,7 @@ QWidget* Form::DrawFirstTab() {
     link_field_1_->setPlaceholderText("Etalon.Modules.EtalonExamples.ImpactSimulation.ObjectMotionParameters.RadiusCirculationExample");
     auto* link_layout = new QVBoxLayout();
     link_layout->addWidget(link_field_1_);
-    auto* link_spoiler = new Spoiler("Ссылка на пример");
+    auto* link_spoiler = new Spoiler("Ссылка на пример", form_layout_->parentWidget());
     link_spoiler->SetContentLayout(*link_layout);
 
     auto* left_side_container = new QWidget();
@@ -222,7 +222,7 @@ QWidget* Form::DrawSecondTab() {
                                                  "После обработки одной матрицы, на вход обработки поступает другая.");
     auto* inputs_description_layout = new QVBoxLayout();
     inputs_description_layout->addWidget(input_description_field_);
-    auto* inputs_description_spoiler = new Spoiler("Описание входов");
+    auto* inputs_description_spoiler = new Spoiler("Описание входов", form_layout_->parentWidget());
     inputs_description_spoiler->SetContentLayout(*inputs_description_layout);
 
     input_list_field_ = new QTextEdit();
@@ -232,7 +232,7 @@ QWidget* Form::DrawSecondTab() {
     input_list_field_->setPlaceholderText("\\({first\\_mat}-\\) первая матрица \n\\({second\\_mat}-\\) вторая матрица");
     auto* inputs_list_layout = new QVBoxLayout();
     inputs_list_layout->addWidget(input_list_field_);
-    auto* inputs_list_spoiler = new Spoiler("Список входов");
+    auto* inputs_list_spoiler = new Spoiler("Список входов", form_layout_->parentWidget());
     inputs_list_spoiler->SetContentLayout(*inputs_list_layout);
 
     output_description_field_ = new QTextEdit();
@@ -242,7 +242,7 @@ QWidget* Form::DrawSecondTab() {
     output_description_field_->setPlaceholderText("Итоговая матрица модели будет отображена во всплывающем окне \"Обработанная матрица\"");
     auto* output_description_layout = new QVBoxLayout();
     output_description_layout->addWidget(output_description_field_);
-    auto* output_description_spoiler = new Spoiler("Описание выходов");
+    auto* output_description_spoiler = new Spoiler("Описание выходов", form_layout_->parentWidget());
     output_description_spoiler->SetContentLayout(*output_description_layout);
 
     output_list_field_ = new QTextEdit();
@@ -252,7 +252,7 @@ QWidget* Form::DrawSecondTab() {
     output_list_field_->setPlaceholderText("\\({output\\_mat}-\\) выходная матрица");
     auto* output_list_layout = new QVBoxLayout();
     output_list_layout->addWidget(output_list_field_);
-    auto* output_list_spoiler = new Spoiler("Список выходов");
+    auto* output_list_spoiler = new Spoiler("Список выходов", form_layout_->parentWidget());
     output_list_spoiler->SetContentLayout(*output_list_layout);
 
     link_field_2_ = new QLineEdit();
@@ -261,7 +261,7 @@ QWidget* Form::DrawSecondTab() {
     link_field_2_->setPlaceholderText("Etalon.Models.experimental.cycle_processing.CycleProcessing");
     auto* link_layout = new QVBoxLayout();
     link_layout->addWidget(link_field_2_);
-    auto* link_spoiler = new Spoiler("Ссылка на модуль");
+    auto* link_spoiler = new Spoiler("Ссылка на модуль", form_layout_->parentWidget());
     link_spoiler->SetContentLayout(*link_layout);
 
     section_name_ = new QLineEdit();
@@ -270,7 +270,7 @@ QWidget* Form::DrawSecondTab() {
     section_name_->setPlaceholderText("Описание модели");
     auto* section_name_layout = new QVBoxLayout();
     section_name_layout->addWidget(section_name_);
-    auto* section_name_spoiler = new Spoiler("Название дополнительного раздела");
+    auto* section_name_spoiler = new Spoiler("Название дополнительного раздела", form_layout_->parentWidget());
     section_name_spoiler->SetContentLayout(*section_name_layout);
 
     section_field_ = new QTextEdit();
@@ -280,7 +280,7 @@ QWidget* Form::DrawSecondTab() {
     section_field_->setPlaceholderText("Обработка матрицы производится при помощи составного блока cycle (CycleProcessing)");
     auto* section_content_layout = new QVBoxLayout();
     section_content_layout->addWidget(section_field_);
-    auto* section_content_spoiler = new Spoiler("Содержание");
+    auto* section_content_spoiler = new Spoiler("Содержание", form_layout_->parentWidget());
     section_content_spoiler->SetContentLayout(*section_content_layout);
 
     auto* left_side_container = new QWidget();

@@ -1,9 +1,11 @@
 #include <QPropertyAnimation>
 #include <QDebug>
 #include "Spoiler.h"
-Spoiler::Spoiler(const QString& title, const int animation_duration, QWidget *parent) : QWidget(parent), animation_duration_(animation_duration) {
+Spoiler::Spoiler(const QString& title, QWidget* parent, const int animation_duration) : QWidget(parent), animation_duration_(animation_duration) {
     QFont font;
     font.setPixelSize(20);
+    parent_ = parent;
+    setObjectName("Spoiler");
 
     toggle_button_.setStyleSheet("QToolButton { border: none; }");
     toggle_button_.setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
@@ -34,10 +36,23 @@ Spoiler::Spoiler(const QString& title, const int animation_duration, QWidget *pa
     main_layout_.addWidget(&header_line_, row++, 2, 1, 1);
     main_layout_.addWidget(&content_area_, row, 0, 1, 3);
     setLayout(&main_layout_);
-    QObject::connect(&toggle_button_, &QToolButton::clicked, [this](const bool checked) {
+    QObject::connect(&toggle_button_, &ToggleButtonR::clicked, [this](const bool checked) {
         toggle_button_.setArrowType(checked ? Qt::ArrowType::DownArrow : Qt::ArrowType::RightArrow);
         toggle_animation_.setDirection(checked ? QAbstractAnimation::Forward : QAbstractAnimation::Backward);
         toggle_animation_.start();
+    });
+    QObject::connect(&toggle_button_, &ToggleButtonR::rightClicked, [this](const bool checked) {
+        if (!checked) {
+            toggle_button_.setArrowType(Qt::ArrowType::DownArrow);
+            toggle_animation_.setDirection(QAbstractAnimation::Forward);
+            toggle_animation_.start();
+            toggle_button_.setChecked(true);
+        }
+        QList<Spoiler*> spoilers = parent_->findChildren<Spoiler*>("Spoiler");
+        for (const auto& spoiler: spoilers) {
+            if (this != spoiler)
+                spoiler->OffButton();
+        }
     });
 }
 
@@ -60,4 +75,13 @@ void Spoiler::SetContentLayout(QLayout & content_layout) {
 
 void Spoiler::ToggleButton() {
     toggle_button_.click();
+}
+
+void Spoiler::OffButton() {
+    if (toggle_button_.isChecked()) {
+        toggle_button_.setArrowType(Qt::ArrowType::RightArrow);
+        toggle_animation_.setDirection(QAbstractAnimation::Backward);
+        toggle_animation_.start();
+        toggle_button_.setChecked(false);
+    }
 }

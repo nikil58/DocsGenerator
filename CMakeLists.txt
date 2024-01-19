@@ -13,7 +13,9 @@ add_executable(${PROJECT_NAME} main.cpp Form.cpp Form.h PreviewWorker.cpp Previe
         Spoiler.cpp
         Spoiler.h
         CharacterForm.cpp
-        CharacterForm.h)
+        CharacterForm.h
+        ToggleButtonR.cpp
+        ToggleButtonR.h)
 
 
 find_package(Qt${QT_VERSION} COMPONENTS ${REQUIRED_LIBS} REQUIRED)

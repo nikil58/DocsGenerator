@@ -12,25 +12,25 @@ CharacterForm::CharacterForm(QWidget* parent) : QWidget(parent){
     font_size_.setPixelSize(20);
     global_layout_ = new QVBoxLayout(this);
 
-    auto* unary_binary_spoiler = new Spoiler("Унарные и бинарные операции");
+    auto* unary_binary_spoiler = new Spoiler("Унарные и бинарные операции", this);
     unary_binary_spoiler->SetContentLayout(*PlaceButton(unary_binary_operations_));
 
-    auto* relations_spoiler = new Spoiler("Отношения");
+    auto* relations_spoiler = new Spoiler("Отношения", this);
     relations_spoiler->SetContentLayout(*PlaceButton(relations_));
 
-    auto* set_operation_spoiler = new Spoiler("Множества");
+    auto* set_operation_spoiler = new Spoiler("Множества", this);
     set_operation_spoiler->SetContentLayout(*PlaceButton(set_operations_));
 
-    auto* function_spoiler = new Spoiler("Функции");
+    auto* function_spoiler = new Spoiler("Функции", this);
     function_spoiler->SetContentLayout(*PlaceButton(functions_));
 
-    auto* operators_spoiler = new Spoiler("Операторы");
+    auto* operators_spoiler = new Spoiler("Операторы", this);
     operators_spoiler->SetContentLayout(*PlaceButton(operators_));
 
-    auto* attributes_spoiler = new Spoiler("Аттрибуты");
+    auto* attributes_spoiler = new Spoiler("Аттрибуты", this);
     attributes_spoiler->SetContentLayout(*PlaceButton(attributes_));
 
-    auto* letters_spoiler = new Spoiler("Символы");
+    auto* letters_spoiler = new Spoiler("Символы", this);
     letters_spoiler->SetContentLayout(*PlaceButton(letters_));
 
     auto* splitters_layout = new QVBoxLayout();

@@ -9,6 +9,7 @@
 #include <QSplitter>
 #include <QLabel>
 #include <QMainWindow>
+#include <QPushButton>
 #include "PreviewWorker.h"
 #include "CharacterForm.h"
 
