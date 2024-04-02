@@ -114,10 +114,12 @@ QString PreviewWorker::Parse(const QString& text) {
         result.replace("\n", "</math>"+last_part);
     }
     if (result.contains("!img")) {
-        QRegExp exp("!img\\((.*\.(png|jpg|jpeg|gif|tiff))\\)");
+        QRegExp exp("!img\\((.*.(png|jpg|jpeg|gif|tiff))\\)");
         int pos = exp.indexIn(result);
         QString path = exp.cap(1);
-        result = result.replace(exp, "<img src = \"file:" + path + "\"/>");
+        int i= path.lastIndexOf("Etalon");
+        path=path.remove(0,i-1);
+        result = result.replace(exp, "<img src = \"modelica:/" + path + "\"/>");
     }
     //qDebug() << result;
     return result;
