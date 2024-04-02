@@ -476,7 +476,7 @@ void Form::ClickOnLink(const QUrl& url) {
 
 void Form::ImportFile(bool) {
     QString file_name = QFileDialog::getOpenFileName(this, tr("Открыть"), QDir::currentPath(), tr("Config file (*.ini) ;; All files (*)"));
-
+    if (file_name.isEmpty()) return;
     auto* settings = new QSettings(file_name, QSettings::IniFormat);
     title_field_->setText(settings->value("title").toString());
     inputs_field_->setText(settings->value("inputs_field").toString());
@@ -499,7 +499,7 @@ void Form::ExportFile(bool) {
     QString file_name = QFileDialog::getSaveFileName(this, tr("Сохранить в"), QDir::currentPath(), tr("Config file (*.ini) ;; All files (*)"));
     if (!file_name.contains(".ini"))
         file_name += ".ini";
-
+    if (file_name.isEmpty()) return;
     auto* settings = new QSettings(file_name, QSettings::IniFormat);
     settings->setValue("title", title_field_->text());
     settings->setValue("inputs_field",inputs_field_->toPlainText());
