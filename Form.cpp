@@ -1,6 +1,7 @@
 #include "Form.h"
 #include "Spoiler.h"
 #include "CharacterForm.h"
+#include <fstream>
 
 #include <QPushButton>
 #include <QClipboard>
@@ -329,8 +330,17 @@ void Form::OperationClick() {
                     AddSymbolToField(button.at(1), button.at(2));
                 else {
                     QString photo_path = QFileDialog::getOpenFileName(this, tr("Выбрать"), QDir::currentPath(), tr("Image (PNG, JPG, JPEG, TIFF, GIF) (*.png *.jpg *.jpeg *.tiff *.gif) ;; All files (*.*)"));
-                    if (!photo_path.isEmpty())
+                    if (!photo_path.isEmpty()) {
                         last_selected_field_->insertPlainText("!img("+photo_path+")");
+                        //QString filename=photo_path.remove(0,photo_path.lastIndexOf("/"));
+                        //QFile copy_photo(photo_path);
+                        std::system("find / -name \"Etalon\" >out.txt");
+                        //std ::ofstream  out;
+                        //out.open("out.txt");
+                        //std::string etalon_path;
+
+                        //copy_photo.copy("/Resources/Images"+filename);
+                    }
                 }
                 last_selected_field_->setFocus();
                 break;

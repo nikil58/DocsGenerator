@@ -117,9 +117,8 @@ QString PreviewWorker::Parse(const QString& text) {
         QRegExp exp("!img\\((.*.(png|jpg|jpeg|gif|tiff))\\)");
         int pos = exp.indexIn(result);
         QString path = exp.cap(1);
-        int i= path.lastIndexOf("Etalon");
-        path=path.remove(0,i-1);
-        result = result.replace(exp, "<img src = \"modelica:/" + path + "\"/>");
+        path=path.remove(0,path.lastIndexOf("/"));
+        result = result.replace(exp, "<img src = \"modelica://Etalon/Resources/Images" + path + "\"/>");
     }
     //qDebug() << result;
     return result;
