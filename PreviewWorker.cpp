@@ -328,6 +328,6 @@ void PreviewWorker::SecondTypeForm() {
             inputs_list_end + outputs_start + outputs + outputs_end + outputs_list_start + outputs_list +
             outputs_list_end + link_start + link + link_end + section_name_start + section_name + section_name_end +
             section_field + section_field_end;
-    QRegExp rexp("<img src= \"file:/.*OM");
+    QRegExp rexp("<img src = \"file:/.*OM");
     text_.replace(rexp,"<img src= \"modelica:/");
 }
