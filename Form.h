@@ -119,6 +119,18 @@ private:
                                                          {"intv2", "\\int\\limits_{a=0}^{a=b}{}", "1"}, {"sumv2", "\\sum\\limits_{a=0}^{a=b}{}","1"}, {"prodv2", "\\prod\\limits_{a=0}^{a=b}{}","1"}};
 
     CharacterForm* character_form_{};
+
+    /**
+     * @brief Method that finds path to Image folder in Etalon
+     * @return {user's_path_to_etalon}/OM/Etalon/Resources/Images
+     */
+    QString FindEtalonImagePath();
+
+    /**
+     * @brief Method that copy Image to the OM/Etalon/Resources/Images and show modal window with result status
+     * @param path to Image which one should be copied
+     */
+    void CopyImageToEtalon(const QString& path);
 public:
     explicit Form();
     ~Form() override;

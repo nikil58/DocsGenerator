@@ -332,47 +332,7 @@ void Form::OperationClick() {
                 else {
                     QString photo_path = QFileDialog::getOpenFileName(this, tr("Выбрать"), QDir::currentPath(), tr("Image (PNG, JPG, JPEG, TIFF, GIF) (*.png *.jpg *.jpeg *.tiff *.gif) ;; All files (*.*)"));
                     if (!photo_path.isEmpty()) {
-                        QString targetStr="Images";
-                        QFileInfoList  hitList;
-                        QString directory="/home";
-                        QDirIterator it(directory,QDirIterator::Subdirectories);
-                        QString Etalon_path;
-                        while (it.hasNext()){
-                            QString filename=it.next();
-                            QFileInfo file(filename);
-                            if (file.isFile()){
-                                continue;
-                            }
-                            if (!QString::compare(file.fileName(),targetStr)){
-                                hitList.append(file);
-                            }
-                        }
-                        foreach (QFileInfo hit, hitList){
-                            if(hit.absoluteFilePath().contains("etalon/OM/Etalon/Resources/Images"))
-                                Etalon_path=hit.absoluteFilePath();
-                        }
-                        hitList.clear();
-                        QString copy_message="Ваша картинка скопирована в "+Etalon_path;
-                        if(!photo_path.contains("etalon/OM/Etalon/Resources/Images")) {
-                            QString image_name=photo_path;
-                            image_name=image_name.remove(0, image_name.lastIndexOf('/')+1);
-                            QString image_path = Etalon_path + "/" + image_name;
-                            if(QFile::copy(photo_path, image_path)) {
-                                QMessageBox::information(NULL, QObject::tr("Копирование"),tr(copy_message.toStdString().c_str()));
-                                last_selected_field_->insertPlainText("!img("+image_path+")");
-                            }
-                            else{
-                                copy_message="Ваша картинка не была скопирована автоматически";
-                                QMessageBox::critical(NULL,QObject::tr("Копирование"),tr(copy_message.toStdString().c_str()));
-                                last_selected_field_->insertPlainText("!img("+image_path+")");
-                            }
-                        }
-                        else{
-                            copy_message="Ваша картинка не была скопирована автоматически, так как уже находится в этой папке";
-                            QMessageBox::critical(NULL,QObject::tr("Копирование"),tr(copy_message.toStdString().c_str()));
-                            last_selected_field_->insertPlainText("!img("+photo_path+")");
-                        }
-                        //qDebug()
+                        CopyImageToEtalon(photo_path);
                     }
                 }
                 last_selected_field_->setFocus();
@@ -561,6 +521,47 @@ void Form::ExportFile(bool) {
     settings->setValue("section_field",section_field_->toPlainText());
 
     delete settings;
+}
+
+QString Form::FindEtalonImagePath() {
+    QFileInfoList image_folders;
+    QDirIterator iterator("/home", QDirIterator::Subdirectories);
+    while (iterator.hasNext()) {
+        QString filename = iterator.next();
+        QFileInfo file(filename);
+        if (file.isFile())
+            continue;
+        if (!QString::compare(file.fileName(), "Images"))
+            image_folders.append(file);
+    }
+    for (const auto& folder: image_folders) {
+        if (folder.absoluteFilePath().contains("etalon/OM/Etalon/Resources/Images"))
+            return folder.absoluteFilePath();
+    }
+    return "";
+}
+
+void Form::CopyImageToEtalon(const QString &path) {
+    QString etalon_path = FindEtalonImagePath();
+    if (!path.contains("etalon/OM/Etalon/Resources/Images") && !etalon_path.isEmpty()) {
+        QString copy_path =
+                etalon_path + "/" + path.split("/").last();
+        if (QFile::copy(path, copy_path)) {
+            QMessageBox::information(this, QObject::tr("Копирование"),
+                                     tr(QString("Ваша картинка скопирована в " + copy_path).toStdString().c_str()));
+            last_selected_field_->insertPlainText("!img(" + copy_path + ")");
+        } else {
+            QMessageBox::critical(this, QObject::tr("Копирование"),
+                                  tr("Ваша картинка не была скопирована автоматически"));
+            last_selected_field_->insertPlainText("!img(" + path + ")");
+        }
+    } else {
+        QMessageBox::warning(this, QObject::tr("Копирование"),
+                             tr(QString(
+                                     "Ваша картинка не была скопирована автоматически, так как уже находится в этой папке: " +
+                                     path).toStdString().c_str()));
+        last_selected_field_->insertPlainText("!img(" + path + ")");
+    }
 }
 
 Form::~Form() {
