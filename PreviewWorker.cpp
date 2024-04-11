@@ -212,7 +212,7 @@ void PreviewWorker::FirstTypeForm() {
     QString for_file = title_start + script + title_start_second_part + title + title_end + inputs_start + inputs + inputs_end + const_start + const_field +
                        const_end + output_start + output + output_end + algorithm_start + algorithm + algorithm_end + link_start +
                        link + link_end;
-
+    for_file+="</body></html>";
     QFile file("./index.html");
     if (file.open(QIODevice::ReadWrite | QFile::Truncate)){
         QTextStream stream(&file);
@@ -223,6 +223,7 @@ void PreviewWorker::FirstTypeForm() {
     text_ = title_start + title_start_second_part + title + title_end + inputs_start + inputs + inputs_end + const_start + const_field +
             const_end + output_start + output + output_end + algorithm_start + algorithm + algorithm_end + link_start +
             link + link_end;
+    text_+="</body></html>";
 }
 
 void PreviewWorker::SecondTypeForm() {
@@ -316,6 +317,7 @@ void PreviewWorker::SecondTypeForm() {
                                inputs_list_end + outputs_start + outputs + outputs_end + outputs_list_start + outputs_list +
                                outputs_list_end + link_start + link + link_end + section_name_start + section_name + section_name_end +
                                section_field + section_field_end;
+    for_file+="</body></html>";
 
     QFile file("./index.html");
     if (file.open(QIODevice::ReadWrite | QFile::Truncate)){
@@ -328,5 +330,6 @@ void PreviewWorker::SecondTypeForm() {
             inputs_list_end + outputs_start + outputs + outputs_end + outputs_list_start + outputs_list +
             outputs_list_end + link_start + link + link_end + section_name_start + section_name + section_name_end +
             section_field + section_field_end;
+    text_+="</body></html>";
 
 }
