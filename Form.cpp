@@ -543,7 +543,13 @@ QString Form::FindEtalonImagePath() {
 
 void Form::CopyImageToEtalon(const QString &path) {
     QString etalon_path = FindEtalonImagePath();
-    if (!path.contains("etalon/OM/Etalon/Resources/Images") && !etalon_path.isEmpty()) {
+    if (etalon_path.isEmpty()) {
+        QMessageBox::critical(this, QObject::tr("Копирование"),
+                              tr("Не удалось найти папку Эталона"));
+        last_selected_field_->insertPlainText("!img(" + path + ")");
+        return;
+    }
+    if (!path.contains("etalon/OM/Etalon/Resources/Images")) {
         QString copy_path =
                 etalon_path + "/" + path.split("/").last();
         if (QFile::copy(path, copy_path)) {
