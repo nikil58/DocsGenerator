@@ -69,6 +69,9 @@ private:
     /// For WebEngine we use text that stores in the file: it has a lot css and spans. But we want copy less part, so here it is
     QString text_in_preview_{};
 
+    /// Current opened file name with .ini extension
+    QString open_file_name_{};
+
     /**
      * @brief Handler for saving the last_selected_field pointer
      * @param obj event sender
@@ -94,6 +97,11 @@ private:
     QWidget* DrawSecondTab();
 
     void AddSymbolToField(const QString& symbol, const QString& shift_count);
+
+    /**
+     * @brief Method that update title of Main Window according on information that contains in open_file_name_
+     */
+    void UpdateTitle();
 
     /// List of all formulas formulas_buttons_
     const QVector<QVector<QString>> formulas_buttons_ = {{"Формула", "\\(\\)",   "2"}, {"sub", "_{}", "1"}, {"sup", "^{}", "1"},
