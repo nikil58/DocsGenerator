@@ -17,7 +17,7 @@
 Form::Form() {
     QThread::currentThread()->setObjectName("Main");
     this->setWindowFlags(Qt::Window/* | Qt::WindowStaysOnTopHint*/);
-    this->setWindowTitle("Генератор документации");
+    UpdateTitle();
     this->setMinimumSize(1280, 900);
 
     font_size_.setPixelSize(20);
@@ -479,10 +479,10 @@ void Form::ClickOnLink(const QUrl& url) {
 }
 
 void Form::ImportFile(bool) {
-    QString file_name = QFileDialog::getOpenFileName(this, tr("Открыть"), QDir::currentPath(), tr("Config file (*.ini) ;; All files (*)"));
-    if (file_name.isEmpty())
+    open_file_name_ = QFileDialog::getOpenFileName(this, tr("Открыть"), QDir::currentPath(), tr("Config file (*.ini) ;; All files (*)"));
+    if (open_file_name_.isEmpty())
         return;
-    auto* settings = new QSettings(file_name, QSettings::IniFormat);
+    auto* settings = new QSettings(open_file_name_, QSettings::IniFormat);
     title_field_->setText(settings->value("title").toString());
     inputs_field_->setText(settings->value("inputs_field").toString());
     const_field_->setText(settings->value("const_field").toString());
@@ -501,12 +501,12 @@ void Form::ImportFile(bool) {
 }
 
 void Form::ExportFile(bool) {
-    QString file_name = QFileDialog::getSaveFileName(this, tr("Сохранить в"), QDir::currentPath(), tr("Config file (*.ini) ;; All files (*)"));
-    if (file_name.isEmpty())
+    open_file_name_ = QFileDialog::getSaveFileName(this, tr("Сохранить в"), QDir::currentPath(), tr("Config file (*.ini) ;; All files (*)"));
+    if (open_file_name_.isEmpty())
         return;
-    if (!file_name.contains(".ini"))
-        file_name += ".ini";
-    auto* settings = new QSettings(file_name, QSettings::IniFormat);
+    if (!open_file_name_.contains(".ini"))
+        open_file_name_ += ".ini";
+    auto* settings = new QSettings(open_file_name_, QSettings::IniFormat);
     settings->setValue("title", title_field_->text());
     settings->setValue("inputs_field",inputs_field_->toPlainText());
     settings->setValue("const_field",const_field_->toPlainText());
@@ -520,7 +520,7 @@ void Form::ExportFile(bool) {
     settings->setValue("link_field_2",link_field_2_->text());
     settings->setValue("section_name",section_name_->text());
     settings->setValue("section_field",section_field_->toPlainText());
-
+    UpdateTitle();
     delete settings;
 }
 
@@ -572,6 +572,15 @@ void Form::CopyImageToEtalon(const QString &path) {
     }
 }
 
+void Form::UpdateTitle() {
+    QRegExp a("(.*/|\.ini)");
+    open_file_name_.remove(a);
+    QString title = "Генератор документации";
+    if (!open_file_name_.isEmpty())
+        title += " - ";
+    this->setWindowTitle(title + open_file_name_);
+}
+
 void Form::FailedCopy(const QString &path, const QString &copy_path) {
     QMessageBox crit(QMessageBox::Critical,QObject::tr("Ошибка копирования"),tr("Ваша картинка не была скопирована, так как в папке Images уже есть картинка с таким названием. Перезаписать Вашу картинку или переименовать?"));
     crit.addButton(QMessageBox::Yes);
@@ -600,4 +609,3 @@ Form::~Form() {
     QFile file("./index.html");
     file.remove();
 }
-
