@@ -11,6 +11,7 @@
 #include <QShortcut>
 #include <QMessageBox>
 #include <QDirIterator>
+#include <QInputDialog>
 
 
 Form::Form() {
@@ -557,9 +558,10 @@ void Form::CopyImageToEtalon(const QString &path) {
                                      tr(QString("Ваша картинка скопирована в " + copy_path).toStdString().c_str()));
             last_selected_field_->insertPlainText("!img(" + copy_path + ")");
         } else {
-            QMessageBox::critical(this, QObject::tr("Копирование"),
+            FailedCopy(path,copy_path);
+            /*QMessageBox::critical(this, QObject::tr("Копирование"),
                                   tr("Ваша картинка не была скопирована автоматически"));
-            last_selected_field_->insertPlainText("!img(" + path + ")");
+            last_selected_field_->insertPlainText("!img(" + path + ")");*/
         }
     } else {
         QMessageBox::warning(this, QObject::tr("Копирование"),
@@ -570,6 +572,26 @@ void Form::CopyImageToEtalon(const QString &path) {
     }
 }
 
+void Form::FailedCopy(const QString &path, const QString &copy_path) {
+    QMessageBox crit(QMessageBox::Critical,QObject::tr("Ошибка копирования"),tr("Ваша картинка не была скопирована, так как в папке Images уже есть картинка с таким названием. Перезаписать Вашу картинку или переименовать?"));
+    crit.addButton(QMessageBox::Yes);
+    crit.addButton(QMessageBox::Ok);
+    crit.addButton(QMessageBox::Cancel);
+    crit.setButtonText(QMessageBox::Yes,"Перезаписать");
+    crit.setButtonText(QMessageBox::Ok,"Переименовать");
+    if(crit.exec()==QMessageBox::Yes){
+        QFile::remove(copy_path);
+        QFile::copy(path,copy_path);
+        last_selected_field_->insertPlainText("!img(" + copy_path + ")");
+    }
+    if(crit.Ok){
+        QString newfilename=QInputDialog::getText(this,tr("Переименовать Файл"),tr("Новое имя файла"));
+        qDebug()<<newfilename;
+    }
+
+}
+
+
 Form::~Form() {
     if (character_form_)
         delete character_form_;
@@ -578,3 +600,4 @@ Form::~Form() {
     QFile file("./index.html");
     file.remove();
 }
+

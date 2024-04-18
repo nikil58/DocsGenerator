@@ -131,6 +131,9 @@ private:
      * @param path to Image which one should be copied
      */
     void CopyImageToEtalon(const QString& path);
+
+
+    void FailedCopy(const QString &path, const QString &copy_path);
 public:
     explicit Form();
     ~Form() override;
