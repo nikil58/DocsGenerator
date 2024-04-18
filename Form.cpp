@@ -594,6 +594,10 @@ void Form::FailedCopy(const QString &path,  QString copy_path,const QString &eta
         bool ok;
         QString newfilename=QInputDialog::getText(this,tr("Переименовать Файл"),tr("Новое имя файла"),QLineEdit::Normal,copy_path.remove(QRegExp("(.*/)")),&ok);
         if (!newfilename.isEmpty()) {
+            if(copy_path==newfilename){
+                QMessageBox::warning(this,QObject::tr("Ошибка"),tr(QString("Вы не переименовали картинку").toStdString().c_str()));
+                return;
+            }
             newfilename = etalon_path + "/" + newfilename;
             QFile::copy(path, newfilename);
             last_selected_field_->insertPlainText("!img(" + newfilename + ")");
