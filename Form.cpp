@@ -454,6 +454,8 @@ void Form::ClearButtonClicked() {
     link_field_2_->clear();
     section_name_->clear();
     section_field_->clear();
+    open_file_name_.clear();
+    UpdateTitle();
 
     emit ClearCache();
 }

@@ -118,7 +118,9 @@ QString PreviewWorker::Parse(const QString& text) {
         int pos = exp.indexIn(result);
         QString path = exp.cap(1);
         auto captured_text = exp.capturedTexts();
-        result = result.replace(captured_text[0], "<img src = \"file:" + path + "\"/>");
+        if (!path.contains("file:") && !path.contains("modelica:"))
+            path = "file:" + path;
+        result = result.replace(captured_text[0], "<img src = \"" + path + "\"/>");
         result = Parse(result);
     }
     //qDebug() << result;
