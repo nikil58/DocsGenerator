@@ -141,7 +141,7 @@ private:
     void CopyImageToEtalon(const QString& path);
 
 
-    void FailedCopy(const QString &path,  QString copy_path,const QString &etalon_path);
+    void ProcessCopyFailure(const QString& source_path, QString destination_path, const QString& etalon_path);
 public:
     explicit Form();
     ~Form() override;

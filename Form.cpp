@@ -558,7 +558,7 @@ void Form::CopyImageToEtalon(const QString &path) {
                                      tr(QString("Ваша картинка скопирована в " + copy_path).toStdString().c_str()));
             last_selected_field_->insertPlainText("!img(" + copy_path + ")");
         } else {
-            FailedCopy(path,copy_path,etalon_path);
+            ProcessCopyFailure(path, copy_path, etalon_path);
         }
     } else {
         QMessageBox::warning(this, QObject::tr("Копирование"),
@@ -578,31 +578,46 @@ void Form::UpdateTitle() {
     this->setWindowTitle(title + open_file_name_);
 }
 
-void Form::FailedCopy(const QString &path,  QString copy_path,const QString &etalon_path) {
-    QMessageBox crit(QMessageBox::Critical,QObject::tr("Ошибка копирования"),tr("Ваша картинка не была скопирована, так как в папке Images уже есть картинка с таким названием. Заменить на Вашу картинку или переименовать?"));
-    crit.addButton(QMessageBox::Yes);
-    crit.addButton(QMessageBox::Cancel);
-    crit.setButtonText(QMessageBox::Yes,"Заменить");
-    QPushButton *RenameButton=crit.addButton("Переименовать",QMessageBox::ButtonRole::AcceptRole);
-    if(crit.exec()==QMessageBox::Yes){
-        QFile::remove(copy_path);
-        QFile::copy(path,copy_path);
-        last_selected_field_->insertPlainText("!img(" + copy_path + ")");
+void Form::ProcessCopyFailure(const QString& source_path, QString destination_path, const QString& etalon_path) {
+    const QString replace_button_text("Заменить");
+    const QString rename_button_text("Переименовать");
+    QMessageBox critical_message_box(QMessageBox::Critical, QObject::tr("Ошибка копирования"),
+                                     tr("Ваша картинка не была скопирована, так как в папке Images уже есть картинка с таким названием. Заменить на Вашу картинку или переименовать?"),
+                     QMessageBox::Yes | QMessageBox::Cancel);
+    critical_message_box.setButtonText(QMessageBox::Yes, replace_button_text);
+    critical_message_box.addButton(rename_button_text, QMessageBox::ButtonRole::AcceptRole);
+    critical_message_box.exec();
+    if (critical_message_box.clickedButton()->text() == replace_button_text) {
+        QFile::remove(destination_path);
+        QFile::copy(source_path, destination_path);
+        last_selected_field_->insertPlainText("!img(" + destination_path + ")");
         return;
-    }
-    if(crit.clickedButton()==RenameButton){
+    } else if (critical_message_box.clickedButton()->text() == rename_button_text) {
         bool ok;
-        QString newfilename=QInputDialog::getText(this,tr("Переименовать Файл"),tr("Новое имя файла"),QLineEdit::Normal,copy_path.remove(QRegExp("(.*/)")),&ok);
-        if (!newfilename.isEmpty()) {
-            if(copy_path==newfilename){
-                QMessageBox::warning(this,QObject::tr("Ошибка"),tr(QString("Вы не переименовали картинку").toStdString().c_str()));
-                return;
+        QString new_file_name;
+        do {
+            new_file_name = QInputDialog::getText(this, tr("Переименовать Файл"), tr("Новое имя файла"),
+                                                  QLineEdit::Normal, destination_path.remove(QRegExp("(.*/)")), &ok);
+            if (ok) {
+                if (!new_file_name.isEmpty()) {
+                    if (destination_path == new_file_name) {
+                        QMessageBox::critical(this, QObject::tr("Ошибка"),
+                                             tr("Вы не переименовали картинку"));
+                        continue;
+                    }
+                    new_file_name = etalon_path + "/" + new_file_name;
+                    QFile::copy(source_path, new_file_name);
+                    last_selected_field_->insertPlainText("!img(" + new_file_name + ")");
+                    return;
+                }
+                else {
+                    QMessageBox::critical(this, QObject::tr("Ошибка"),
+                                         tr("Вы ввели пустую строку!"));
+                    continue;
+                }
             }
-            newfilename = etalon_path + "/" + newfilename;
-            QFile::copy(path, newfilename);
-            last_selected_field_->insertPlainText("!img(" + newfilename + ")");
-            return;
-        }
+
+        } while ((ok && new_file_name.isEmpty()) || (ok && !new_file_name.isEmpty() && destination_path == new_file_name));
         return;
     }
 }
