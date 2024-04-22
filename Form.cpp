@@ -498,7 +498,6 @@ void  Form::SetDirectoryPath(QString file_path) {
     if (file.open(QIODevice::ReadWrite)) {
         QTextStream stream(&file);
         stream<<file_path;
-        qDebug() << file_path;
     }
 }
 
