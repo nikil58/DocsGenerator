@@ -139,6 +139,25 @@ private:
      * @param path to Image which one should be copied
      */
     void CopyImageToEtalon(const QString& path);
+
+    /**
+     * @brief Method that finds file with cash path to the last used directory
+     * @return file that contains path /home/{username}/.etalon/DocGeneratorPath.txt
+     */
+    [[nodiscard]] QFile GetFile() const;
+
+    /**
+     * @brief Method that gets path to the last used directory
+     * @return string with path to the last used directory or path to DocsGenerator
+     */
+    QString GetDirectoryPath();
+
+    /**
+     * @brief Method that sets path to the last used directory
+     * @param path to the recently opened ini file
+     */
+    void  SetDirectoryPath(QString file_path);
+
 public:
     explicit Form();
     ~Form() override;
