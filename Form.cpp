@@ -530,6 +530,7 @@ void Form::ExportFile(bool) {
         return;
     if (!open_file_name_.contains(".ini"))
         open_file_name_ += ".ini";
+    SetDirectoryPath(open_file_name_);
     auto* settings = new QSettings(open_file_name_, QSettings::IniFormat);
     settings->setValue("title", title_field_->text());
     settings->setValue("inputs_field",inputs_field_->toPlainText());
