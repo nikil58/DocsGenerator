@@ -598,8 +598,10 @@ void Form::ProcessCopyFailure(const QString& source_path, QString destination_pa
         return;
     } else if (critical_message_box.clickedButton()->text() == rename_button_text) {
         bool ok;
+        bool condition;
         QString new_file_name;
         do {
+            condition= true;
             new_file_name = QInputDialog::getText(this, tr("Переименовать Файл"), tr("Новое имя файла"),
                                                   QLineEdit::Normal, destination_path.remove(QRegExp("(.*/)")), &ok);
             if (ok) {
@@ -607,6 +609,19 @@ void Form::ProcessCopyFailure(const QString& source_path, QString destination_pa
                     if (destination_path == new_file_name) {
                         QMessageBox::critical(this, QObject::tr("Ошибка"),
                                              tr("Вы не переименовали картинку"));
+                        condition=false;
+                        continue;
+                    }
+                    if (!new_file_name.contains(QRegExp("\.jpg$|\.png$|\.jpeg$|\.gif$"))){
+                        QMessageBox::critical(this, QObject::tr("Ошибка"),
+                                              tr("Формат картинки не поддерживается"));
+                        condition=false;
+                        continue;
+                    }
+                    if(new_file_name.contains("/")||new_file_name.contains("\\")){
+                        QMessageBox::critical(this, QObject::tr("Ошибка"),
+                                              tr("Недопустимое имя картинки"));
+                        condition=false;
                         continue;
                     }
                     new_file_name = etalon_path + "/" + new_file_name;
@@ -617,11 +632,11 @@ void Form::ProcessCopyFailure(const QString& source_path, QString destination_pa
                 else {
                     QMessageBox::critical(this, QObject::tr("Ошибка"),
                                          tr("Вы ввели пустую строку!"));
+                    condition=false;
                     continue;
                 }
             }
-
-        } while ((ok && new_file_name.isEmpty()) || (ok && !new_file_name.isEmpty() && destination_path == new_file_name));
+        } while (ok && !condition);
         return;
     }
 }
