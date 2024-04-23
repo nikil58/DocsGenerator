@@ -477,35 +477,35 @@ void Form::ClickOnLink(const QUrl& url) {
         inputs_field_->textChanged();
 }
 
-QFile Form::GetFile() const {
-    return {  QDir::homePath() + "/.etalon/DocGeneratorPath.txt" };
+QFile Form::GetCachedFile() const {
+    return {QDir::homePath() + "/.etalon/DocGeneratorPath.txt"};
 }
 
-QString Form::GetDirectoryPath() {
-    QFile file = GetFile();
+QString Form::GetLastDirectoryPath() {
+    QFile file = GetCachedFile();
     QString current_dir;
     if (file.open(QIODevice::ReadWrite)) {
-        QTextStream stream (&file);
+        QTextStream stream(&file);
         stream >> current_dir;
         return current_dir;
     }
     return QDir::currentPath();
 }
 
-void  Form::SetDirectoryPath(QString file_path) {
-    QFile file = GetFile();
+void Form::SetLastDirectoryPath(QString file_path) {
+    QFile file = GetCachedFile();
     file_path.remove(QFileInfo(file_path).fileName());
     if (file.open(QIODevice::ReadWrite)) {
         QTextStream stream(&file);
-        stream<<file_path;
+        stream << file_path;
     }
 }
 
 void Form::ImportFile(bool) {
-    open_file_name_ = QFileDialog::getOpenFileName(this, tr("Открыть"), GetDirectoryPath(), tr("Config file (*.ini) ;; All files (*)"));
+    open_file_name_ = QFileDialog::getOpenFileName(this, tr("Открыть"), GetLastDirectoryPath(), tr("Config file (*.ini) ;; All files (*)"));
     if (open_file_name_.isEmpty())
         return;
-    SetDirectoryPath(open_file_name_);
+    SetLastDirectoryPath(open_file_name_);
     auto* settings = new QSettings(open_file_name_, QSettings::IniFormat);
     title_field_->setText(settings->value("title").toString());
     inputs_field_->setText(settings->value("inputs_field").toString());
@@ -525,12 +525,12 @@ void Form::ImportFile(bool) {
 }
 
 void Form::ExportFile(bool) {
-    open_file_name_ = QFileDialog::getSaveFileName(this, tr("Сохранить в"), GetDirectoryPath(), tr("Config file (*.ini) ;; All files (*)"));
+    open_file_name_ = QFileDialog::getSaveFileName(this, tr("Сохранить в"), GetLastDirectoryPath(), tr("Config file (*.ini) ;; All files (*)"));
     if (open_file_name_.isEmpty())
         return;
     if (!open_file_name_.contains(".ini"))
         open_file_name_ += ".ini";
-    SetDirectoryPath(open_file_name_);
+    SetLastDirectoryPath(open_file_name_);
     auto* settings = new QSettings(open_file_name_, QSettings::IniFormat);
     settings->setValue("title", title_field_->text());
     settings->setValue("inputs_field",inputs_field_->toPlainText());
