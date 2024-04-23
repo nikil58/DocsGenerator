@@ -496,7 +496,7 @@ void Form::ImportFile(bool) {
     link_field_2_->setText(settings->value("link_field_2").toString());
     section_name_->setText(settings->value("section_name").toString());
     section_field_->setText(settings->value("section_field").toString());
-
+    UpdateTitle();
     delete settings;
 }
 
@@ -579,6 +579,10 @@ void Form::UpdateTitle() {
 }
 
 void Form::ProcessCopyFailure(const QString& source_path, QString destination_path, const QString& etalon_path) {
+    if(!(QFile::permissions(etalon_path)&QFile::WriteUser)){
+        QMessageBox::critical(this,QObject::tr("Ошибка прав доступа"), tr("Права доступа для записи в папку Images отсутствуют"));
+        return;
+    }
     const QString replace_button_text("Заменить");
     const QString rename_button_text("Переименовать");
     QMessageBox critical_message_box(QMessageBox::Critical, QObject::tr("Ошибка копирования"),
