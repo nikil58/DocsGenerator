@@ -5,6 +5,8 @@
 #include <QProcess>
 #include <QFile>
 
+#define PROJECT_VERSION ALL_PROJECT_VERSION
+
 class PreviewWorker : public QObject{
 Q_OBJECT
 private:
