@@ -135,12 +135,17 @@ private:
     QString FindEtalonImagePath();
 
     /**
-     * @brief Method that copy Image to the OM/Etalon/Resources/Images and show modal window with result status
+     * @brief Method that copies Image to the OM/Etalon/Resources/Images and show modal window with result status
      * @param path to Image which one should be copied
      */
     void CopyImageToEtalon(const QString& path);
 
-
+    /**
+     * @brief Method that gives an error when copying fails and allows to rename the image
+     * @param source_path source path to image
+     * @param destination_path path where the image should be copied
+     * @param etalon_path path to the Images folder
+     */
     void ProcessCopyFailure(const QString& source_path, QString destination_path, const QString& etalon_path);
 public:
     explicit Form();
