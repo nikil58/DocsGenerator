@@ -612,7 +612,7 @@ void Form::ProcessCopyFailure(const QString& source_path, QString destination_pa
                         condition=false;
                         continue;
                     }
-                    if (!new_file_name.contains(QRegExp("\.jpg$|\.png$|\.jpeg$|\.gif$"))){
+                    if (!new_file_name.contains(QRegExp("\.jpg$|\.png$|\.jpeg$|\.gif$|\.tiff$"))){
                         QMessageBox::critical(this, QObject::tr("Ошибка"),
                                               tr("Формат картинки не поддерживается"));
                         condition=false;
