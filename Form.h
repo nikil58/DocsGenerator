@@ -141,7 +141,7 @@ private:
     void CopyImageToEtalon(const QString& path);
 
     /**
-     * @brief Method that gives an error when copying fails and allows to rename the image
+     * @brief Method that checks what problem was invoked and inform user about it
      * @param source_path source path to image
      * @param destination_path path where the image should be copied
      * @param etalon_path path to the Images folder

@@ -579,8 +579,9 @@ void Form::UpdateTitle() {
 }
 
 void Form::ProcessCopyFailure(const QString& source_path, QString destination_path, const QString& etalon_path) {
-    if(!(QFile::permissions(etalon_path)&QFile::WriteUser)){
-        QMessageBox::critical(this,QObject::tr("Ошибка прав доступа"), tr("Права доступа для записи в папку Images отсутствуют"));
+    if (!(QFile::permissions(etalon_path) & QFile::WriteUser)) {
+        QMessageBox::critical(this, QObject::tr("Ошибка прав доступа"),
+                              tr("Права доступа для записи в папку Images отсутствуют"));
         return;
     }
     const QString replace_button_text("Заменить");
@@ -598,45 +599,39 @@ void Form::ProcessCopyFailure(const QString& source_path, QString destination_pa
         return;
     } else if (critical_message_box.clickedButton()->text() == rename_button_text) {
         bool ok;
-        bool condition;
-        QString new_file_name;
+        bool success;
         do {
-            condition= true;
-            new_file_name = QInputDialog::getText(this, tr("Переименовать Файл"), tr("Новое имя файла"),
+            success = false;
+            QString new_file_name = QInputDialog::getText(this, tr("Переименовать Файл"), tr("Новое имя файла"),
                                                   QLineEdit::Normal, destination_path.remove(QRegExp("(.*/)")), &ok);
             if (ok) {
                 if (!new_file_name.isEmpty()) {
                     if (destination_path == new_file_name) {
                         QMessageBox::critical(this, QObject::tr("Ошибка"),
-                                             tr("Вы не переименовали картинку"));
-                        condition=false;
+                                              tr("Вы не переименовали картинку"));
                         continue;
                     }
-                    if (!new_file_name.contains(QRegExp("\.jpg$|\.png$|\.jpeg$|\.gif$|\.tiff$"))){
+                    if (!new_file_name.contains(QRegExp("\.jpg$|\.png$|\.jpeg$|\.gif$|\.tiff$"))) {
                         QMessageBox::critical(this, QObject::tr("Ошибка"),
                                               tr("Формат картинки не поддерживается"));
-                        condition=false;
                         continue;
                     }
-                    if(new_file_name.contains("/")||new_file_name.contains("\\")){
+                    if (new_file_name.contains("/") || new_file_name.contains("\\")) {
                         QMessageBox::critical(this, QObject::tr("Ошибка"),
                                               tr("Недопустимое имя картинки"));
-                        condition=false;
                         continue;
                     }
                     new_file_name = etalon_path + "/" + new_file_name;
                     QFile::copy(source_path, new_file_name);
                     last_selected_field_->insertPlainText("!img(" + new_file_name + ")");
-                    return;
-                }
-                else {
+                    success = true;
+                } else {
                     QMessageBox::critical(this, QObject::tr("Ошибка"),
-                                         tr("Вы ввели пустую строку!"));
-                    condition=false;
+                                          tr("Вы ввели пустую строку!"));
                     continue;
                 }
             }
-        } while (ok && !condition);
+        } while (ok && !success);
         return;
     }
 }
