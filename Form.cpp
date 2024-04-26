@@ -11,6 +11,7 @@
 #include <QShortcut>
 #include <QMessageBox>
 #include <QDirIterator>
+#include <QInputDialog>
 
 
 Form::Form() {
@@ -585,9 +586,7 @@ void Form::CopyImageToEtalon(const QString &path) {
                                      tr(QString("Ваша картинка скопирована в " + copy_path).toStdString().c_str()));
             last_selected_field_->insertPlainText("!img(" + copy_path + ")");
         } else {
-            QMessageBox::critical(this, QObject::tr("Копирование"),
-                                  tr("Ваша картинка не была скопирована автоматически"));
-            last_selected_field_->insertPlainText("!img(" + path + ")");
+            ProcessCopyFailure(path, copy_path, etalon_path);
         }
     } else {
         QMessageBox::warning(this, QObject::tr("Копирование"),
@@ -605,6 +604,64 @@ void Form::UpdateTitle() {
     if (!open_file_name_.isEmpty())
         title += " - ";
     this->setWindowTitle(title + open_file_name_);
+}
+
+void Form::ProcessCopyFailure(const QString& source_path, QString destination_path, const QString& etalon_path) {
+    if (!(QFile::permissions(etalon_path) & QFile::WriteUser)) {
+        QMessageBox::critical(this, QObject::tr("Ошибка прав доступа"),
+                              tr("Права доступа для записи в папку Images отсутствуют"));
+        return;
+    }
+    const QString replace_button_text("Заменить");
+    const QString rename_button_text("Переименовать");
+    QMessageBox critical_message_box(QMessageBox::Critical, QObject::tr("Ошибка копирования"),
+                                     tr("Ваша картинка не была скопирована, так как в папке Images уже есть картинка с таким названием. Заменить на Вашу картинку или переименовать?"),
+                     QMessageBox::Yes | QMessageBox::Cancel);
+    critical_message_box.setButtonText(QMessageBox::Yes, replace_button_text);
+    critical_message_box.addButton(rename_button_text, QMessageBox::ButtonRole::AcceptRole);
+    critical_message_box.exec();
+    if (critical_message_box.clickedButton()->text() == replace_button_text) {
+        QFile::remove(destination_path);
+        QFile::copy(source_path, destination_path);
+        last_selected_field_->insertPlainText("!img(" + destination_path + ")");
+        return;
+    } else if (critical_message_box.clickedButton()->text() == rename_button_text) {
+        bool ok;
+        bool success;
+        do {
+            success = false;
+            QString new_file_name = QInputDialog::getText(this, tr("Переименовать Файл"), tr("Новое имя файла"),
+                                                  QLineEdit::Normal, destination_path.remove(QRegExp("(.*/)")), &ok);
+            if (ok) {
+                if (!new_file_name.isEmpty()) {
+                    if (destination_path == new_file_name) {
+                        QMessageBox::critical(this, QObject::tr("Ошибка"),
+                                              tr("Вы не переименовали картинку"));
+                        continue;
+                    }
+                    if (!new_file_name.contains(QRegExp("\.jpg$|\.png$|\.jpeg$|\.gif$|\.tiff$"))) {
+                        QMessageBox::critical(this, QObject::tr("Ошибка"),
+                                              tr("Формат картинки не поддерживается"));
+                        continue;
+                    }
+                    if (new_file_name.contains("/") || new_file_name.contains("\\")) {
+                        QMessageBox::critical(this, QObject::tr("Ошибка"),
+                                              tr("Недопустимое имя картинки"));
+                        continue;
+                    }
+                    new_file_name = etalon_path + "/" + new_file_name;
+                    QFile::copy(source_path, new_file_name);
+                    last_selected_field_->insertPlainText("!img(" + new_file_name + ")");
+                    success = true;
+                } else {
+                    QMessageBox::critical(this, QObject::tr("Ошибка"),
+                                          tr("Вы ввели пустую строку!"));
+                    continue;
+                }
+            }
+        } while (ok && !success);
+        return;
+    }
 }
 
 Form::~Form() {
