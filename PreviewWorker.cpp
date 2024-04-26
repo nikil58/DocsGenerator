@@ -118,7 +118,9 @@ QString PreviewWorker::Parse(const QString& text) {
         int pos = exp.indexIn(result);
         QString path = exp.cap(1);
         auto captured_text = exp.capturedTexts();
-        result = result.replace(captured_text[0], "<img src = \"file:" + path + "\"/>");
+        if (!path.contains("file:") && !path.contains("modelica:"))
+            path = "file:" + path;
+        result = result.replace(captured_text[0], "<img src = \"" + path + "\"/>");
         result = Parse(result);
     }
     //qDebug() << result;
@@ -145,6 +147,7 @@ void PreviewWorker::ClearCache() {
 
 void PreviewWorker::FirstTypeForm() {
     QString title_start = "<html><head>";
+    QString version = "<meta name=\"DocsGenerator Version\" content = \"Made By DocsGenerator's version " + QString(PROJECT_VERSION) + "\">";
     QString script = R"(<script type="text/javascript" src=")" + QCoreApplication::applicationDirPath() + "/MathJax/es5/tex-mml-chtml.js\"></script>";
     QString title_start_second_part = R"(</head><body><h1><font face="Times New Roman, serif"><span style="font-size: 16px;">)";
     QString title = title_field_.replace("\n", "<br>");
@@ -209,7 +212,7 @@ void PreviewWorker::FirstTypeForm() {
                    "    </p></body></html>";
     }
 
-    QString for_file = title_start + script + title_start_second_part + title + title_end + inputs_start + inputs + inputs_end + const_start + const_field +
+    QString for_file = title_start + version + script + title_start_second_part + title + title_end + inputs_start + inputs + inputs_end + const_start + const_field +
                        const_end + output_start + output + output_end + algorithm_start + algorithm + algorithm_end + link_start +
                        link + link_end;
     QFile file("./index.html");
@@ -219,7 +222,7 @@ void PreviewWorker::FirstTypeForm() {
         file.close();
     }
 
-    text_ = title_start + title_start_second_part + title + title_end + inputs_start + inputs + inputs_end + const_start + const_field +
+    text_ = title_start + version + title_start_second_part + title + title_end + inputs_start + inputs + inputs_end + const_start + const_field +
             const_end + output_start + output + output_end + algorithm_start + algorithm + algorithm_end + link_start +
             link + link_end;
     text_.replace(QRegExp("<img src = \"file:/[^>]*OM"),"<img src = \"modelica:/");
@@ -227,6 +230,7 @@ void PreviewWorker::FirstTypeForm() {
 
 void PreviewWorker::SecondTypeForm() {
     QString title_start = "<html><head>";
+    QString version = "<meta name=\"DocsGenerator Version\" content = \"Made By DocsGenerator's version " + QString(PROJECT_VERSION) + "\">";
     QString script = R"(<script type="text/javascript" src=")" + QCoreApplication::applicationDirPath() + "/MathJax/es5/tex-mml-chtml.js\"></script>";
     QString title_start_second_part = R"(</head><body><h1><font face="Times New Roman, serif"><span style="font-size: 16px;">)";
     QString title = title_field_.replace("\n", "<br>");
@@ -312,7 +316,7 @@ void PreviewWorker::SecondTypeForm() {
         link_end = "\">Ссылка на модуль</a></u>\n"
                            "</p></body></html>";
     }
-    QString for_file = text_ = title_start + script + title_start_second_part + title + title_end + inputs_start + inputs + inputs_end + inputs_list_start + inputs_list +
+    QString for_file = text_ = title_start + version + script + title_start_second_part + title + title_end + inputs_start + inputs + inputs_end + inputs_list_start + inputs_list +
                                inputs_list_end + outputs_start + outputs + outputs_end + outputs_list_start + outputs_list +
                                outputs_list_end + section_name_start + section_name + section_name_end +
                                section_field + section_field_end +  link_start + link + link_end;
@@ -324,7 +328,7 @@ void PreviewWorker::SecondTypeForm() {
         file.close();
     }
 
-    text_ = title_start + title_start_second_part + title + title_end + inputs_start + inputs + inputs_end + inputs_list_start + inputs_list +
+    text_ = title_start + version + title_start_second_part + title + title_end + inputs_start + inputs + inputs_end + inputs_list_start + inputs_list +
             inputs_list_end + outputs_start + outputs + outputs_end + outputs_list_start + outputs_list +
             outputs_list_end + section_name_start + section_name + section_name_end +
             section_field + section_field_end + link_start + link + link_end;

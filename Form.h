@@ -147,6 +147,25 @@ private:
      * @param etalon_path path to the Images folder
      */
     void ProcessCopyFailure(const QString& source_path, QString destination_path, const QString& etalon_path);
+
+    /**
+     * @brief Method that finds file with cash path to the last used directory
+     * @return file that contains path /home/{username}/.etalon/DocGeneratorPath.txt
+     */
+    [[nodiscard]] QFile GetCachedFile() const;
+
+    /**
+     * @brief Method that gets path to the last used directory
+     * @return string with path to the last used directory or path to DocsGenerator
+     */
+    QString GetLastDirectoryPath();
+
+    /**
+     * @brief Method that sets path to the last used directory
+     * @param path to the recently opened ini file
+     */
+    void SetLastDirectoryPath(QString file_path);
+
 public:
     explicit Form();
     ~Form() override;
