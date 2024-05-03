@@ -6,5 +6,8 @@ int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
     a.setStyleSheet("QSplitter::handle { margin: 15px; background-color: gray }");
     Form mainWindow;
+    QPixmap pixmap(":icon");
+    QIcon application_icon(pixmap);
+    mainWindow.setWindowIcon(application_icon);
     return QApplication::exec();
 }

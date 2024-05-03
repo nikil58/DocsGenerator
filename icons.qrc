@@ -72,5 +72,6 @@
     <file alias="intv2">./img/intv2.png</file>
     <file alias="sumv2">./img/sumv2.png</file>
     <file alias="prodv2">./img/prodv2.png</file>
+    <file alias="icon">./img/icon.png</file>
 </qresource>
 </RCC>
