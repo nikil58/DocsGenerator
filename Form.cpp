@@ -487,7 +487,7 @@ QFile Form::GetCachedFile() const {
 QString Form::GetLastDirectoryPath() {
     QFile file = GetCachedFile();
     QString current_dir;
-    if (file.open(QIODevice::ReadWrite)) {
+    if (file.open(QIODevice::ReadOnly)) {
         QTextStream stream(&file);
         stream >> current_dir;
         return current_dir;
@@ -498,7 +498,7 @@ QString Form::GetLastDirectoryPath() {
 void Form::SetLastDirectoryPath(QString file_path) {
     QFile file = GetCachedFile();
     file_path.remove(QFileInfo(file_path).fileName());
-    if (file.open(QIODevice::ReadWrite)) {
+    if (file.open(QIODevice::ReadWrite | QIODevice::Truncate)) {
         QTextStream stream(&file);
         stream << file_path;
     }
