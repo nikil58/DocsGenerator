@@ -331,7 +331,7 @@ void Form::OperationClick() {
                 if (!button.at(1).isEmpty())
                     AddSymbolToField(button.at(1), button.at(2));
                 else {
-                    QString photo_path = QFileDialog::getOpenFileName(this, tr("Выбрать"), QDir::currentPath(), tr("Image (PNG, JPG, JPEG, TIFF, GIF) (*.png *.jpg *.jpeg *.tiff *.gif) ;; All files (*.*)"));
+                    QString photo_path = QFileDialog::getOpenFileName(this, tr("Выбрать"), GetLastDirectoryPath(), tr("Image (PNG, JPG, JPEG, TIFF, GIF) (*.png *.jpg *.jpeg *.tiff *.gif) ;; All files (*.*)"));
                     if (!photo_path.isEmpty()) {
                         CopyImageToEtalon(photo_path);
                     }
