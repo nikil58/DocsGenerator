@@ -563,7 +563,7 @@ QString Form::FindEtalonImagePath() {
             image_folders.append(file);
     }
     for (const auto& folder: image_folders) {
-        if (folder.absoluteFilePath().contains("etalon/OM/Etalon/Resources/Images"))
+        if (folder.absoluteFilePath().contains("OM/Etalon/Resources/Images"))
             return folder.absoluteFilePath();
     }
     return "";
