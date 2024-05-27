@@ -13,7 +13,6 @@
 #include <QDirIterator>
 #include <QInputDialog>
 
-
 Form::Form() {
     QThread::currentThread()->setObjectName("Main");
     this->setWindowFlags(Qt::Window/* | Qt::WindowStaysOnTopHint*/);
@@ -584,6 +583,8 @@ void Form::CopyImageToEtalon(const QString &path) {
         if (QFile::copy(path, copy_path)) {
             QMessageBox::information(this, QObject::tr("Копирование"),
                                      tr(QString("Ваша картинка скопирована в " + copy_path).toStdString().c_str()));
+            std::string temp =copy_path.toStdString();
+           copy_path.remove(QRegExp(".*(?=/OM)"));
             last_selected_field_->insertPlainText("!img(" + copy_path + ")");
         } else {
             ProcessCopyFailure(path, copy_path, etalon_path);
@@ -593,7 +594,9 @@ void Form::CopyImageToEtalon(const QString &path) {
                              tr(QString(
                                      "Ваша картинка не была скопирована автоматически, так как уже находится в этой папке: " +
                                      path).toStdString().c_str()));
-        last_selected_field_->insertPlainText("!img(" + path + ")");
+        QString corrected_path = path;
+        corrected_path.remove(QRegExp(".*(?=/OM)"));
+        last_selected_field_->insertPlainText("!img(" + corrected_path + ")");
     }
 }
 
@@ -623,6 +626,7 @@ void Form::ProcessCopyFailure(const QString& source_path, QString destination_pa
     if (critical_message_box.clickedButton()->text() == replace_button_text) {
         QFile::remove(destination_path);
         QFile::copy(source_path, destination_path);
+        destination_path.remove(QRegExp(".*(?=/OM)"));
         last_selected_field_->insertPlainText("!img(" + destination_path + ")");
         return;
     } else if (critical_message_box.clickedButton()->text() == rename_button_text) {
@@ -651,6 +655,7 @@ void Form::ProcessCopyFailure(const QString& source_path, QString destination_pa
                     }
                     new_file_name = etalon_path + "/" + new_file_name;
                     QFile::copy(source_path, new_file_name);
+                    new_file_name.remove(QRegExp(".*(?=/OM)"));
                     last_selected_field_->insertPlainText("!img(" + new_file_name + ")");
                     success = true;
                 } else {

@@ -3,7 +3,7 @@
 #include <QTextEdit>
 #include <QCoreApplication>
 #include <QRegularExpression>
-
+#include "Form.h"
 
 PreviewWorker::PreviewWorker(int mode, QObject* parent) : mode_(mode) {
     thread_ = new QThread;
@@ -215,6 +215,8 @@ void PreviewWorker::FirstTypeForm() {
     QString for_file = title_start + version + script + title_start_second_part + title + title_end + inputs_start + inputs + inputs_end + const_start + const_field +
                        const_end + output_start + output + output_end + algorithm_start + algorithm + algorithm_end + link_start +
                        link + link_end;
+    for_file.replace(QRegExp("<img src = \"file:/[^>]*OM"), "<img src = \"" + Form::FindEtalonImagePath().remove(QRegExp("(/Etalon).*")));
+    std::string tt = for_file.toStdString();
     QFile file("./index.html");
     if (file.open(QIODevice::ReadWrite | QFile::Truncate)){
         QTextStream stream(&file);
@@ -321,6 +323,7 @@ void PreviewWorker::SecondTypeForm() {
                                outputs_list_end + section_name_start + section_name + section_name_end +
                                section_field + section_field_end +  link_start + link + link_end;
 
+    for_file.replace(QRegExp("<img src = \"file:/[^>]*OM"), "<img src = \"" + Form::FindEtalonImagePath().remove(QRegExp("(/Etalon).*")));
     QFile file("./index.html");
     if (file.open(QIODevice::ReadWrite | QFile::Truncate)){
         QTextStream stream(&file);

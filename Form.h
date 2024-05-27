@@ -129,12 +129,6 @@ private:
     CharacterForm* character_form_{};
 
     /**
-     * @brief Method that finds path to Image folder in Etalon
-     * @return {user's_path_to_etalon}/OM/Etalon/Resources/Images
-     */
-    QString FindEtalonImagePath();
-
-    /**
      * @brief Method that copies Image to the OM/Etalon/Resources/Images and show modal window with result status
      * @param path to Image which one should be copied
      */
@@ -169,6 +163,13 @@ private:
 public:
     explicit Form();
     ~Form() override;
+
+    /**
+    * @brief Method that finds path to Image folder in Etalon
+    * @return {user's_path_to_etalon}/OM/Etalon/Resources/Images
+    */
+    static QString FindEtalonImagePath();
+
 signals:
     /// Signal that emits when Clear formulas_buttons_ is clicked for worker
     void ClearCache();
