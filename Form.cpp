@@ -583,7 +583,6 @@ void Form::CopyImageToEtalon(const QString &path) {
         if (QFile::copy(path, copy_path)) {
             QMessageBox::information(this, QObject::tr("Копирование"),
                                      tr(QString("Ваша картинка скопирована в " + copy_path).toStdString().c_str()));
-            std::string temp =copy_path.toStdString();
            copy_path.remove(QRegExp(".*(?=/OM)"));
             last_selected_field_->insertPlainText("!img(" + copy_path + ")");
         } else {

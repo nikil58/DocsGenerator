@@ -216,8 +216,6 @@ void PreviewWorker::FirstTypeForm() {
                        const_end + output_start + output + output_end + algorithm_start + algorithm + algorithm_end + link_start +
                        link + link_end;
     for_file.replace(QRegExp("<img src = \"file:/[^>]*OM"), "<img src = \"" + (Form::FindEtalonImagePath().remove(QRegExp("(/Etalon).*"))));
-    auto temp = (Form::FindEtalonImagePath().remove(QRegExp("(/Etalon).*")).toStdString());
-    std::string tt = for_file.toStdString();
     QFile file("./index.html");
     if (file.open(QIODevice::ReadWrite | QFile::Truncate)){
         QTextStream stream(&file);
