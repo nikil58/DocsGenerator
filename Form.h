@@ -128,6 +128,13 @@ private:
 
     CharacterForm* character_form_{};
 
+
+    /**
+     * @brief Method that finds path to Image folder in Etalon
+     * @return {user's_path_to_etalon}/OM/Etalon/Resources/Images
+     */
+    QString FindEtalonImagePath();
+
     /**
      * @brief Method that copies Image to the OM/Etalon/Resources/Images and show modal window with result status
      * @param path to Image which one should be copied
@@ -139,8 +146,9 @@ private:
      * @param source_path source path to image
      * @param destination_path path where the image should be copied
      * @param etalon_path path to the Images folder
+     * @return String of final file destination
      */
-    void ProcessCopyFailure(const QString& source_path, QString destination_path, const QString& etalon_path);
+    QString ProcessCopyFailure(const QString& source_path, QString destination_path, const QString& etalon_path);
 
     /**
      * @brief Method that finds file with cash path to the last used directory
@@ -164,11 +172,7 @@ public:
     explicit Form();
     ~Form() override;
 
-    /**
-    * @brief Method that finds path to Image folder in Etalon
-    * @return {user's_path_to_etalon}/OM/Etalon/Resources/Images
-    */
-    static QString FindEtalonImagePath();
+    static QString etalon_image_path_;
 
 signals:
     /// Signal that emits when Clear formulas_buttons_ is clicked for worker
