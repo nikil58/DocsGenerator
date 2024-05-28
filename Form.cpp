@@ -13,10 +13,12 @@
 #include <QDirIterator>
 #include <QInputDialog>
 
+QString Form::etalon_image_path_{};
 
 Form::Form() {
     QThread::currentThread()->setObjectName("Main");
     this->setWindowFlags(Qt::Window/* | Qt::WindowStaysOnTopHint*/);
+    etalon_image_path_ = FindEtalonImagePath();
     UpdateTitle();
     this->setMinimumSize(1280, 900);
 
@@ -510,19 +512,19 @@ void Form::ImportFile(bool) {
         return;
     SetLastDirectoryPath(open_file_name_);
     auto* settings = new QSettings(open_file_name_, QSettings::IniFormat);
-    title_field_->setText(settings->value("title").toString());
-    inputs_field_->setText(settings->value("inputs_field").toString());
-    const_field_->setText(settings->value("const_field").toString());
-    algorithm_field_->setText(settings->value("algorithm_field").toString());
-    output_field_->setText(settings->value("output_field").toString());
+    title_field_->setText(settings->value("title").toString().replace(QRegExp("!img(.*/OM)"), "!img(/OM"));
+    inputs_field_->setText(settings->value("inputs_field").toString().replace(QRegExp("!img(.*/OM)"), "!img(/OM"));
+    const_field_->setText(settings->value("const_field").toString().replace(QRegExp("!img(.*/OM)"), "!img(/OM"));
+    algorithm_field_->setText(settings->value("algorithm_field").toString().replace(QRegExp("!img(.*/OM)"), "!img(/OM"));
+    output_field_->setText(settings->value("output_field").toString().replace(QRegExp("!img(.*/OM)"), "!img(/OM"));
     link_field_1_->setText(settings->value("link_field_1").toString());
-    input_description_field_->setText(settings->value("input_description_field").toString());
-    input_list_field_->setText(settings->value("input_list_field").toString());
-    output_description_field_->setText(settings->value("output_description_field").toString());
-    output_list_field_->setText(settings->value("output_list_field").toString());
+    input_description_field_->setText(settings->value("input_description_field").toString().replace(QRegExp("!img(.*/OM)"), "!img(/OM"));
+    input_list_field_->setText(settings->value("input_list_field").toString().replace(QRegExp("!img(.*/OM)"), "!img(/OM"));
+    output_description_field_->setText(settings->value("output_description_field").toString().replace(QRegExp("!img(.*/OM)"), "!img(/OM"));
+    output_list_field_->setText(settings->value("output_list_field").toString().replace(QRegExp("!img(.*/OM)"), "!img(/OM"));
     link_field_2_->setText(settings->value("link_field_2").toString());
     section_name_->setText(settings->value("section_name").toString());
-    section_field_->setText(settings->value("section_field").toString());
+    section_field_->setText(settings->value("section_field").toString().replace(QRegExp("!img(.*/OM)"), "!img(/OM"));
     UpdateTitle();
     delete settings;
 }
@@ -564,36 +566,38 @@ QString Form::FindEtalonImagePath() {
             image_folders.append(file);
     }
     for (const auto& folder: image_folders) {
-        if (folder.absoluteFilePath().contains("etalon/OM/Etalon/Resources/Images"))
+        if (folder.absoluteFilePath().contains("OM/Etalon/Resources/Images"))
             return folder.absoluteFilePath();
     }
     return "";
 }
 
 void Form::CopyImageToEtalon(const QString &path) {
-    QString etalon_path = FindEtalonImagePath();
-    if (etalon_path.isEmpty()) {
+    if (etalon_image_path_.isEmpty()) {
         QMessageBox::critical(this, QObject::tr("Копирование"),
                               tr("Не удалось найти папку Эталона"));
         last_selected_field_->insertPlainText("!img(" + path + ")");
         return;
     }
+    QString copy_path{path};
     if (!path.contains("etalon/OM/Etalon/Resources/Images")) {
-        QString copy_path =
-                etalon_path + "/" + path.split("/").last();
+        copy_path =
+                etalon_image_path_ + "/" + path.split("/").last();
         if (QFile::copy(path, copy_path)) {
             QMessageBox::information(this, QObject::tr("Копирование"),
                                      tr(QString("Ваша картинка скопирована в " + copy_path).toStdString().c_str()));
-            last_selected_field_->insertPlainText("!img(" + copy_path + ")");
         } else {
-            ProcessCopyFailure(path, copy_path, etalon_path);
+            copy_path = ProcessCopyFailure(path, copy_path, etalon_image_path_);
         }
     } else {
         QMessageBox::warning(this, QObject::tr("Копирование"),
                              tr(QString(
                                      "Ваша картинка не была скопирована автоматически, так как уже находится в этой папке: " +
                                      path).toStdString().c_str()));
-        last_selected_field_->insertPlainText("!img(" + path + ")");
+    }
+    if (!copy_path.isEmpty()) {
+        copy_path.remove(QRegExp(".*(?=/OM)"));
+        last_selected_field_->insertPlainText("!img(" + copy_path + ")");
     }
 }
 
@@ -606,11 +610,11 @@ void Form::UpdateTitle() {
     this->setWindowTitle(title + open_file_name_);
 }
 
-void Form::ProcessCopyFailure(const QString& source_path, QString destination_path, const QString& etalon_path) {
+QString Form::ProcessCopyFailure(const QString& source_path, QString destination_path, const QString& etalon_path) {
     if (!(QFile::permissions(etalon_path) & QFile::WriteUser)) {
         QMessageBox::critical(this, QObject::tr("Ошибка прав доступа"),
                               tr("Права доступа для записи в папку Images отсутствуют"));
-        return;
+        return source_path;
     }
     const QString replace_button_text("Заменить");
     const QString rename_button_text("Переименовать");
@@ -623,8 +627,7 @@ void Form::ProcessCopyFailure(const QString& source_path, QString destination_pa
     if (critical_message_box.clickedButton()->text() == replace_button_text) {
         QFile::remove(destination_path);
         QFile::copy(source_path, destination_path);
-        last_selected_field_->insertPlainText("!img(" + destination_path + ")");
-        return;
+        return destination_path;
     } else if (critical_message_box.clickedButton()->text() == rename_button_text) {
         bool ok;
         bool success;
@@ -650,9 +653,13 @@ void Form::ProcessCopyFailure(const QString& source_path, QString destination_pa
                         continue;
                     }
                     new_file_name = etalon_path + "/" + new_file_name;
-                    QFile::copy(source_path, new_file_name);
-                    last_selected_field_->insertPlainText("!img(" + new_file_name + ")");
-                    success = true;
+                    if (QFile::copy(source_path, new_file_name))
+                        return new_file_name;
+                    else {
+                        QMessageBox::critical(this, QObject::tr("Ошибка"),
+                                              tr("В папке Images уже есть картинка с таким названием."));
+                        continue;
+                    }
                 } else {
                     QMessageBox::critical(this, QObject::tr("Ошибка"),
                                           tr("Вы ввели пустую строку!"));
@@ -660,8 +667,8 @@ void Form::ProcessCopyFailure(const QString& source_path, QString destination_pa
                 }
             }
         } while (ok && !success);
-        return;
     }
+    return "";
 }
 
 Form::~Form() {
