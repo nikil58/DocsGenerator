@@ -320,6 +320,7 @@ QWidget* Form::DrawSecondTab() {
     input_list_field_->installEventFilter(this);
     output_description_field_->installEventFilter(this);
     output_list_field_->installEventFilter(this);
+    section_field_->installEventFilter(this);
 
     return scroll_area;
 }
@@ -361,6 +362,7 @@ bool Form::eventFilter(QObject* obj, QEvent* e) {
         if (text_edit)
             last_selected_field_ = text_edit;
     }
+
     return false;
 }
 
