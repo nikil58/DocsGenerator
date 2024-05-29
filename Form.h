@@ -168,6 +168,11 @@ private:
      */
     void SetLastDirectoryPath(QString file_path);
 
+    /**
+     * @brief Method that connect all things up
+     */
+    void SetConnections();
+
 public:
     explicit Form();
     ~Form() override;
@@ -197,4 +202,6 @@ private slots:
     void ExportFile(bool);
 
     void OpenFormulas(bool);
+    /// Slot that invokes when writing to fields for update the title
+    void SetChangedIndicator();
 };

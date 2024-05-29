@@ -37,6 +37,7 @@ Form::Form() {
     file->addAction(export_menu);
     connect(import_menu, SIGNAL(triggered(bool)), this, SLOT(ImportFile(bool)));
     connect(export_menu, SIGNAL(triggered(bool)), this, SLOT(ExportFile(bool)));
+    SetConnections();
 
     this->setCentralWidget(widget);
     this->show();
@@ -86,17 +87,13 @@ void Form::DrawMainForm() {
 
     preview_widget_ = new QWebEngineView();
     preview_widget_->setMinimumWidth(400);
-    connect(preview_widget_, SIGNAL(urlChanged(const QUrl &)), this, SLOT(ClickOnLink(const QUrl &))); /// Do now allow link clicks
     worker_ = new PreviewWorker(0, this);
-    connect(this, SIGNAL(ClearCache()), worker_, SLOT(ClearCache()));
-    connect(title_field_, SIGNAL(textChanged(const QString &)),  worker_, SLOT(UpdatePreview()));
 
     buttons_layout_ = new QHBoxLayout();
     buttons_layout_->addWidget(copy_button);
     buttons_layout_->addWidget(clear_button);
 
     tabs_ = new QTabWidget();
-    connect(tabs_, SIGNAL(currentChanged(int)), this, SLOT(SwitchTab(int)));
     tabs_->setFont(font_size_);
     tabs_->addTab(DrawFirstTab(), "Модуль");
     tabs_->addTab(DrawSecondTab(), "Модель");
@@ -204,17 +201,6 @@ QWidget* Form::DrawFirstTab() {
     scroll_area->setWidgetResizable(true);
     scroll_area->setWidget(left_side_container);
 
-    connect(inputs_field_, SIGNAL(textChanged()),  worker_, SLOT(UpdatePreview()));
-    connect(const_field_, SIGNAL(textChanged()),  worker_, SLOT(UpdatePreview()));
-    connect(output_field_, SIGNAL(textChanged()),  worker_, SLOT(UpdatePreview()));
-    connect(algorithm_field_, SIGNAL(textChanged()), worker_, SLOT(UpdatePreview()));
-    connect(link_field_1_, SIGNAL(textChanged(const QString &)),  worker_, SLOT(UpdatePreview()));
-
-    inputs_field_->installEventFilter(this);
-    const_field_->installEventFilter(this);
-    algorithm_field_->installEventFilter(this);
-    output_field_->installEventFilter(this);
-
     return scroll_area;
 }
 
@@ -308,20 +294,6 @@ QWidget* Form::DrawSecondTab() {
     scroll_area->setWidgetResizable(true);
     scroll_area->setWidget(left_side_container);
 
-    connect(input_description_field_, SIGNAL(textChanged()),  worker_, SLOT(UpdatePreview()));
-    connect(input_list_field_, SIGNAL(textChanged()),  worker_, SLOT(UpdatePreview()));
-    connect(output_description_field_, SIGNAL(textChanged()), worker_, SLOT(UpdatePreview()));
-    connect(output_list_field_, SIGNAL(textChanged()),  worker_, SLOT(UpdatePreview()));
-    connect(link_field_2_, SIGNAL(textChanged(const QString &)),  worker_, SLOT(UpdatePreview()));
-    connect(section_name_, SIGNAL(textChanged(const QString &)),  worker_, SLOT(UpdatePreview()));
-    connect(section_field_, SIGNAL(textChanged()),  worker_, SLOT(UpdatePreview()));
-
-    input_description_field_->installEventFilter(this);
-    input_list_field_->installEventFilter(this);
-    output_description_field_->installEventFilter(this);
-    output_list_field_->installEventFilter(this);
-    section_field_->installEventFilter(this);
-
     return scroll_area;
 }
 
@@ -362,7 +334,6 @@ bool Form::eventFilter(QObject* obj, QEvent* e) {
         if (text_edit)
             last_selected_field_ = text_edit;
     }
-
     return false;
 }
 
@@ -461,7 +432,6 @@ void Form::ClearButtonClicked() {
     section_field_->clear();
     open_file_name_.clear();
     UpdateTitle();
-
     emit ClearCache();
 }
 
@@ -674,10 +644,66 @@ QString Form::ProcessCopyFailure(const QString& source_path, QString destination
 }
 
 Form::~Form() {
-    if (character_form_)
-        delete character_form_;
+    delete character_form_;
     delete worker_;
     delete this->centralWidget();
     QFile file("./index.html");
     file.remove();
+}
+
+void Form::SetChangedIndicator(){
+    if (!open_file_name_.contains("*")) {
+        if (open_file_name_.isEmpty())
+            open_file_name_ = "Untitled";
+        open_file_name_+="*";
+        UpdateTitle();
+    }
+}
+
+void Form::SetConnections() {
+    connect(preview_widget_, SIGNAL(urlChanged(const QUrl &)), this, SLOT(ClickOnLink(const QUrl &))); /// Do now allow link clicks
+
+    connect(tabs_, SIGNAL(currentChanged(int)), this, SLOT(SwitchTab(int)));
+
+    connect(this, SIGNAL(ClearCache()), worker_, SLOT(ClearCache()));
+    connect(title_field_, SIGNAL(textChanged(const QString &)),  worker_, SLOT(UpdatePreview()));
+
+    connect(inputs_field_, SIGNAL(textChanged()),  worker_, SLOT(UpdatePreview()));
+    connect(const_field_, SIGNAL(textChanged()),  worker_, SLOT(UpdatePreview()));
+    connect(output_field_, SIGNAL(textChanged()),  worker_, SLOT(UpdatePreview()));
+    connect(algorithm_field_, SIGNAL(textChanged()), worker_, SLOT(UpdatePreview()));
+    connect(link_field_1_, SIGNAL(textChanged(const QString &)),  worker_, SLOT(UpdatePreview()));
+
+    connect(inputs_field_, SIGNAL(textChanged()),SLOT(SetChangedIndicator()));
+    connect(const_field_, SIGNAL(textChanged()),SLOT(SetChangedIndicator()));
+    connect(output_field_, SIGNAL(textChanged()),SLOT(SetChangedIndicator()));
+    connect(algorithm_field_, SIGNAL(textChanged()),SLOT(SetChangedIndicator()));
+    connect(link_field_1_, SIGNAL(textChanged(const QString &)),SLOT(SetChangedIndicator()));
+
+    connect(input_description_field_, SIGNAL(textChanged()),  worker_, SLOT(UpdatePreview()));
+    connect(input_list_field_, SIGNAL(textChanged()),  worker_, SLOT(UpdatePreview()));
+    connect(output_description_field_, SIGNAL(textChanged()), worker_, SLOT(UpdatePreview()));
+    connect(output_list_field_, SIGNAL(textChanged()),  worker_, SLOT(UpdatePreview()));
+    connect(link_field_2_, SIGNAL(textChanged(const QString &)),  worker_, SLOT(UpdatePreview()));
+    connect(section_name_, SIGNAL(textChanged(const QString &)),  worker_, SLOT(UpdatePreview()));
+    connect(section_field_, SIGNAL(textChanged()),  worker_, SLOT(UpdatePreview()));
+
+    connect(input_description_field_, SIGNAL(textChanged()),SLOT(SetChangedIndicator()));
+    connect(input_list_field_, SIGNAL(textChanged()),SLOT(SetChangedIndicator()));
+    connect(output_description_field_, SIGNAL(textChanged()),SLOT(SetChangedIndicator()));
+    connect(output_list_field_, SIGNAL(textChanged()),SLOT(SetChangedIndicator()));
+    connect(link_field_2_, SIGNAL(textChanged(const QString &)),SLOT(SetChangedIndicator()));
+    connect(section_name_, SIGNAL(textChanged(const QString &)),SLOT(SetChangedIndicator()));
+    connect(section_field_, SIGNAL(textChanged()),SLOT(SetChangedIndicator()));
+
+    inputs_field_->installEventFilter(this);
+    const_field_->installEventFilter(this);
+    algorithm_field_->installEventFilter(this);
+    output_field_->installEventFilter(this);
+
+    input_description_field_->installEventFilter(this);
+    input_list_field_->installEventFilter(this);
+    output_description_field_->installEventFilter(this);
+    output_list_field_->installEventFilter(this);
+    section_field_->installEventFilter(this);
 }
