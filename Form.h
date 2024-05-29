@@ -173,6 +173,16 @@ private:
      */
     void SetConnections();
 
+    /**
+     * @brief Method that disconnect SetChangedIndicator when ImportFile
+     */
+    void DisconnectIndicator();
+
+    /**
+     * @brief Method that connect SetChangedIndicator slot
+     */
+    void ConnectIndicator();
+
 public:
     explicit Form();
     ~Form() override;

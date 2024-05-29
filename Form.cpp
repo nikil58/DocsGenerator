@@ -482,6 +482,7 @@ void Form::ImportFile(bool) {
     open_file_name_ = QFileDialog::getOpenFileName(this, tr("Открыть"), GetLastDirectoryPath(), tr("Config file (*.ini) ;; All files (*)"));
     if (open_file_name_.isEmpty())
         return;
+    DisconnectIndicator();
     SetLastDirectoryPath(open_file_name_);
     auto* settings = new QSettings(open_file_name_, QSettings::IniFormat);
     title_field_->setText(settings->value("title").toString().replace(QRegExp("!img(.*/OM)"), "!img(/OM"));
@@ -497,6 +498,7 @@ void Form::ImportFile(bool) {
     link_field_2_->setText(settings->value("link_field_2").toString());
     section_name_->setText(settings->value("section_name").toString());
     section_field_->setText(settings->value("section_field").toString().replace(QRegExp("!img(.*/OM)"), "!img(/OM"));
+    ConnectIndicator();
     UpdateTitle();
     delete settings;
 }
@@ -674,12 +676,6 @@ void Form::SetConnections() {
     connect(algorithm_field_, SIGNAL(textChanged()), worker_, SLOT(UpdatePreview()));
     connect(link_field_1_, SIGNAL(textChanged(const QString &)),  worker_, SLOT(UpdatePreview()));
 
-    connect(inputs_field_, SIGNAL(textChanged()),SLOT(SetChangedIndicator()));
-    connect(const_field_, SIGNAL(textChanged()),SLOT(SetChangedIndicator()));
-    connect(output_field_, SIGNAL(textChanged()),SLOT(SetChangedIndicator()));
-    connect(algorithm_field_, SIGNAL(textChanged()),SLOT(SetChangedIndicator()));
-    connect(link_field_1_, SIGNAL(textChanged(const QString &)),SLOT(SetChangedIndicator()));
-
     connect(input_description_field_, SIGNAL(textChanged()),  worker_, SLOT(UpdatePreview()));
     connect(input_list_field_, SIGNAL(textChanged()),  worker_, SLOT(UpdatePreview()));
     connect(output_description_field_, SIGNAL(textChanged()), worker_, SLOT(UpdatePreview()));
@@ -688,13 +684,7 @@ void Form::SetConnections() {
     connect(section_name_, SIGNAL(textChanged(const QString &)),  worker_, SLOT(UpdatePreview()));
     connect(section_field_, SIGNAL(textChanged()),  worker_, SLOT(UpdatePreview()));
 
-    connect(input_description_field_, SIGNAL(textChanged()),SLOT(SetChangedIndicator()));
-    connect(input_list_field_, SIGNAL(textChanged()),SLOT(SetChangedIndicator()));
-    connect(output_description_field_, SIGNAL(textChanged()),SLOT(SetChangedIndicator()));
-    connect(output_list_field_, SIGNAL(textChanged()),SLOT(SetChangedIndicator()));
-    connect(link_field_2_, SIGNAL(textChanged(const QString &)),SLOT(SetChangedIndicator()));
-    connect(section_name_, SIGNAL(textChanged(const QString &)),SLOT(SetChangedIndicator()));
-    connect(section_field_, SIGNAL(textChanged()),SLOT(SetChangedIndicator()));
+    ConnectIndicator();
 
     inputs_field_->installEventFilter(this);
     const_field_->installEventFilter(this);
@@ -706,4 +696,35 @@ void Form::SetConnections() {
     output_description_field_->installEventFilter(this);
     output_list_field_->installEventFilter(this);
     section_field_->installEventFilter(this);
+}
+
+void Form::DisconnectIndicator() {
+    disconnect(inputs_field_, SIGNAL(textChanged()), this, SLOT(SetChangedIndicator()));
+    disconnect(const_field_, SIGNAL(textChanged()), this, SLOT(SetChangedIndicator()));
+    disconnect(output_field_, SIGNAL(textChanged()), this, SLOT(SetChangedIndicator()));
+    disconnect(algorithm_field_, SIGNAL(textChanged()), this, SLOT(SetChangedIndicator()));
+    disconnect(link_field_1_, SIGNAL(textChanged(const QString&)), this, SLOT(SetChangedIndicator()));
+    disconnect(input_description_field_, SIGNAL(textChanged()), this, SLOT(SetChangedIndicator()));
+    disconnect(input_list_field_, SIGNAL(textChanged()), this, SLOT(SetChangedIndicator()));
+    disconnect(output_description_field_, SIGNAL(textChanged()), this, SLOT(SetChangedIndicator()));
+    disconnect(output_list_field_, SIGNAL(textChanged()), this, SLOT(SetChangedIndicator()));
+    disconnect(link_field_2_, SIGNAL(textChanged(const QString&)), this, SLOT(SetChangedIndicator()));
+    disconnect(section_name_, SIGNAL(textChanged(const QString&)), this, SLOT(SetChangedIndicator()));
+    disconnect(section_field_, SIGNAL(textChanged()), this, SLOT(SetChangedIndicator()));
+}
+
+void Form::ConnectIndicator() {
+    connect(inputs_field_, SIGNAL(textChanged()),SLOT(SetChangedIndicator()));
+    connect(const_field_, SIGNAL(textChanged()),SLOT(SetChangedIndicator()));
+    connect(output_field_, SIGNAL(textChanged()),SLOT(SetChangedIndicator()));
+    connect(algorithm_field_, SIGNAL(textChanged()),SLOT(SetChangedIndicator()));
+    connect(link_field_1_, SIGNAL(textChanged(const QString &)),SLOT(SetChangedIndicator()));
+
+    connect(input_description_field_, SIGNAL(textChanged()),SLOT(SetChangedIndicator()));
+    connect(input_list_field_, SIGNAL(textChanged()),SLOT(SetChangedIndicator()));
+    connect(output_description_field_, SIGNAL(textChanged()),SLOT(SetChangedIndicator()));
+    connect(output_list_field_, SIGNAL(textChanged()),SLOT(SetChangedIndicator()));
+    connect(link_field_2_, SIGNAL(textChanged(const QString &)),SLOT(SetChangedIndicator()));
+    connect(section_name_, SIGNAL(textChanged(const QString &)),SLOT(SetChangedIndicator()));
+    connect(section_field_, SIGNAL(textChanged()),SLOT(SetChangedIndicator()));
 }
