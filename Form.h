@@ -193,8 +193,10 @@ private slots:
     void ClickOnLink(const QUrl &);
     /// Slot that invokes every time when File->Import is clicked
     void ImportFile(bool);
-    /// Slot that invokes every time when File->Export is clicked
-    void ExportFile(bool);
+    /// Slot that invokes every time when File->Export ini is clicked
+    void ExportIniFile(bool);
+    /// Slot that invokes every time when File->Export csv is clicked
+    void ExportCSVFile(bool);
 
     void OpenFormulas(bool);
 };

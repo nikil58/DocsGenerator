@@ -29,14 +29,17 @@ Form::Form() {
     DrawMainForm();
 
     auto* import_menu = new QAction("&Импорт", this);
-    auto* export_menu = new QAction("&Экспорт", this);
+    auto* export_ini_menu = new QAction("&Экспорт ini", this);
+    auto* export_csv_menu = new QAction("&Экспорт csv", this);
     QMenu* file = menuBar()->addMenu("&Файл");
     menuBar()->setFont(font_size_);
     file->setFont(font_size_);
     file->addAction(import_menu);
-    file->addAction(export_menu);
+    file->addAction(export_ini_menu);
+    file->addAction(export_csv_menu);
     connect(import_menu, SIGNAL(triggered(bool)), this, SLOT(ImportFile(bool)));
-    connect(export_menu, SIGNAL(triggered(bool)), this, SLOT(ExportFile(bool)));
+    connect(export_ini_menu, SIGNAL(triggered(bool)), this, SLOT(ExportIniFile(bool)));
+    connect(export_csv_menu, SIGNAL(triggered(bool)), this, SLOT(ExportCSVFile(bool)));
 
     this->setCentralWidget(widget);
     this->show();
@@ -531,7 +534,7 @@ void Form::ImportFile(bool) {
     delete settings;
 }
 
-void Form::ExportFile(bool) {
+void Form::ExportIniFile(bool) {
     open_file_name_ = QFileDialog::getSaveFileName(this, tr("Сохранить в"), GetLastDirectoryPath(), tr("Config file (*.ini) ;; All files (*)"));
     if (open_file_name_.isEmpty())
         return;
@@ -552,6 +555,31 @@ void Form::ExportFile(bool) {
     settings->setValue("link_field_2",link_field_2_->text());
     settings->setValue("section_name",section_name_->text());
     settings->setValue("section_field",section_field_->toPlainText());
+    UpdateTitle();
+    delete settings;
+}
+
+void Form::ExportCSVFile(bool) {
+    open_file_name_ = QFileDialog::getSaveFileName(this, tr("Сохранить в"), GetLastDirectoryPath(), tr("Config file (*.csv) ;; All files (*)"));
+    if (open_file_name_.isEmpty())
+        return;
+    if (!open_file_name_.contains(".csv"))
+        open_file_name_ += ".csv";
+    SetLastDirectoryPath(open_file_name_);
+    auto* settings = new QSettings(open_file_name_, QSettings::NativeFormat);
+    settings->setValue("title", ";" + title_field_->text().replace(QRegExp("\n|;\n"),";") + "\n");
+    settings->setValue("inputs_field",";" + inputs_field_->toPlainText().replace(QRegExp("\n|;\n"),";")  + "\n");
+    settings->setValue("const_field",const_field_->toPlainText().replace(QRegExp("\n|;\n"),";")  + "\n");
+    settings->setValue("algorithm_field",";" + algorithm_field_->toPlainText().replace(QRegExp("\n|;\n"),";")  + "\n");
+    settings->setValue("output_field",output_field_->toPlainText().replace(QRegExp("\n|;\n"),";") + "\n");
+    settings->setValue("link_field_1",";" + link_field_1_->text().replace(QRegExp("\n|;\n"),";")  + "\n");
+    settings->setValue("input_description_field",input_description_field_->toPlainText().replace(QRegExp("\n|;\n"),";")  + "\n");
+    settings->setValue("input_list_field",input_list_field_->toPlainText().replace(QRegExp("\n|;\n"),";")  + "\n");
+    settings->setValue("output_description_field",output_description_field_->toPlainText().replace(QRegExp("\n|;\n"),";")  + "\n");
+    settings->setValue("output_list_field",";" + output_list_field_->toPlainText().replace(QRegExp("\n|;\n"),";")  + "\n");
+    settings->setValue("link_field_2",";" + link_field_2_->text().replace(QRegExp("\n|;\n"),";")  + "\n");
+    settings->setValue("section_name",section_name_->text().replace(QRegExp("\n|;\n"),";")  + "\n");
+    settings->setValue("section_field",section_field_->toPlainText().replace(QRegExp("\n|;\n"),";")  + "\n");
     UpdateTitle();
     delete settings;
 }
