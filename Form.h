@@ -168,6 +168,27 @@ private:
      */
     void SetLastDirectoryPath(QString file_path);
 
+    /**
+     * @brief Method that prepares string fpr QSettings
+     * @param field one of fields in form
+     */
+     QString prepForSettingCSV(QLineEdit* field){
+         QString ans;
+            ans = (field->text().isEmpty()?"":";") + field->text().replace(QRegExp("\n|;\n"), ";");
+
+        return ans;
+     }
+
+    /**
+   * @brief Method that prepares string fpr QSettings
+   * @param field one of fields in form
+   */
+    QString prepForSettingCSV(QTextEdit* field){
+        QString ans;
+        ans = (field->toPlainText().isEmpty()?"":";") + field->toPlainText().replace(QRegExp("\n|;\n"), ";");
+        return ans;
+    }
+
 public:
     explicit Form();
     ~Form() override;

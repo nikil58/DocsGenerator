@@ -567,20 +567,32 @@ void Form::ExportCSVFile(bool) {
         open_file_name_ += ".csv";
     SetLastDirectoryPath(open_file_name_);
     auto* settings = new QSettings(open_file_name_, QSettings::NativeFormat);
-    settings->setValue("title", ";" + title_field_->text().replace(QRegExp("\n|;\n"),";") + "\n");
-    settings->setValue("inputs_field",";" + inputs_field_->toPlainText().replace(QRegExp("\n|;\n"),";")  + "\n");
-    settings->setValue("const_field",const_field_->toPlainText().replace(QRegExp("\n|;\n"),";")  + "\n");
-    settings->setValue("algorithm_field",";" + algorithm_field_->toPlainText().replace(QRegExp("\n|;\n"),";")  + "\n");
-    settings->setValue("output_field",output_field_->toPlainText().replace(QRegExp("\n|;\n"),";") + "\n");
-    settings->setValue("link_field_1",";" + link_field_1_->text().replace(QRegExp("\n|;\n"),";")  + "\n");
-    settings->setValue("input_description_field",input_description_field_->toPlainText().replace(QRegExp("\n|;\n"),";")  + "\n");
-    settings->setValue("input_list_field",input_list_field_->toPlainText().replace(QRegExp("\n|;\n"),";")  + "\n");
-    settings->setValue("output_description_field",output_description_field_->toPlainText().replace(QRegExp("\n|;\n"),";")  + "\n");
-    settings->setValue("output_list_field",";" + output_list_field_->toPlainText().replace(QRegExp("\n|;\n"),";")  + "\n");
-    settings->setValue("link_field_2",";" + link_field_2_->text().replace(QRegExp("\n|;\n"),";")  + "\n");
-    settings->setValue("section_name",section_name_->text().replace(QRegExp("\n|;\n"),";")  + "\n");
-    settings->setValue("section_field",section_field_->toPlainText().replace(QRegExp("\n|;\n"),";")  + "\n");
-    UpdateTitle();
+    /*settings->setValue("title", ";" + title_field_->text().replace(QRegExp("\n|;\n"),";"));
+    settings->setValue("inputs_field",";" + inputs_field_->toPlainText().replace(QRegExp("\n|;\n"),";"));
+    settings->setValue("const_field",(const_field_->toPlainText().isEmpty()?"":";") + const_field_->toPlainText().replace(QRegExp("\n|;\n"),";"));
+    settings->setValue("algorithm_field",(algorithm_field_->toPlainText().isEmpty()?"":";") + algorithm_field_->toPlainText().replace(QRegExp("\n|;\n"),";"));
+    settings->setValue("output_field",output_field_->toPlainText().replace(QRegExp("\n|;\n"),";"));
+    settings->setValue("link_field_1",";" + link_field_1_->text().replace(QRegExp("\n|;\n"),";"));
+    settings->setValue("input_description_field",(input_description_field_->toPlainText().isEmpty()?"":";") + input_description_field_->toPlainText().replace(QRegExp("\n|;\n"),";"));
+    settings->setValue("input_list_field",input_list_field_->toPlainText().replace(QRegExp("\n|;\n"),";"));
+    settings->setValue("output_description_field",output_description_field_->toPlainText().replace(QRegExp("\n|;\n"),";"));
+    settings->setValue("output_list_field",";" + output_list_field_->toPlainText().replace(QRegExp("\n|;\n"),";"));
+    settings->setValue("link_field_2",";" + link_field_2_->text().replace(QRegExp("\n|;\n"),";"));
+    settings->setValue("section_name",section_name_->text().replace(QRegExp("\n|;\n"),";"));
+    settings->setValue("section_field",section_field_->toPlainText().replace(QRegExp("\n|;\n"),";"));*/
+    settings->setValue("title", prepForSettingCSV(title_field_));
+    settings->setValue("inputs_field",";" + prepForSettingCSV(inputs_field_));
+    settings->setValue("const_field",prepForSettingCSV(const_field_));
+    settings->setValue("algorithm_field",prepForSettingCSV(algorithm_field_));
+    settings->setValue("output_field",prepForSettingCSV(output_field_));
+    settings->setValue("link_field_1",prepForSettingCSV(link_field_1_));
+    settings->setValue("input_description_field",prepForSettingCSV(input_description_field_));
+    settings->setValue("input_list_field",prepForSettingCSV(input_list_field_));
+    settings->setValue("output_description_field",prepForSettingCSV(output_description_field_));
+    settings->setValue("output_list_field",prepForSettingCSV(output_list_field_));
+    settings->setValue("link_field_2",prepForSettingCSV(link_field_2_));
+    settings->setValue("section_name",prepForSettingCSV(section_name_));
+    settings->setValue("section_field",prepForSettingCSV(section_field_));
     delete settings;
 }
 
