@@ -174,6 +174,21 @@ private:
      */
      static bool WriteCSV(const QStringList& list, QTextStream& stream);
 
+    /**
+     * @brief Method that connect all things up
+     */
+    void SetConnections();
+
+    /**
+     * @brief Method that disconnect SetChangedIndicator when ImportFile
+     */
+    void DisconnectIndicator();
+
+    /**
+     * @brief Method that connect SetChangedIndicator slot
+     */
+    void ConnectIndicator();
+
 public:
     explicit Form();
     ~Form() override;
@@ -205,4 +220,6 @@ private slots:
     void ExportCSVFile(bool);
 
     void OpenFormulas(bool);
+    /// Slot that invokes when writing to fields for update the title
+    void SetChangedIndicator();
 };
