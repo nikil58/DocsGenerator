@@ -487,7 +487,7 @@ void Form::ClickOnLink(const QUrl& url) {
         inputs_field_->textChanged();
 }
 
-QFile Form::GetCachedFile() const {
+QFile Form::GetCachedFile() {
     return {QDir::homePath() + "/.etalon/DocGeneratorPath.txt"};
 }
 
@@ -560,43 +560,44 @@ void Form::ExportIniFile(bool) {
 }
 
 void Form::ExportCSVFile(bool) {
-    open_file_name_ = QFileDialog::getSaveFileName(this, tr("Сохранить в"), GetLastDirectoryPath(), tr("Config file (*.csv) ;; All files (*)"));
+    open_file_name_ = QFileDialog::getSaveFileName(this, tr("Сохранить в"), GetLastDirectoryPath(),
+                                                   tr("CSV File (*.csv) ;; All files (*)"));
     if (open_file_name_.isEmpty())
         return;
     if (!open_file_name_.contains(".csv"))
         open_file_name_ += ".csv";
     SetLastDirectoryPath(open_file_name_);
     QFile file(open_file_name_);
-    if(!file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)) {
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)) {
         return;
     }
     QTextStream stream(&file);
 
-    QRegExp regExpForCSV("\n|;|;\n");
+    const QRegExp regExpForCSV("\n|;|;\n");
 
-    writeCSV(QStringList() << "Название" << title_field_->text().replace(regExpForCSV, "  "), &stream);
-    writeCSV(QStringList() << "Входы" << inputs_field_->toPlainText().replace(regExpForCSV, "  "), &stream);
-    writeCSV(QStringList() << "Константы" << const_field_->toPlainText().replace(regExpForCSV, "  "), &stream);
-    writeCSV(QStringList() << "Выходы" << output_field_->toPlainText().replace(regExpForCSV, "  "), &stream);
-    writeCSV(QStringList() << "Алгоритм" << algorithm_field_->toPlainText().replace(regExpForCSV, "  "), &stream);
-    writeCSV(QStringList() << "Ссылка на пример модуля" << link_field_1_->text().replace(regExpForCSV, "  "), &stream);
-    writeCSV(QStringList() << "Описание входов" << input_description_field_->toPlainText().replace(regExpForCSV, "  "), &stream);
-    writeCSV(QStringList() << "Список входов" << input_list_field_->toPlainText().replace(regExpForCSV, "  "), &stream);
-    writeCSV(QStringList() << "Описание выходов" << output_description_field_->toPlainText().replace(regExpForCSV, "  "), &stream);
-    writeCSV(QStringList() << "Список выходов" << output_list_field_->toPlainText().replace(regExpForCSV, "  "), &stream);
-    writeCSV(QStringList() << "Ссылка на модуль" << link_field_2_->text().replace(regExpForCSV, "  "), &stream);
-    writeCSV(QStringList() << "Название дополнительного раздела" << section_name_->text().replace(regExpForCSV, "  "), &stream);
-    writeCSV(QStringList() << "Содержание" << section_field_->toPlainText().replace(regExpForCSV, "  "), &stream);
+    WriteCSV(QStringList() << "Название" << title_field_->text().replace(regExpForCSV, "  "), stream);
+    WriteCSV(QStringList() << "Входы" << inputs_field_->toPlainText().replace(regExpForCSV, "  "), stream);
+    WriteCSV(QStringList() << "Константы" << const_field_->toPlainText().replace(regExpForCSV, "  "), stream);
+    WriteCSV(QStringList() << "Выходы" << output_field_->toPlainText().replace(regExpForCSV, "  "), stream);
+    WriteCSV(QStringList() << "Алгоритм" << algorithm_field_->toPlainText().replace(regExpForCSV, "  "), stream);
+    WriteCSV(QStringList() << "Ссылка на пример модуля" << link_field_1_->text().replace(regExpForCSV, "  "), stream);
+    WriteCSV(QStringList() << "Описание входов" << input_description_field_->toPlainText().replace(regExpForCSV, "  "), stream);
+    WriteCSV(QStringList() << "Список входов" << input_list_field_->toPlainText().replace(regExpForCSV, "  "), stream);
+    WriteCSV(QStringList() << "Описание выходов" << output_description_field_->toPlainText().replace(regExpForCSV, "  "), stream);
+    WriteCSV(QStringList() << "Список выходов" << output_list_field_->toPlainText().replace(regExpForCSV, "  "), stream);
+    WriteCSV(QStringList() << "Ссылка на модуль" << link_field_2_->text().replace(regExpForCSV, "  "), stream);
+    WriteCSV(QStringList() << "Название дополнительного раздела" << section_name_->text().replace(regExpForCSV, "  "), stream);
+    WriteCSV(QStringList() << "Содержание" << section_field_->toPlainText().replace(regExpForCSV, "  "), stream);
 
     file.close();
 }
 
 
-bool Form::writeCSV(QStringList stringList, QTextStream* stream) {
-    if(!stream->status() == QTextStream::Ok || stringList.isEmpty()) {
+bool Form::WriteCSV(const QStringList& list, QTextStream& stream) {
+    if(stream.status() != QTextStream::Ok || list.isEmpty()) {
         return false;
     }
-    *stream << stringList.join(";").toUtf8() << "\n";
+    stream << list.join(";").toUtf8() << "\n";
     return true;
 }
 

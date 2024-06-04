@@ -54,9 +54,6 @@ private:
     /// Horizontal line that split title input field from rest part of the form: formulas formulas_buttons_ and tabs
     QFrame* title_splitter_{};
 
-    /// Grid layout that have 5 formulas_buttons_ in a row
-    QGridLayout* formulas_buttons_layout_{};
-
     /// Left-side widget that imitate Chromium browser and displays HTML
     QWebEngineView* preview_widget_{};
 
@@ -133,7 +130,7 @@ private:
      * @brief Method that finds path to Image folder in Etalon
      * @return {user's_path_to_etalon}/OM/Etalon/Resources/Images
      */
-    QString FindEtalonImagePath();
+    static QString FindEtalonImagePath();
 
     /**
      * @brief Method that copies Image to the OM/Etalon/Resources/Images and show modal window with result status
@@ -154,28 +151,28 @@ private:
      * @brief Method that finds file with cash path to the last used directory
      * @return file that contains path /home/{username}/.etalon/DocGeneratorPath.txt
      */
-    [[nodiscard]] QFile GetCachedFile() const;
+    [[nodiscard]] static QFile GetCachedFile() ;
 
     /**
      * @brief Method that gets path to the last used directory
      * @return string with path to the last used directory or path to DocsGenerator
      */
-    QString GetLastDirectoryPath();
+    static QString GetLastDirectoryPath();
 
     /**
      * @brief Method that sets path to the last used directory
      * @param path to the recently opened ini file
      */
-    void SetLastDirectoryPath(QString file_path);
+    static void SetLastDirectoryPath(QString file_path);
 
     /**
      * @brief Method that write all data from QStringList with sep = ';' to QTextStream
      * @param list - QStringList, where gets data
-     * @param stream strem, where write data
+     * @param stream stream, where write data
      *
      * @return true when write some data
      */
-     bool writeCSV(QStringList list, QTextStream* stream);
+     static bool WriteCSV(const QStringList& list, QTextStream& stream);
 
 public:
     explicit Form();
