@@ -29,14 +29,17 @@ Form::Form() {
     DrawMainForm();
 
     auto* import_menu = new QAction("&Импорт", this);
-    auto* export_menu = new QAction("&Экспорт", this);
+    auto* export_ini_menu = new QAction("&Экспорт ini", this);
+    auto* export_csv_menu = new QAction("&Экспорт csv", this);
     QMenu* file = menuBar()->addMenu("&Файл");
     menuBar()->setFont(font_size_);
     file->setFont(font_size_);
     file->addAction(import_menu);
-    file->addAction(export_menu);
+    file->addAction(export_ini_menu);
+    file->addAction(export_csv_menu);
     connect(import_menu, SIGNAL(triggered(bool)), this, SLOT(ImportFile(bool)));
-    connect(export_menu, SIGNAL(triggered(bool)), this, SLOT(ExportFile(bool)));
+    connect(export_ini_menu, SIGNAL(triggered(bool)), this, SLOT(ExportIniFile(bool)));
+    connect(export_csv_menu, SIGNAL(triggered(bool)), this, SLOT(ExportCSVFile(bool)));
     SetConnections();
 
     this->setCentralWidget(widget);
@@ -454,7 +457,7 @@ void Form::ClickOnLink(const QUrl& url) {
         inputs_field_->textChanged();
 }
 
-QFile Form::GetCachedFile() const {
+QFile Form::GetCachedFile() {
     return {QDir::homePath() + "/.etalon/DocGeneratorPath.txt"};
 }
 
@@ -503,7 +506,7 @@ void Form::ImportFile(bool) {
     delete settings;
 }
 
-void Form::ExportFile(bool) {
+void Form::ExportIniFile(bool) {
     open_file_name_ = QFileDialog::getSaveFileName(this, tr("Сохранить в"), GetLastDirectoryPath(), tr("Config file (*.ini) ;; All files (*)"));
     if (open_file_name_.isEmpty())
         return;
@@ -526,6 +529,48 @@ void Form::ExportFile(bool) {
     settings->setValue("section_field",section_field_->toPlainText());
     UpdateTitle();
     delete settings;
+}
+
+void Form::ExportCSVFile(bool) {
+    open_file_name_ = QFileDialog::getSaveFileName(this, tr("Сохранить в"), GetLastDirectoryPath(),
+                                                   tr("CSV File (*.csv) ;; All files (*)"));
+    if (open_file_name_.isEmpty())
+        return;
+    if (!open_file_name_.contains(".csv"))
+        open_file_name_ += ".csv";
+    SetLastDirectoryPath(open_file_name_);
+    QFile file(open_file_name_);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)) {
+        return;
+    }
+    QTextStream stream(&file);
+
+    const QRegExp regExpForCSV("\n|;|;\n");
+
+    WriteCSV(QStringList() << "Название" << title_field_->text().replace(regExpForCSV, "  "), stream);
+    WriteCSV(QStringList() << "Входы" << inputs_field_->toPlainText().replace(regExpForCSV, "  "), stream);
+    WriteCSV(QStringList() << "Константы" << const_field_->toPlainText().replace(regExpForCSV, "  "), stream);
+    WriteCSV(QStringList() << "Выходы" << output_field_->toPlainText().replace(regExpForCSV, "  "), stream);
+    WriteCSV(QStringList() << "Алгоритм" << algorithm_field_->toPlainText().replace(regExpForCSV, "  "), stream);
+    WriteCSV(QStringList() << "Ссылка на пример модуля" << link_field_1_->text().replace(regExpForCSV, "  "), stream);
+    WriteCSV(QStringList() << "Описание входов" << input_description_field_->toPlainText().replace(regExpForCSV, "  "), stream);
+    WriteCSV(QStringList() << "Список входов" << input_list_field_->toPlainText().replace(regExpForCSV, "  "), stream);
+    WriteCSV(QStringList() << "Описание выходов" << output_description_field_->toPlainText().replace(regExpForCSV, "  "), stream);
+    WriteCSV(QStringList() << "Список выходов" << output_list_field_->toPlainText().replace(regExpForCSV, "  "), stream);
+    WriteCSV(QStringList() << "Ссылка на модуль" << link_field_2_->text().replace(regExpForCSV, "  "), stream);
+    WriteCSV(QStringList() << "Название дополнительного раздела" << section_name_->text().replace(regExpForCSV, "  "), stream);
+    WriteCSV(QStringList() << "Содержание" << section_field_->toPlainText().replace(regExpForCSV, "  "), stream);
+
+    file.close();
+}
+
+
+bool Form::WriteCSV(const QStringList& list, QTextStream& stream) {
+    if(stream.status() != QTextStream::Ok || list.isEmpty()) {
+        return false;
+    }
+    stream << list.join(";").toUtf8() << "\n";
+    return true;
 }
 
 QString Form::FindEtalonImagePath() {
