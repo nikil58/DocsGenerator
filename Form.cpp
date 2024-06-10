@@ -780,7 +780,7 @@ void Form::closeEvent(QCloseEvent *event) {
     const QString save_button_text("Сохранить");
     const QString dont_save_button_text("Не сохранять");
     const QString cancel("Отменить");
-    QMessageBox exit_message_box(QMessageBox::Critical, QObject::tr("Ошибка копирования"),
+    QMessageBox exit_message_box(QMessageBox::Critical, QObject::tr("Файл не сохранен"),
                                      tr("Вы не сохранили файл перед закрытием"),
                                      QMessageBox::Yes | QMessageBox::Cancel);
     exit_message_box.setButtonText(QMessageBox::Yes, save_button_text);
