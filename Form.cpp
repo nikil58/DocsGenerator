@@ -773,3 +773,28 @@ void Form::ConnectIndicator() {
     connect(section_name_, SIGNAL(textChanged(const QString &)),SLOT(SetChangedIndicator()));
     connect(section_field_, SIGNAL(textChanged()),SLOT(SetChangedIndicator()));
 }
+
+void Form::closeEvent(QCloseEvent *event) {
+    if(!open_file_name_.contains("*"))
+        return;
+    const QString save_button_text("Сохранить");
+    const QString dont_save_button_text("Не сохранять");
+    const QString cancel("Отменить");
+    QMessageBox exit_message_box(QMessageBox::Critical, QObject::tr("Ошибка копирования"),
+                                     tr("Вы не сохранили файл перед закрытием"),
+                                     QMessageBox::Yes | QMessageBox::Cancel);
+    exit_message_box.setButtonText(QMessageBox::Yes, save_button_text);
+    exit_message_box.addButton(dont_save_button_text, QMessageBox::ButtonRole::AcceptRole);
+    exit_message_box.setButtonText(QMessageBox::Cancel,cancel);
+    exit_message_box.exec();
+    if(exit_message_box.clickedButton()->text()==save_button_text){
+        ExportIniFile(true);
+    }
+    else if(exit_message_box.clickedButton()->text()==dont_save_button_text){
+        exit_message_box.close();
+    }
+    else if(exit_message_box.clickedButton()->text()==cancel){
+        event->ignore();
+    }
+}
+

@@ -189,6 +189,10 @@ private:
      */
     void ConnectIndicator();
 
+    /**
+     *@brief window closing method
+     */
+    void closeEvent(QCloseEvent *event);
 public:
     explicit Form();
     ~Form() override;
@@ -222,4 +226,5 @@ private slots:
     void OpenFormulas(bool);
     /// Slot that invokes when writing to fields for update the title
     void SetChangedIndicator();
+
 };
