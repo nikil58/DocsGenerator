@@ -789,6 +789,8 @@ void Form::closeEvent(QCloseEvent *event) {
     exit_message_box.exec();
     if(exit_message_box.clickedButton()->text()==save_button_text){
         ExportIniFile(true);
+        if(open_file_name_.contains("*"));
+        event->ignore();
     }
     else if(exit_message_box.clickedButton()->text()==dont_save_button_text){
         exit_message_box.close();
