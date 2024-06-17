@@ -508,8 +508,11 @@ void Form::ImportFile(bool) {
 
 void Form::ExportIniFile(bool) {
     open_file_name_ = QFileDialog::getSaveFileName(this, tr("Сохранить в"), GetLastDirectoryPath(), tr("Config file (*.ini) ;; All files (*)"));
-    if (open_file_name_.isEmpty())
+    if (open_file_name_.isEmpty()) {
+        open_file_name_ = "Untitled*";
         return;
+    }
+
     if (!open_file_name_.contains(".ini"))
         open_file_name_ += ".ini";
     SetLastDirectoryPath(open_file_name_);
@@ -528,6 +531,7 @@ void Form::ExportIniFile(bool) {
     settings->setValue("section_name",section_name_->text());
     settings->setValue("section_field",section_field_->toPlainText());
     UpdateTitle();
+    is_saved_ = true;
     delete settings;
 }
 
@@ -775,3 +779,20 @@ void Form::ConnectIndicator() {
     connect(section_name_, SIGNAL(textChanged(const QString &)),SLOT(SetChangedIndicator()));
     connect(section_field_, SIGNAL(textChanged()),SLOT(SetChangedIndicator()));
 }
+
+void Form::closeEvent(QCloseEvent *event) {
+    if (!open_file_name_.contains("*"))
+        return;
+    auto reply = QMessageBox::critical(this, QObject::tr("Файл не сохранен"),
+                                  tr("Сохранить файл?"),
+                                  QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+    if (reply == QMessageBox::Yes) {
+        auto actions = this->findChild<QMenu *>();
+        actions->actions().at(1)->trigger();
+        if (!is_saved_)
+            event->ignore();
+    } else if (reply == QMessageBox::Cancel) {
+        event->ignore();
+    }
+}
+
