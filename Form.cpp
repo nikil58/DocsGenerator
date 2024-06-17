@@ -508,8 +508,11 @@ void Form::ImportFile(bool) {
 
 void Form::ExportIniFile(bool) {
     open_file_name_ = QFileDialog::getSaveFileName(this, tr("Сохранить в"), GetLastDirectoryPath(), tr("Config file (*.ini) ;; All files (*)"));
-    if (open_file_name_.isEmpty())
+    if (open_file_name_.isEmpty()) {
+        open_file_name_ = "Untitled*";
         return;
+    }
+
     if (!open_file_name_.contains(".ini"))
         open_file_name_ += ".ini";
     SetLastDirectoryPath(open_file_name_);
@@ -528,6 +531,7 @@ void Form::ExportIniFile(bool) {
     settings->setValue("section_name",section_name_->text());
     settings->setValue("section_field",section_field_->toPlainText());
     UpdateTitle();
+    is_saved_ = true;
     delete settings;
 }
 
@@ -775,25 +779,17 @@ void Form::ConnectIndicator() {
 }
 
 void Form::closeEvent(QCloseEvent *event) {
-    if(!open_file_name_.contains("*"))
+    if (!open_file_name_.contains("*"))
         return;
-    const QString save_button_text("Сохранить");
-    const QString dont_save_button_text("Не сохранять");
-    const QString cancel("Отменить");
-    QMessageBox exit_message_box(QMessageBox::Critical, QObject::tr("Файл не сохранен"),
-                                     tr("Вы не сохранили файл перед закрытием"),
-                                     QMessageBox::Yes | QMessageBox::Cancel);
-    exit_message_box.setButtonText(QMessageBox::Yes, save_button_text);
-    exit_message_box.addButton(dont_save_button_text, QMessageBox::ButtonRole::AcceptRole);
-    exit_message_box.setButtonText(QMessageBox::Cancel,cancel);
-    exit_message_box.exec();
-    if(exit_message_box.clickedButton()->text()==save_button_text){
-        ExportIniFile(true);
-    }
-    else if(exit_message_box.clickedButton()->text()==dont_save_button_text){
-        exit_message_box.close();
-    }
-    else if(exit_message_box.clickedButton()->text()==cancel){
+    auto reply = QMessageBox::critical(this, QObject::tr("Файл не сохранен"),
+                                  tr("Сохранить файл?"),
+                                  QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+    if (reply == QMessageBox::Yes) {
+        auto actions = this->findChild<QMenu *>();
+        actions->actions().at(1)->trigger();
+        if (!is_saved_)
+            event->ignore();
+    } else if (reply == QMessageBox::Cancel) {
         event->ignore();
     }
 }

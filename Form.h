@@ -69,6 +69,33 @@ private:
     /// Current opened file name with .ini extension
     QString open_file_name_{};
 
+    /// @brief True if success while saving
+    bool is_saved_{false};
+
+    /// List of all formulas formulas_buttons_
+    const QVector<QVector<QString>> formulas_buttons_ = {{"Формула", "\\(\\)",   "2"}, {"sub", "_{}", "1"}, {"sup", "^{}", "1"},
+                                                         {"root",    "\\sqrt{}", "1"}, {"frac", "\\frac{}{}", "3"}, {"Delta", "\\Delta", "0"},
+                                                         {"sum",     "\\sum{}",  "1"}, {"prod", "\\prod{}", "1"}, {"int", "\\int", "0"}, {"times", "\\times", "0"},
+                                                         {"pi",      "\\pi",     "0"}, {"alpha", "\\alpha", "0"}, {"beta", "\\beta", "0"}, {"phi", "\\varphi", "0"},
+                                                         {"theta",   "\\theta",  "0"}, {"leq", "\\leq", "0"}, {"infty", "\\infty", "0"}, {"Фотография", "", "0"},
+                                                         {"pm", "\\pm", "0"}, {"mp", "\\mp", "0"}, {"cdot", "\\cdot", "0"}, {"div", "\\div", "0"}, {"bigoplus", "\\bigoplus", "0"},
+                                                         {"bigominus", "\\usepackage{mathabx}\\bigominus", "0"}, {"bigodot", "\\bigodot", "0"}, {"bigotimes", "\\bigotimes", "0"},
+                                                         {"neg", "\\neg", "0"}, {"lor", "\\lor", "0"}, {"land", "\\land", "0"}, {"neq", "\\neq", "0"}, {"leq", "\\leq", "0"},
+                                                         {"geq","\\geq", "0"}, {"ll", "\\ll", "0"}, {"gg", "\\gg", "0"}, {"approx", "\\approx", "0"}, {"sim", "\\sim", "0"},
+                                                         {"simeq", "\\simeq", "0"}, {"equiv", "\\equiv", "0"}, {"perp", "\\perp", "0"}, {"parallel", "\\parallel", "0"},
+                                                         {"mid", "\\mid", "0"}, {"in", "\\in", "0"}, {"notin", "\\notin", "0"}, {"ni", "\\ni", "0"}, {"cap", "\\cap", "0"},
+                                                         {"cup", "\\cup", "0"}, {"subset", "\\subset", "0"}, {"supset", "\\supset", "0"}, {"subseteq", "\\subseteq", "0"},
+                                                         {"supseteq", "\\supseteq", "0"}, {"notsubset", "\\not\\subset", "0"}, {"notsupset", "\\not\\supset", "0"},
+                                                         {"mathbb", "\\usepackage{amsfonts}\\mathbb{}", "1"}, {"|x|", "\\left|\\right|", "7"}, {"cos(x)", "\\cos()", "1"},
+                                                         {"sin(x)", "\\sin()", "1"}, {"tan(x)", "\\tan()", "1"}, {"arccos(x)", "\\arccos()", "1"}, {"arcsin(x)", "\\arcsin()", "1"},
+                                                         {"arctan(x)", "\\arctan()", "1"}, {"lim", "\\lim{}", "1"}, {"dot", "\\dot{}", "1"}, {"overline", "\\overline{}", "1"},
+                                                         {"overrightarrow", "\\overrightarrow{}", "1"}, {"widetilde", "\\widetilde{}", "1"}, {"gamma", "\\gamma", "0"},
+                                                         {"delta", "\\delta", "0"}, {"epsilon", "\\epsilon", "0"}, {"varepsilon", "\\varepsilon", "0"}, {"zeta", "\\zeta", "0"},
+                                                         {"eta", "\\eta", "0"}, {"vartheta", "\\vartheta", "0"}, {"Theta", "\\Theta", "0"}, {"iota", "\\iota", "0"},
+                                                         {"lambda", "\\lambda", "0"}, {"Lambda", "\\Lambda", "0"}, {"mu", "\\mu", "0"}, {"limv2", "\\lim\\limits_{x \\to \\infty}{}", "1"},
+                                                         {"intv2", "\\int\\limits_{a=0}^{a=b}{}", "1"}, {"sumv2", "\\sum\\limits_{a=0}^{a=b}{}","1"}, {"prodv2", "\\prod\\limits_{a=0}^{a=b}{}","1"}};
+
+private:
     /**
      * @brief Handler for saving the last_selected_field pointer
      * @param obj event sender
@@ -100,28 +127,6 @@ private:
      */
     void UpdateTitle();
 
-    /// List of all formulas formulas_buttons_
-    const QVector<QVector<QString>> formulas_buttons_ = {{"Формула", "\\(\\)",   "2"}, {"sub", "_{}", "1"}, {"sup", "^{}", "1"},
-                                                         {"root",    "\\sqrt{}", "1"}, {"frac", "\\frac{}{}", "3"}, {"Delta", "\\Delta", "0"},
-                                                         {"sum",     "\\sum{}",  "1"}, {"prod", "\\prod{}", "1"}, {"int", "\\int", "0"}, {"times", "\\times", "0"},
-                                                         {"pi",      "\\pi",     "0"}, {"alpha", "\\alpha", "0"}, {"beta", "\\beta", "0"}, {"phi", "\\varphi", "0"},
-                                                         {"theta",   "\\theta",  "0"}, {"leq", "\\leq", "0"}, {"infty", "\\infty", "0"}, {"Фотография", "", "0"},
-                                                         {"pm", "\\pm", "0"}, {"mp", "\\mp", "0"}, {"cdot", "\\cdot", "0"}, {"div", "\\div", "0"}, {"bigoplus", "\\bigoplus", "0"},
-                                                         {"bigominus", "\\usepackage{mathabx}\\bigominus", "0"}, {"bigodot", "\\bigodot", "0"}, {"bigotimes", "\\bigotimes", "0"},
-                                                         {"neg", "\\neg", "0"}, {"lor", "\\lor", "0"}, {"land", "\\land", "0"}, {"neq", "\\neq", "0"}, {"leq", "\\leq", "0"},
-                                                         {"geq","\\geq", "0"}, {"ll", "\\ll", "0"}, {"gg", "\\gg", "0"}, {"approx", "\\approx", "0"}, {"sim", "\\sim", "0"},
-                                                         {"simeq", "\\simeq", "0"}, {"equiv", "\\equiv", "0"}, {"perp", "\\perp", "0"}, {"parallel", "\\parallel", "0"},
-                                                         {"mid", "\\mid", "0"}, {"in", "\\in", "0"}, {"notin", "\\notin", "0"}, {"ni", "\\ni", "0"}, {"cap", "\\cap", "0"},
-                                                         {"cup", "\\cup", "0"}, {"subset", "\\subset", "0"}, {"supset", "\\supset", "0"}, {"subseteq", "\\subseteq", "0"},
-                                                         {"supseteq", "\\supseteq", "0"}, {"notsubset", "\\not\\subset", "0"}, {"notsupset", "\\not\\supset", "0"},
-                                                         {"mathbb", "\\usepackage{amsfonts}\\mathbb{}", "1"}, {"|x|", "\\left|\\right|", "7"}, {"cos(x)", "\\cos()", "1"},
-                                                         {"sin(x)", "\\sin()", "1"}, {"tan(x)", "\\tan()", "1"}, {"arccos(x)", "\\arccos()", "1"}, {"arcsin(x)", "\\arcsin()", "1"},
-                                                         {"arctan(x)", "\\arctan()", "1"}, {"lim", "\\lim{}", "1"}, {"dot", "\\dot{}", "1"}, {"overline", "\\overline{}", "1"},
-                                                         {"overrightarrow", "\\overrightarrow{}", "1"}, {"widetilde", "\\widetilde{}", "1"}, {"gamma", "\\gamma", "0"},
-                                                         {"delta", "\\delta", "0"}, {"epsilon", "\\epsilon", "0"}, {"varepsilon", "\\varepsilon", "0"}, {"zeta", "\\zeta", "0"},
-                                                         {"eta", "\\eta", "0"}, {"vartheta", "\\vartheta", "0"}, {"Theta", "\\Theta", "0"}, {"iota", "\\iota", "0"},
-                                                         {"lambda", "\\lambda", "0"}, {"Lambda", "\\Lambda", "0"}, {"mu", "\\mu", "0"}, {"limv2", "\\lim\\limits_{x \\to \\infty}{}", "1"},
-                                                         {"intv2", "\\int\\limits_{a=0}^{a=b}{}", "1"}, {"sumv2", "\\sum\\limits_{a=0}^{a=b}{}","1"}, {"prodv2", "\\prod\\limits_{a=0}^{a=b}{}","1"}};
 
     CharacterForm* character_form_{};
 
@@ -190,9 +195,9 @@ private:
     void ConnectIndicator();
 
     /**
-     *@brief window closing method
+     *@brief Method that invokes on window close event
      */
-    void closeEvent(QCloseEvent *event);
+    void closeEvent(QCloseEvent *event) override;
 public:
     explicit Form();
     ~Form() override;
