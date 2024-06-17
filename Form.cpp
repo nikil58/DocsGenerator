@@ -744,6 +744,7 @@ void Form::SetConnections() {
 }
 
 void Form::DisconnectIndicator() {
+    disconnect(title_field_, SIGNAL(textChanged(const QString &)),this, SLOT(SetChangedIndicator()));
     disconnect(inputs_field_, SIGNAL(textChanged()), this, SLOT(SetChangedIndicator()));
     disconnect(const_field_, SIGNAL(textChanged()), this, SLOT(SetChangedIndicator()));
     disconnect(output_field_, SIGNAL(textChanged()), this, SLOT(SetChangedIndicator()));
@@ -759,6 +760,7 @@ void Form::DisconnectIndicator() {
 }
 
 void Form::ConnectIndicator() {
+    connect(title_field_, SIGNAL(textChanged(const QString &)), SLOT(SetChangedIndicator()));
     connect(inputs_field_, SIGNAL(textChanged()),SLOT(SetChangedIndicator()));
     connect(const_field_, SIGNAL(textChanged()),SLOT(SetChangedIndicator()));
     connect(output_field_, SIGNAL(textChanged()),SLOT(SetChangedIndicator()));
